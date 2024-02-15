@@ -38,6 +38,24 @@ def check(c):
 
 
 @task
+def reqs(c):
+    """Generate requirements.txt file for use in GitHub Actions.
+
+    The GitHub Actions workflow runners don't seem to play nicely with
+    Pipenv. We generate a requirements.txt file and use it to install
+    dependencies in GitHub Actions.
+    """
+    add_warning = (
+        "echo '# Do not edit directly. This file is generated.\n' > requirements.txt"
+    )
+    # The PIPENV_VERBOSITY variable suppresses a warning issued Pipenv
+    # if you use the run command when you've already activated the
+    # virtual environment.
+    add_reqs = "PIPENV_VERBOSITY=-1 pipenv run pip freeze >> requirements.txt"
+    c.run(f"{add_warning} && {add_reqs}")
+
+
+@task
 def dev(c):
     """Run the development server.
 

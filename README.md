@@ -5,8 +5,9 @@ affils is ClinGen's affiliations service.
 ## Getting started
 
 The affils project uses [Pipenv](https://pipenv.pypa.io/en/latest/index.html)
-to manage its dependencies. For all other command line tasks, it uses
-[Invoke](https://docs.pyinvoke.org/en/stable/index.html).
+to manage its dependencies. (Do not use the `requirements.txt` file.
+The `requirements.txt` file is generated and used in GitHub Actions.)
+For all other command line tasks, the affils project uses [Invoke](https://docs.pyinvoke.org/en/stable/index.html).
 
 1. Install Python 3.12+.
 2. Install [Pipenv](https://pipenv.pypa.io/en/latest/index.html): `pip install --user pipenv`.
