@@ -1,0 +1,29 @@
+name: Run affils code checks
+on:
+  push:
+    branches: [$default-branch]
+  pull_request:
+    branches: [$default-branch]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Pipenv
+        run: pip install pipenv
+      - name: Install dependencies
+        run: pipenv sync
+      - name: Format
+        run: invoke fmt
+      - name: Lint
+        run: invoke lint
+      - name: Check types
+        run: invoke types
+      - name: Run tests
+        run: invoke test
