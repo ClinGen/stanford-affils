@@ -15,13 +15,11 @@ jobs:
         run: pip install pipenv
       - name: Install dependencies
         run: pipenv sync
-      - name: Activate virtual environment
-        run: pipenv shell
       - name: Format
-        run: invoke fmt
+        run: pipenv run invoke fmt
       - name: Lint
-        run: invoke lint
+        run: pipenv run invoke lint
       - name: Check types
-        run: invoke types
+        run: pipenv run invoke types
       - name: Run tests
-        run: invoke test
+        run: pipenv run invoke test
