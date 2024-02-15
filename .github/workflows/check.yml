@@ -14,7 +14,7 @@ jobs:
       - name: Install Pipenv
         run: pip install pipenv
       - name: Install dependencies
-        run: pipenv sync
+        run: pipenv install
       - name: Format
         run: pipenv run invoke fmt
       - name: Lint
