@@ -1,18 +1,19 @@
 """Test code in the entrypoint file for the affils service."""
 
-# Third-party dependencies:
-from fastapi.testclient import TestClient
-
 # In-house code:
-from .main import app
+from .app import app
 
-client = TestClient(app)
+# Configure app for testing.
+app.config.update({"TESTING": True})
+
+# Constants:
+CLIENT = app.test_client()
 
 
-def test_main():
+def test_root():
     """Ensure our cheeky hello world route works."""
-    response = client.get("/")
+    response = CLIENT.get("/")
     assert response.status_code == 200
-    assert response.json() == {
+    assert response.json == {
         "message": "Look on my Affiliations Service, ye Mighty, and despair!"
     }

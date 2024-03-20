@@ -61,4 +61,4 @@ def dev(c):
 
     Assumes you've activated the virtual environment.
     """
-    c.run("cd src && uvicorn main:app --reload")
+    c.run("cd src && flask run")

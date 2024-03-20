@@ -3,12 +3,13 @@
 Set up API routes.
 """
 
-from fastapi import FastAPI
+# Third-party dependencies:
+from flask import Flask
 
-app = FastAPI()
+app = Flask(__name__)
 
 
-@app.get("/")
-async def root():
+@app.route("/")
+def hello_world():
     """A cheeky hello world route."""
     return {"message": "Look on my Affiliations Service, ye Mighty, and despair!"}
