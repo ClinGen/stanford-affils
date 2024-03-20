@@ -1,3 +1,7 @@
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+.elasticbeanstalk/*
+
 .coverage
 .mypy_cache
 .pytest_cache
