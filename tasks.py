@@ -62,3 +62,14 @@ def dev(c):
     Assumes you've activated the virtual environment.
     """
     c.run("cd src && flask run")
+
+
+@task
+def deploy(c):
+    """Deploy the affils service.
+
+    Assumes you have the Elastic Beanstalk CLI tool, eb. Also assumes
+    you have AWS configured properly. You should set Oregon (us-west-2)
+    as your AWS region, and you should have AWS production credentials.
+    """
+    c.run("eb deploy")

@@ -16,3 +16,7 @@ For all other command line tasks, the affils project uses [Invoke](https://docs.
 5. Run the development server: `invoke dev` or `inv dev`.
 6. Read the `tasks.py` module for other command line tasks.
 7. Read the [standards document](./doc/standards.md).
+
+## Deployment
+
+Read the [doc](./doc/deploy.md) on deploying to production.
