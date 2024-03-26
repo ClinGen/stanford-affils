@@ -17,6 +17,11 @@ For all other command line tasks, the affils project uses [Invoke](https://docs.
 6. Read the `tasks.py` module for other command line tasks.
 7. Read the [standards document](./doc/standards.md).
 
+## Affiliations workflow
+
+We have diagrams for our current and desired affiliations workflow in
+the [diagrams directory](./doc/diagrams).
+
 ## Deployment
 
 Read the [doc](./doc/deploy.md) on deploying to production.
