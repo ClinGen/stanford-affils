@@ -3,6 +3,9 @@
 Set up API routes.
 """
 
+# Built-in libraries:
+import subprocess
+
 # Third-party dependencies:
 from flask import Flask
 
@@ -12,4 +15,16 @@ app = Flask(__name__)
 @app.route("/")
 def hello_world():
     """A cheeky hello world route."""
-    return {"message": "Look on my Affiliations Service, ye Mighty, and despair!"}
+    return "<p>Look on my Affiliations Service, ye Mighty, and despair!</p>"
+
+
+@app.route("/sha")
+def current_git_sha():
+    """Displays current Git SHA."""
+    command = ["git", "rev-parse", "HEAD"]
+    output = subprocess.run(command, check=False, capture_output=True).stdout.decode(
+        "utf-8"
+    )
+    # Strip newline character from the end of the string.
+    sha = output[0 : len(output) - 1]
+    return sha

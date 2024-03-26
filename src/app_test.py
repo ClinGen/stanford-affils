@@ -14,6 +14,14 @@ def test_root():
     """Ensure our cheeky hello world route works."""
     response = CLIENT.get("/")
     assert response.status_code == 200
-    assert response.json == {
-        "message": "Look on my Affiliations Service, ye Mighty, and despair!"
-    }
+    assert (
+        response.text
+        == "<p>Look on my Affiliations Service, ye Mighty, and despair!</p>"
+    )
+
+
+def test_sha():
+    """Ensure we can get a SHA."""
+    response = CLIENT.get("/sha")
+    assert response.status_code == 200
+    assert len(response.text) == 40  # SHA-1 is 40 characters in length.
