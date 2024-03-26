@@ -12,7 +12,7 @@ For all other command line tasks, the affils project uses [Invoke](https://docs.
 1. Install Python 3.12+.
 2. Install [Pipenv](https://pipenv.pypa.io/en/latest/index.html): `pip install --user pipenv`.
 3. Activate a virtual environment: `pipenv shell`.
-4. Install dependencies: `pipenv sync`.
+4. Install dependencies: `pipenv sync --dev`.
 5. Run the development server: `invoke dev` or `inv dev`.
 6. Read the `tasks.py` module for other command line tasks.
 7. Read the [standards document](./doc/standards.md).
