@@ -31,4 +31,4 @@ use `.env` files, see the [doc on environment variables](./doc/envars.md).
 
 ## Deployment
 
-Read the [doc](./doc/deploy.md) on deploying to production.
+Read the [doc on deploying to production](./doc/deploy.md).
