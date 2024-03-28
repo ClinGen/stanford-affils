@@ -22,6 +22,7 @@ platformdirs==4.2.0
 pluggy==1.4.0
 pylint==3.1.0
 pytest==8.1.1
+python-dotenv==1.0.1
 tomlkit==0.12.4
 typing_extensions==4.10.0
 Werkzeug==3.0.1

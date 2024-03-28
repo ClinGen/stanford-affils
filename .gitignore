@@ -1,7 +1,13 @@
+# Elastic Beanstalk stuff:
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 .elasticbeanstalk/*
 
+# Environment variable files:
+.env.local
+.env.prod
+
+# Python stuff:
 .coverage
 .mypy_cache
 .pytest_cache

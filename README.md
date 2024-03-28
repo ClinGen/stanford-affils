@@ -22,6 +22,12 @@ For all other command line tasks, the affils project uses [Invoke](https://docs.
 We have diagrams for our current and desired affiliations workflow in
 the [diagrams directory](./doc/diagrams).
 
+## Environment variables
+
+We use environment variables files (commonly referred to as `.env`
+files) to configure the affiliations service. For more info on how we
+use `.env` files, see the [doc on environment variables](./doc/envars.md).
+
 ## Deployment
 
 Read the [doc](./doc/deploy.md) on deploying to production.

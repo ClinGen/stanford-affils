@@ -13,6 +13,7 @@ mypy = "*"
 pytest = "*"
 invoke = "*"
 coverage = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.12"
