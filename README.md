@@ -1,6 +1,7 @@
 # affils
 
-affils is ClinGen's affiliations service.
+affils is ClinGen's affiliations service. It is under development. See
+our [roadmap](https://github.com/ClinGen/affils/issues/1).
 
 ## Getting started
 
