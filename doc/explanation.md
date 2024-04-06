@@ -1,4 +1,11 @@
-# Environment variables
+# Explanations
+
+## Affiliations workflow diagrams
+
+We have diagrams for our current and desired affiliations workflow in
+the [diagrams directory](./diagrams).
+
+## Environment variables
 
 There's a `.env.template` file that is the source of truth for
 environment variable keys. You're supposed to create a `.env.local` file
