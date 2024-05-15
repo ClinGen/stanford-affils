@@ -85,23 +85,3 @@ def dev(c):
     Assumes you've activated the virtual environment.
     """
     c.run(f"source {ENV_LOCAL} && cd src && flask run")
-
-
-@task(pre=[envsame])
-def envprod(c):
-    """Set production environment variables."""
-    vars = " ".join([f"{key}={val}" for key, val in PROD_CONFIG.items()])
-    c.run(f"eb setenv {vars}")
-
-
-# Make sure our requirements.txt is up-to-date before we deploy.
-# Set environment variables before we deploy.
-@task(pre=[reqs, envprod])
-def deploy(c):
-    """Deploy the affils service.
-
-    Assumes you have the Elastic Beanstalk CLI tool, eb. Also assumes
-    you have AWS configured properly. You should set Oregon (us-west-2)
-    as your AWS region, and you should have AWS production credentials.
-    """
-    c.run("eb deploy")
