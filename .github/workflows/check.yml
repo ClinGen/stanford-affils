@@ -11,13 +11,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: install Pipenv
+        run: pip install pipenv --user
       - name: install dependencies
-        run: pip install -r requirements.txt
+        run: pipenv sync --dev # Installs all deps, including dev deps, from Pipfile.lock.
       - name: Format
-        run: invoke fmt
+        run: pipenv run invoke fmt
       - name: lint
-        run: invoke lint
+        run: pipenv run invoke lint
       - name: check types
-        run: invoke types
+        run: pipenv run invoke types
       - name: run tests
-        run: invoke test
+        run: pipenv run invoke test
