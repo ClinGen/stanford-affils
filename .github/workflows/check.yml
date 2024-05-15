@@ -1,4 +1,4 @@
-name: Code Checks
+name: continuous integration
 on: [push, pull_request]
 permissions:
   contents: read
@@ -11,13 +11,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install dependencies
+      - name: install dependencies
         run: pip install -r requirements.txt
       - name: Format
         run: invoke fmt
-      - name: Lint
+      - name: lint
         run: invoke lint
-      - name: Check types
+      - name: check types
         run: invoke types
-      - name: Run tests
+      - name: run tests
         run: invoke test
