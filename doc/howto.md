@@ -17,8 +17,8 @@ inv check
 
 ## Style your code
 
-Defer to the formatter (Black) and the linter (pylint). If neither of
-them have an opinion, refer to
+Defer to the formatter (Black) and the linter (pylint). If neither of them have
+an opinion, refer to
 [Google's Python style guide](https://google.github.io/styleguide/pyguide.html).
 
 ## Write code that can be submitted to the main branch
@@ -26,27 +26,24 @@ them have an opinion, refer to
 - Must pass the `check` script.
 - New code must have automated tests.
 - New code must have docstrings.
-- If adding a new tool or something that other developers need to
-  understand, there must be a tutorial for it.
-- If a manual process is being added, there must be a how-to guide for
-  it.
-- If changing something significant (e.g. architecture) there should be
-  a written explanation.
-- If doing something complex or weird, there should be an explanation
-  for it.
+- If adding a new tool or something that other developers need to understand,
+  there must be a tutorial for it.
+- If a manual process is being added, there must be a how-to guide for it.
+- If changing something significant (e.g. architecture) there should be a
+  written explanation.
+- If doing something complex or weird, there should be an explanation for it.
 
 ## Conform to best practices
 
 See our Gecko Group developer best practices spreadsheet
 [here](https://docs.google.com/spreadsheets/d/1MLeEQE-v3eEnEtKNG4oJ8q6a8pal9q462TTgVcodcg4/edit?pli=1#gid=0).
 We are also working toward conforming to OpenSSF Best Practices. See
-[this page](https://www.bestpractices.dev/en/projects/8941) for more
-info.
+[this page](https://www.bestpractices.dev/en/projects/8941) for more info.
 
 ## Organize imports and constants
 
-At the top of any given module there will probably be imports and
-constants. Our preferred way of organizing them is as follows:
+At the top of any given module there will probably be imports and constants. Our
+preferred way of organizing them is as follows:
 
 ```
 # Built-in libraries:
@@ -67,8 +64,8 @@ Each of the sections should be sorted alphabetically.
 
 ## Write a TODO comment
 
-TODO comments should include the name of the person who wrote the TODO
-comment and a link to a GitHub issue describing the TODO in more depth.
+TODO comments should include the name of the person who wrote the TODO comment
+and a link to a GitHub issue describing the TODO in more depth.
 
 ## Write a commit message
 

@@ -29,6 +29,8 @@ ACTUAL_CONF = dotenv_values(ENV_ACTUAL)
 def fmt(c):
     """Format code."""
     c.run("black .")
+    c.run("mdformat README.md")
+    c.run("mdformat doc")
 
 
 @task

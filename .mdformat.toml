@@ -1,0 +1,8 @@
+# Wrap lines to 80 characters.
+wrap = 80
+
+# Apply consecutive numbering to ordered lists.
+number = true
+
+# Use the line feed (AKA newline or \n) character for line endings.
+end_of_line = "lf"

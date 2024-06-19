@@ -4,19 +4,20 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+boto3 = "1.*"
 flask = "==3.*"
-boto3 = "*"
 
 [dev-packages]
 black = "==24.*"
-pylint = "==3.*"
-mypy = "==1.*"
-pytest = "==8.*"
-invoke = "==2.*"
+boto3-stubs = {extras = ["essential"], version = "1.*"}
 coverage = "==7.*"
+invoke = "==2.*"
+mdformat = "0.*"
+mypy = "==1.*"
+pylint = "==3.*"
+pytest = "==8.*"
 python-dotenv = "==1.*"
-sqlfluff = "*"
-boto3-stubs = {extras = ["essential"], version = "*"}
+sqlfluff = "3.*"
 
 [requires]
 python_version = "3.12"
