@@ -33,22 +33,60 @@
             {% for affiliation in affiliations %}
                 <tr>
                     <td>
-                        <a href="/affiliation/{{ affiliation.id }}/edit">Edit</a>
-                        <a href="/affiliation/{{ affiliation.id }}">View</a>
+                        <button id="edit-button-{{ loop.index }}">Edit</button>
+                        <button style="display: none;" id="cancel-button-{{ loop.index }}">Cancel</button>
                     </td>
                     <td>{{ affiliation.id }}</td>
                     <td>{{ affiliation.name }}</td>
-                    <td>{{ affiliation.coordinator }}</td>
-                    <td>{{ affiliation.coordinator_email }}</td>
-                    <td>{{ affiliation.status }}</td>
+                    <td id="coord-name-{{ loop.index }}">
+                        <div id="cn-cell-input-{{ loop.index }}" style="display: none;">
+                            <input type='text' value="{{ affiliation.coordinator }}"/>
+                        </div>
+                        <div id="cn-cell-text-{{ loop.index }}">{{ affiliation.coordinator }}</div>
+                    </td>
+                    <td id="coord-email-{{ loop.index }}">
+                        <div id="ce-cell-input-{{ loop.index }}" style="display: none;">
+                            <input type='text' value="{{ affiliation.coordinator_email }}"/>
+                        </div>
+                        <div id="ce-cell-text-{{ loop.index }}">
+                            {{ affiliation.coordinator_email }}
+                        </div>
+                    </td>
+                    <td id="status-{{ loop.index }}">
+                        <div id="s-cell-input-{{ loop.index }}" style="display: none;">
+                            <input type='text' value="{{ affiliation.status }}"/>
+                        </div>
+                        <div id="s-cell-text-{{ loop.index }}">
+                            {{ affiliation.status }}
+                        </div>
+                    </td>
                     <td>{{ affiliation.type }}</td>
                     <td>{{ affiliation.family }}</td>
-                    <td>{{ affiliation.members }}</td>
-                    <td>{{ affiliation.approvers }}</td>
+                    <td id="members-{{ loop.index }}">
+                        <div id="m-cell-input-{{ loop.index }}" style="display: none;">
+                            <input type='text' value="{{ affiliation.members }}"/>
+                        </div>
+                        <div id="m-cell-text-{{ loop.index }}">
+                            {{ affiliation.members }}
+                        </div>
+                    </td>
+                    <td id="approvers-{{ loop.index }}">
+                        <div>
+                            <div id="a-cell-input-{{ loop.index }}" style="display: none;">
+                                <input type='text' value="{{ affiliation.approvers }}"/>
+                            </div>
+                        </div>
+                        <div id="a-cell-text-{{ loop.index }}">
+                            {{ affiliation.approvers }}
+                        </div>
+                    </td>
                     <td>{{ affiliation.clinvar_submitter_ids }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        {% block javascript %}
+        <script type="text/javascript" src="{{url_for('static', filename='index.js')}}"></script>
+        {% endblock %}
     </div>
 {% endblock %}

@@ -141,4 +141,6 @@ def dev(c):
     Assumes you've activated the virtual environment. Also assumes
     you're in the root directory.
     """
-    c.run(f"source {ENV_ACTUAL} && cd src && flask run")
+    # c.run(f"source {ENV_ACTUAL} && cd src && flask run -p 8080")
+
+    c.run(f"source {ENV_ACTUAL} && echo $AFFILS_DB_FILE && cd src && flask run -p 8080")
