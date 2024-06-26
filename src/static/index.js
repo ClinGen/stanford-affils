@@ -1,15 +1,9 @@
 function handleEditClick(event) {
     const rowId = getRowId(event.srcElement.id);
     // Toggle visibilities of buttons.
-    toggleVisible(event.srcElement.id);
     toggleVisible("cancel-button-"+rowId);
-
-    // Get a NodeList Obj of all cells in the row that was selected.
-    var cells = document.querySelectorAll("div[id$=" + CSS.escape(rowId) + "]");
-    // Toggle div visibility.
-    for (const cell of cells) {
-        toggleVisible(cell.id);
-    }
+    toggleAllOfSame("button[id^='edit-button-']");
+    toggleAllOfSame("div[id$=" + CSS.escape(rowId) + "]");
 };
 
 // Get a NodeList Obj of all edit buttons, add EventListener to each.
@@ -22,14 +16,8 @@ function handleCancelClick(event) {
     const rowId = getRowId(event.srcElement.id);
     // Toggle visibilities of buttons.
     toggleVisible(event.srcElement.id);
-    toggleVisible("edit-button-"+rowId);
-
-    // Get a NodeList Obj of all cells in the row that was selected.
-    var cells = document.querySelectorAll("div[id$=" + CSS.escape(rowId) + "]");
-    // Toggle div visibility.
-    for (const cell of cells) {
-        toggleVisible(cell.id);
-    };
+    toggleAllOfSame("button[id^='edit-button-']");
+    toggleAllOfSame("div[id$=" + CSS.escape(rowId) + "]");
 };
 
 // Get a NodeList Obj of all cancel buttons, add EventListener to each.
@@ -52,4 +40,11 @@ function toggleVisible(idName) {
         } else {
             x.style.display = "none";
         }
+};
+
+function toggleAllOfSame(identifier) {
+    var idNodeListObj = document.querySelectorAll(identifier);
+    for (const item of idNodeListObj) {
+        toggleVisible(item.id);
+    };
 };

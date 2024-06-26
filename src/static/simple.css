@@ -722,3 +722,9 @@ sub {
   overflow-x: auto;
   padding: 1.5rem;
 }
+
+.cancel-button {
+  background: #DC143C;
+  color : white;
+  border-color: #DC143C;
+}

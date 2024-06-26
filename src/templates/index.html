@@ -12,11 +12,11 @@
     </nav>
 {% endblock %}
 {% block content %}
-    <div class="scrollable">
+    <div>
         <table>
             <thead>
             <tr>
-                <th>Links</th>
+                <th>Options</th>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Coordinator</th>
@@ -34,7 +34,7 @@
                 <tr>
                     <td>
                         <button id="edit-button-{{ loop.index }}">Edit</button>
-                        <button style="display: none;" id="cancel-button-{{ loop.index }}">Cancel</button>
+                        <button class="cancel-button" style="display: none;" id="cancel-button-{{ loop.index }}">Cancel</button>
                     </td>
                     <td>{{ affiliation.id }}</td>
                     <td>{{ affiliation.name }}</td>
