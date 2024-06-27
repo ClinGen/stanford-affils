@@ -18,6 +18,14 @@ function handleCancelClick(event) {
     toggleVisible(event.srcElement.id);
     toggleAllOfSame("button[id^='edit-button-']");
     toggleAllOfSame("div[id$=" + CSS.escape(rowId) + "]");
+
+    // Replace cancelled input text with existing cell text.
+    var allInputs = document.querySelectorAll("input");
+    var allTextCells = document.querySelectorAll("div[id$='cell-text-" + CSS.escape(rowId) + "']");
+    for (let i = 0; i < allTextCells.length; i++) {
+        allInputs[i].value = allTextCells[i].textContent.trim();
+    };
+    // allInputs.forEach(singleInput => singleInput.value = .textContent.trim());
 };
 
 // Get a NodeList Obj of all cancel buttons, add EventListener to each.

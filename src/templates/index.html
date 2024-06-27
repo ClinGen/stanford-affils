@@ -71,10 +71,8 @@
                         </div>
                     </td>
                     <td id="approvers-{{ loop.index }}">
-                        <div>
-                            <div id="a-cell-input-{{ loop.index }}" style="display: none;">
-                                <input type='text' value="{{ affiliation.approvers }}"/>
-                            </div>
+                        <div id="a-cell-input-{{ loop.index }}" style="display: none;">
+                            <input type='text' value="{{ affiliation.approvers }}"/>
                         </div>
                         <div id="a-cell-text-{{ loop.index }}">
                             {{ affiliation.approvers }}
