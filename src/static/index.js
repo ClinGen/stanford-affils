@@ -35,6 +35,27 @@ for (const cancelButton of cancelButtons) {
     cancelButton.addEventListener("click", handleCancelClick);
 };
 
+function handleSubmitClick(event) {
+    const rowId = getRowId(event.srcElement.id);
+    // Toggle visibilities of buttons.
+    toggleVisible(event.srcElement.id);
+    toggleAllOfSame("button[id^='edit-button-']");
+    toggleAllOfSame("button[id^='cancel-button-" + CSS.escape(rowId) + "']");
+    toggleAllOfSame("div[id$=" + CSS.escape(rowId) + "]");
+
+    // Replace cancelled input text with existing cell text.
+    var allInputs = document.querySelectorAll("input");
+    var allTextCells = document.querySelectorAll("div[id$='cell-text-" + CSS.escape(rowId) + "']");
+    for (let i = 0; i < allTextCells.length; i++) {
+        allTextCells[i].textContent = allInputs[i].value;
+    };
+};
+// Get a NodeList Obj of all cancel buttons, add EventListener to each.
+var submitButtons = document.querySelectorAll("button[id^='submit-button-']");
+for (const submitButton of submitButtons) {
+    submitButton.addEventListener("click", handleSubmitClick);
+};
+
 // Helper function to get rowId.
 function getRowId(idName) {
     const rowId = idName.slice(idName.lastIndexOf("-") + 1,idName.length);
