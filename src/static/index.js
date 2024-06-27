@@ -3,6 +3,7 @@ function handleEditClick(event) {
     // Toggle visibilities of buttons.
     toggleVisible("cancel-button-"+rowId);
     toggleAllOfSame("button[id^='edit-button-']");
+    toggleAllOfSame("button[id^='submit-button-" + CSS.escape(rowId) + "']");
     toggleAllOfSame("div[id$=" + CSS.escape(rowId) + "]");
 };
 
@@ -17,6 +18,7 @@ function handleCancelClick(event) {
     // Toggle visibilities of buttons.
     toggleVisible(event.srcElement.id);
     toggleAllOfSame("button[id^='edit-button-']");
+    toggleAllOfSame("button[id^='submit-button-" + CSS.escape(rowId) + "']");
     toggleAllOfSame("div[id$=" + CSS.escape(rowId) + "]");
 
     // Replace cancelled input text with existing cell text.
@@ -25,7 +27,6 @@ function handleCancelClick(event) {
     for (let i = 0; i < allTextCells.length; i++) {
         allInputs[i].value = allTextCells[i].textContent.trim();
     };
-    // allInputs.forEach(singleInput => singleInput.value = .textContent.trim());
 };
 
 // Get a NodeList Obj of all cancel buttons, add EventListener to each.
