@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block header %}
+    <h1>ClinGen Affiliations Service</h1>
+    <nav>
+        <p>You are logged in as: {{ email }}</p>
+        <a href="/logout">Log out</a>
+    </nav>
+{% endblock %}
+{% block content %}
+{% if not affiliation %}
+    <p>Not found</p>
+{% else %}
+    <p>{{affiliation.name}}</p>
+{% endif %}
+{% endblock %}

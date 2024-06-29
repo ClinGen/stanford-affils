@@ -33,6 +33,7 @@
             {% for affiliation in affiliations %}
                 <tr>
                     <td>
+                        <a href="/edit?affil={{affiliation.id}}">Real edit</a>
                         <a href="/affiliation/{{ affiliation.id }}/edit">Edit</a>
                         <a href="/affiliation/{{ affiliation.id }}">View</a>
                     </td>

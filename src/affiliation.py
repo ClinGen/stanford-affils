@@ -62,6 +62,25 @@ class Affiliation:
         return cls(*row)
 
     @classmethod
+    def get_by_id(cls, id) -> Optional['Affiliation']:
+        """Return an affiliation matching a given ID."""
+        con = sqlite3.connect(DB_FILE)  # type: ignore
+        cur = con.cursor()
+        try:
+            cur.execute(f"SELECT * FROM affiliations WHERE id = {id}")
+            result = cur.fetchone()
+        except sqlite3.Error as err:
+            logger.error("Unable to get all affiliations")
+            logger.error("Error code: %s", err.sqlite_errorcode)
+            logger.error("Error name: %s", err.sqlite_errorname)
+            con.rollback()
+            result = None
+        con.close()
+        if result:
+            return cls._row_to_affiliation(result)
+        return None
+
+    @classmethod
     def all(cls) -> Optional[List]:
         """Return all affiliations in the database."""
         all_affiliations = []
