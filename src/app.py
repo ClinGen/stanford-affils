@@ -46,6 +46,21 @@ def index():
     return render_template("index.html", affiliations=affiliations_set, email=email)
 
 
+@app.route("/edit")
+def edit():
+    logger.info("User accessed edit")
+    affil_id = request.args.get('affil')
+    if not affil_id:
+        return redirect(url_for("index"))
+    # email = session.get("email")
+    # if not email:
+    #     return redirect(url_for("login"))
+    affiliation = Affiliation.get_by_id(affil_id)
+    # if not affiliation:
+    #     return redirect(url_for("index"))
+    return render_template("edit.html", affiliation=affiliation)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """The login route.

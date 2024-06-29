@@ -33,6 +33,7 @@
             {% for affiliation in affiliations %}
                 <tr>
                     <td>
+                        <a href="/edit?affil={{affiliation.id}}">Real edit</a>
                         <button id="edit-button-{{ loop.index }}">Edit</button>
                         <button class="cancel-button" style="display: none;" id="cancel-button-{{ loop.index }}">Cancel</button>
                         <button class="submit-button" style="display: none;" id="submit-button-{{ loop.index }}">Submit</button>
