@@ -1,5 +1,6 @@
 # Environment variable files:
 .env
+**/.DS_Store
 
 # Python stuff:
 .coverage

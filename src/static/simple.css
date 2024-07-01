@@ -22,7 +22,7 @@ https://github.com/kevquirk/simple.css
   --text-light: #585858;
   --border: #898EA4;
   --accent: #0d47a1;
-  --accent-hover: #1266e2;
+  /* --accent-hover: #1266e2; */
   --accent-text: var(--bg);
   --code: #d81b60;
   --preformatted: #444;
@@ -40,7 +40,7 @@ https://github.com/kevquirk/simple.css
     --text: #dcdcdc;
     --text-light: #ababab;
     --accent: #ffb300;
-    --accent-hover: #ffe099;
+    /* --accent-hover: #ffe099; */
     --accent-text: var(--bg);
     --code: #f06292;
     --preformatted: #ccc;
@@ -721,4 +721,55 @@ sub {
   margin: 2rem 0;
   overflow-x: auto;
   padding: 1.5rem;
+}
+
+.form-group{
+  align-items: baseline;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+  padding-left: 70px;
+}
+
+label {
+  padding-right: 20px;
+}
+
+.submit-button {
+  color: white;
+  background-color: #31b033;
+  border: #31b033;
+  width: 150px;
+  height: 60px;
+  margin: 15px;
+}
+button.submit-button:hover {
+  background-color: #53d455;
+  border: #53d455;
+}
+
+.cancel-button {
+  color: white;
+  background-color: #b04831;
+  border: #b04831;
+  width: 150px;
+  height: 60px;
+  margin: 15px;
+}
+
+button.cancel-button:hover {
+  background-color: #e06d53;
+  border: #e06d53;
+}
+
+
+.buttons {
+  display: inline;
+  margin: auto;
 }

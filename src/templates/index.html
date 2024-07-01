@@ -24,18 +24,21 @@
                 <th>Status</th>
                 <th>Type</th>
                 <th>Family</th>
+                <th>ClinVar Submitter IDs</th>
                 <th>Members</th>
                 <th>Approvers</th>
-                <th>ClinVar Submitter IDs</th>
             </tr>
             </thead>
             <tbody>
             {% for affiliation in affiliations %}
                 <tr>
                     <td>
-                        <a href="/edit?affil={{affiliation.id}}">Real edit</a>
-                        <a href="/affiliation/{{ affiliation.id }}/edit">Edit</a>
-                        <a href="/affiliation/{{ affiliation.id }}">View</a>
+                        <a href="/edit?affil={{affiliation.id}}">
+                            <button>Edit</button>
+                        </a>
+                        <a href="/affiliation/{{ affiliation.id }}">
+                            <button>View</button>
+                        </a>
                     </td>
                     <td>{{ affiliation.id }}</td>
                     <td>{{ affiliation.name }}</td>
@@ -44,9 +47,9 @@
                     <td>{{ affiliation.status }}</td>
                     <td>{{ affiliation.type }}</td>
                     <td>{{ affiliation.family }}</td>
+                    <td>{{ affiliation.clinvar_submitter_ids }}</td>
                     <td>{{ affiliation.members }}</td>
                     <td>{{ affiliation.approvers }}</td>
-                    <td>{{ affiliation.clinvar_submitter_ids }}</td>
                 </tr>
             {% endfor %}
             </tbody>
