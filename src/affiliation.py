@@ -57,7 +57,7 @@ class Affiliation:
         self.errors: dict = {}
 
     @classmethod
-    def _row_to_affiliation(cls, row: tuple) -> object:
+    def _row_to_affiliation(cls, row: tuple) -> 'Affiliation':
         """Convert table row to instance of affiliations object."""
         return cls(*row)
 
