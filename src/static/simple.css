@@ -22,7 +22,7 @@ https://github.com/kevquirk/simple.css
   --text-light: #585858;
   --border: #898EA4;
   --accent: #0d47a1;
-  /* --accent-hover: #1266e2; */
+  --accent-hover: #1266e2;
   --accent-text: var(--bg);
   --code: #d81b60;
   --preformatted: #444;
@@ -40,7 +40,7 @@ https://github.com/kevquirk/simple.css
     --text: #dcdcdc;
     --text-light: #ababab;
     --accent: #ffb300;
-    /* --accent-hover: #ffe099; */
+    --accent-hover: #ffe099;
     --accent-text: var(--bg);
     --code: #f06292;
     --preformatted: #ccc;
@@ -725,16 +725,16 @@ sub {
 
 .form-group{
   align-items: baseline;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  margin-top: 15px;
 }
-.row {
-  display: flex;
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 30%;
+  grid-template-rows: 1fr 1fr;
 }
 
 .column {
-  flex: 50%;
-  padding-left: 70px;
+  width: 100%;
 }
 
 label {
@@ -768,8 +768,11 @@ button.cancel-button:hover {
   border: #e06d53;
 }
 
-
 .buttons {
   display: inline;
   margin: auto;
+}
+
+.center {
+  text-align: center;
 }

@@ -45,15 +45,15 @@ class Affiliation:
         """
         # pylint: disable=too-many-arguments
         self.id = id_
-        self.name = name
-        self.coordinator = coordinator
-        self.coordinator_email = coordinator_email
+        self.name = name if name else ""
+        self.coordinator = coordinator if coordinator else ""
+        self.coordinator_email = coordinator_email if coordinator_email else ""
         self.status = status
-        self.type = type_
-        self.family = family
-        self.members = members
-        self.approvers = approvers
-        self.clinvar_submitter_ids = clinvar_submitter_ids
+        self.type = type_ if type_ else ""
+        self.family = family if family else ""
+        self.members = members if members else []
+        self.approvers = approvers if approvers else []
+        self.clinvar_submitter_ids = clinvar_submitter_ids if clinvar_submitter_ids else []
         self.errors: dict = {}
 
     @classmethod

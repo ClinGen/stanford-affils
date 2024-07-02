@@ -34,22 +34,22 @@
                 <tr>
                     <td>
                         <a href="/edit?affil={{affiliation.id}}">
-                            <button>Edit</button>
+                            <button class="edit-button">Edit</button>
                         </a>
                         <a href="/affiliation/{{ affiliation.id }}">
-                            <button>View</button>
+                            <button class="view-button">View</button>
                         </a>
                     </td>
                     <td>{{ affiliation.id }}</td>
                     <td>{{ affiliation.name }}</td>
-                    <td>{{ affiliation.coordinator }}</td>
-                    <td>{{ affiliation.coordinator_email }}</td>
+                    <td>{{ affiliation.coordinator if affiliation.coordinator else "None" }}</td>
+                    <td>{{ affiliation.coordinator_email if affiliation.coordinator_email else "None" }}</td>
                     <td>{{ affiliation.status }}</td>
-                    <td>{{ affiliation.type }}</td>
-                    <td>{{ affiliation.family }}</td>
-                    <td>{{ affiliation.clinvar_submitter_ids }}</td>
-                    <td>{{ affiliation.members }}</td>
-                    <td>{{ affiliation.approvers }}</td>
+                    <td>{{ affiliation.type if affiliation.type else "None" }}</td>
+                    <td>{{ affiliation.family if affiliation.family else "None" }}</td>
+                    <td>{{ affiliation.clinvar_submitter_ids if affiliation.clinvar_submitter_ids else "None" }}</td>
+                    <td>{{ affiliation.members if affiliation.members else "None" }}</td>
+                    <td>{{ affiliation.approvers if affiliation.approvers else "None" }}</td>
                 </tr>
             {% endfor %}
             </tbody>
