@@ -53,21 +53,23 @@ class Affiliation:
         self.family = family if family else ""
         self.members = members if members else []
         self.approvers = approvers if approvers else []
-        self.clinvar_submitter_ids = clinvar_submitter_ids if clinvar_submitter_ids else []
+        self.clinvar_submitter_ids = (
+            clinvar_submitter_ids if clinvar_submitter_ids else []
+        )
         self.errors: dict = {}
 
     @classmethod
-    def _row_to_affiliation(cls, row: tuple) -> 'Affiliation':
+    def _row_to_affiliation(cls, row: tuple) -> "Affiliation":
         """Convert table row to instance of affiliations object."""
         return cls(*row)
 
     @classmethod
-    def get_by_id(cls, id_) -> Optional['Affiliation']:
+    def get_by_id(cls, id_) -> Optional["Affiliation"]:
         """Return an affiliation matching a given ID."""
         con = sqlite3.connect(DB_FILE)  # type: ignore
         cur = con.cursor()
         try:
-            cur.execute("SELECT * FROM affiliations WHERE id = ?", (id_, ))
+            cur.execute("SELECT * FROM affiliations WHERE id = ?", (id_,))
             result = cur.fetchone()
         except sqlite3.Error as err:
             logger.error("Unable to get affiliation by ID")

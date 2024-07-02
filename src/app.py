@@ -48,12 +48,9 @@ def index():
 
 @app.route("/edit")
 def edit():
-    """The edit route.
-
-    Edit an existing affiliation.
-    """
+    """Edit an existing affiliation."""
     logger.info("User accessed edit")
-    affil_id = request.args.get('affil')
+    affil_id = request.args.get("affil")
     if not affil_id:
         return redirect(url_for("index"))
     email = session["email"] if "email" in session else None
