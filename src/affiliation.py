@@ -67,10 +67,10 @@ class Affiliation:
         con = sqlite3.connect(DB_FILE)  # type: ignore
         cur = con.cursor()
         try:
-            cur.execute(f"SELECT * FROM affiliations WHERE id = {id_}")
+            cur.execute("SELECT * FROM affiliations WHERE id = ?", (id_, ))
             result = cur.fetchone()
         except sqlite3.Error as err:
-            logger.error("Unable to get all affiliations")
+            logger.error("Unable to get affiliation by ID")
             logger.error("Error code: %s", err.sqlite_errorcode)
             logger.error("Error name: %s", err.sqlite_errorname)
             con.rollback()
