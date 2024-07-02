@@ -727,6 +727,7 @@ sub {
   align-items: baseline;
   margin-top: 15px;
 }
+
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 30%;
@@ -737,10 +738,6 @@ sub {
   width: 100%;
 }
 
-label {
-  padding-right: 20px;
-}
-
 .submit-button {
   color: white;
   background-color: #31b033;
@@ -749,6 +746,7 @@ label {
   height: 60px;
   margin: 15px;
 }
+
 button.submit-button:hover {
   background-color: #53d455;
   border: #53d455;
