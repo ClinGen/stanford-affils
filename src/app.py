@@ -48,17 +48,20 @@ def index():
 
 @app.route("/edit")
 def edit():
+    """The edit route.
+
+    Edit an existing affiliation.
+    """
     logger.info("User accessed edit")
     affil_id = request.args.get('affil')
     if not affil_id:
         return redirect(url_for("index"))
-    # email = session.get("email")
-    # if not email:
-    #     return redirect(url_for("login"))
+    email = session["email"] if "email" in session else None
+    # TODO(sanchegm): Redirect to main page if user is not logged in.
     affiliation = Affiliation.get_by_id(affil_id)
-    # if not affiliation:
-    #     return redirect(url_for("index"))
-    return render_template("edit.html", affiliation=affiliation)
+    if not affiliation:
+        return redirect(url_for("index"))
+    return render_template("edit.html", affiliation=affiliation, email=email)
 
 
 @app.route("/login", methods=["GET", "POST"])
