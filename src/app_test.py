@@ -50,3 +50,17 @@ def test_sha_route():
     response = CLIENT.get("/sha")
     assert response.status_code == 200
     assert len(response.text) == 40  # SHA-1 is 40 characters in length.
+
+
+def test_edit_route():
+    """Ensure edit route redirects."""
+    response = CLIENT.get("/edit?affil=10000")
+    assert response.status_code == 200
+    assert "Submit</button>" in response.text
+    assert "<button>Cancel" in response.text
+    assert "<label>Name:</label>" in response.text
+    assert (
+        '<input type="text" value="Interface Admin" placeholder="Name" />'
+        in response.text
+    )
+    assert "<label>Family:</label>" in response.text
