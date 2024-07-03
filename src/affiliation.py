@@ -45,21 +45,42 @@ class Affiliation:
         """
         # pylint: disable=too-many-arguments
         self.id = id_
-        self.name = name
-        self.coordinator = coordinator
-        self.coordinator_email = coordinator_email
+        self.name = name if name else ""
+        self.coordinator = coordinator if coordinator else ""
+        self.coordinator_email = coordinator_email if coordinator_email else ""
         self.status = status
-        self.type = type_
-        self.family = family
-        self.members = members
-        self.approvers = approvers
-        self.clinvar_submitter_ids = clinvar_submitter_ids
+        self.type = type_ if type_ else ""
+        self.family = family if family else ""
+        self.members = members if members else []
+        self.approvers = approvers if approvers else []
+        self.clinvar_submitter_ids = (
+            clinvar_submitter_ids if clinvar_submitter_ids else []
+        )
         self.errors: dict = {}
 
     @classmethod
-    def _row_to_affiliation(cls, row: tuple) -> object:
+    def _row_to_affiliation(cls, row: tuple) -> "Affiliation":
         """Convert table row to instance of affiliations object."""
         return cls(*row)
+
+    @classmethod
+    def get_by_id(cls, id_) -> Optional["Affiliation"]:
+        """Return an affiliation matching a given ID."""
+        con = sqlite3.connect(DB_FILE)  # type: ignore
+        cur = con.cursor()
+        try:
+            cur.execute("SELECT * FROM affiliations WHERE id = ?", (id_,))
+            result = cur.fetchone()
+        except sqlite3.Error as err:
+            logger.error("Unable to get affiliation by ID")
+            logger.error("Error code: %s", err.sqlite_errorcode)
+            logger.error("Error name: %s", err.sqlite_errorname)
+            con.rollback()
+            result = None
+        con.close()
+        if result:
+            return cls._row_to_affiliation(result)
+        return None
 
     @classmethod
     def all(cls) -> Optional[List]:
