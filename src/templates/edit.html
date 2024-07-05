@@ -27,12 +27,25 @@
                 <input name="name" type="text" value="{{affiliation.name}}" placeholder="Name" />
             </div>
             <div>
-                <label>Status: {{affiliation.status}}</label>
+                <label>Status:</label>
                 <select name="status">
+                    {% if affiliation.status == "Active" %}
+                    <option  selected>Active</option>
+                    {% else %}
                     <option>Active</option>
+                    {% endif %}
+                    {% if affiliation.status == "Pending" %}
+                    <option  selected>Pending</option>
+                    {% else %}
                     <option>Pending</option>
+                    {% endif %}
+                    {% if affiliation.status == "Retired" %}
+                    <option  selected>Retired</option>
+                    {% else %}
                     <option>Retired</option>
+                    {% endif %}
                 </select>
+
             </div>
             <div>
                 <label>Coordinator:</label>
@@ -50,9 +63,22 @@
             <div>
                 <label>Type:</label>
                 <select name="type">
+                    {% if affiliation.type == "Expert Panel" %}
+                    <option  selected>Expert Panel</option>
+                    {% else %}
                     <option>Expert Panel</option>
+                    {% endif %}
+                    {% if affiliation.type == "Working Group" %}
+                    <option  selected>Working Group</option>
+                    {% else %}
                     <option>Working Group</option>
+                    {% endif %}
+                    {% if affiliation.type == "Clinical Domain Working Group" %}
+                    <option  selected>Clinical Domain Working Group</option>
+                    {% else %}
                     <option>Clinical Domain Working Group</option>
+                    {% endif %}
+
                 </select>
             </div>
         </div>
