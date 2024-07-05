@@ -54,13 +54,10 @@ def test_sha_route():
 
 def test_edit_route():
     """Ensure edit route redirects."""
-    response = CLIENT.get("/edit?affil=10000")
+    response = CLIENT.get("/edit/10000")
     assert response.status_code == 200
     assert "Submit</button>" in response.text
-    assert "<button>Cancel" in response.text
+    assert "<button>Back" in response.text
     assert "<label>Name:</label>" in response.text
-    assert (
-        '<input type="text" value="Interface Admin" placeholder="Name" />'
-        in response.text
-    )
+    assert '<select name="status">'in response.text
     assert "<label>Family:</label>" in response.text
