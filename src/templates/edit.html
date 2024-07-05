@@ -11,64 +11,67 @@
 <p>Not found</p>
 {% else %}
 <div style="margin-top: 20px;">
-    <button style="margin-right: 10px;">Submit</button>
     <a href="/">
-        <button>Cancel Edit</button>
+        <button>Back</button>
     </a>
 </div>
-<div>
-    <h3>ID: {{affiliation.id}}</h3>
-</div>
-<form>
-    <div>
+<form action="/edit/{{affiliation.id}}" method="post">
+    <fieldset>
+        <button style="margin-right: 10px;">Submit</button>
         <div>
-            <label>Name:</label>
-            <input type="text" value="{{affiliation.name}}" placeholder="Name" />
+            <h3>ID: {{affiliation.id}}</h3>
         </div>
         <div>
-            <label>Status: {{affiliation.status}}</label>
-            <select>
-                <option>Active</option>
-                <option>Pending</option>
-                <option>Retired</option>
-            </select>
+            <div>
+                <label>Name:</label>
+                <input name="name" type="text" value="{{affiliation.name}}" placeholder="Name" />
+            </div>
+            <div>
+                <label>Status: {{affiliation.status}}</label>
+                <select name="status">
+                    <option>Active</option>
+                    <option>Pending</option>
+                    <option>Retired</option>
+                </select>
+            </div>
+            <div>
+                <label>Coordinator:</label>
+                <input name="coordinator" type="text" value="{{affiliation.coordinator}}" placeholder="Name" />
+            </div>
+            <div>
+                <label>Coordinator Email:</label>
+                <input name="coordinator_email" type="text" value="{{affiliation.coordinator_email}}"
+                    placeholder="user@example.com" />
+            </div>
+            <div>
+                <label>Family:</label>
+                <input name="family" type="text" value="{{affiliation.family}}" placeholder="Family" />
+            </div>
+            <div>
+                <label>Type:</label>
+                <select name="type">
+                    <option>Expert Panel</option>
+                    <option>Working Group</option>
+                    <option>Clinical Domain Working Group</option>
+                </select>
+            </div>
         </div>
         <div>
-            <label>Coordinator:</label>
-            <input type="text" value="{{affiliation.coordinator}}" placeholder="Name" />
+            <label>Members:</label>
+            <textarea name="members" rows="5" cols="100"
+                placeholder="Name One&#10;Name Two">{{affiliation.members}}</textarea>
         </div>
         <div>
-            <label>Coordinator Email:</label>
-            <input type="text" value="{{affiliation.coordinator_email}}" placeholder="user@example.com" />
+            <label>Approvers:</label>
+            <textarea name="approvers" rows="5" cols="100"
+                placeholder="Name One&#10;Name Two">{{affiliation.approvers}}</textarea>
         </div>
         <div>
-            <label>Family:</label>
-            <input type="text" value="{{affiliation.family}}" placeholder="Family" />
+            <label>ClinVar Submitter IDs:</label>
+            <textarea name="clinvar_submitter_ids" rows="5" cols="100"
+                placeholder="001&#10;002">{{affiliation.clinvar_submitter_ids}}</textarea>
         </div>
-        <div>
-            <label>Type:</label>
-            <select>
-                <option>Expert Panel</option>
-                <option>Working Group</option>
-                <option>Clinical Domain Working Group</option>
-            </select>
-        </div>
-    </div>
-    <div>
-        <label>Members:</label>
-        <textarea rows="5" cols="100"
-            placeholder="Name One&#10;Name Two">{{'\n'.join(affiliation.members)|safe}}</textarea>
-    </div>
-    <div>
-        <label>Approvers:</label>
-        <textarea rows="5" cols="100"
-            placeholder="Name One&#10;Name Two">{{'\n'.join(affiliation.approvers)|safe}}</textarea>
-    </div>
-    <div>
-        <label>ClinVar Submitter IDs:</label>
-        <textarea rows="5" cols="100"
-            placeholder="001&#10;002">{{'\n'.join(affiliation.clinvar_submitter_ids)|safe}}</textarea>
-    </div>
+    </fieldset>
 </form>
 {% endif %}
 {% endblock %}

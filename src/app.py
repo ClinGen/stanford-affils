@@ -11,6 +11,7 @@ import sys
 # Third-party dependencies:
 from flask import (
     Flask,
+    flash,
     redirect,
     render_template,
     request,
@@ -46,11 +47,10 @@ def index():
     return render_template("index.html", affiliations=affiliations_set, email=email)
 
 
-@app.route("/edit")
-def edit():
+@app.route("/edit/<affil_id>",  methods=["GET"])
+def edit_get(affil_id):
     """Edit an existing affiliation."""
     logger.info("User accessed edit")
-    affil_id = request.args.get("affil")
     if not affil_id:
         return redirect(url_for("index"))
     email = session["email"] if "email" in session else None
@@ -59,6 +59,29 @@ def edit():
     if not affiliation:
         return redirect(url_for("index"))
     return render_template("edit.html", affiliation=affiliation, email=email)
+
+
+@app.route("/edit/<affil_id>",  methods=["POST"])
+def edit_post(affil_id):
+    """Edit an existing affiliation."""
+    logger.info("User accessed edit")
+    if not affil_id:
+        return redirect(url_for("index"))
+    affiliation = Affiliation.get_by_id(affil_id)
+    if affiliation.save(request.form['name'],
+                        request.form['coordinator'],
+                        request.form['coordinator_email'],
+                        request.form['status'],
+                        request.form['type'],
+                        request.form['family'],
+                        request.form['members'],
+                        request.form['approvers'],
+                        request.form['clinvar_submitter_ids'],
+                        affil_id):
+        flash("Updated Affiliation")
+        return redirect(url_for("index"))
+    else:
+        return render_template("edit.html", affiliation=affiliation)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -100,5 +123,5 @@ def current_git_sha():
         "utf-8"
     )
     # Strip newline character from the end of the string.
-    sha = output[0 : len(output) - 1]
+    sha = output[0: len(output) - 1]
     return sha

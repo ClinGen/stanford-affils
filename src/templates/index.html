@@ -12,7 +12,7 @@
 </nav>
 {% endblock %}
 {% block content %}
-<div class="scrollable">
+<div>
     <table>
         <thead>
             <tr>
@@ -24,16 +24,16 @@
                 <th>Status</th>
                 <th>Type</th>
                 <th>Family</th>
-                <th>ClinVar Submitter IDs</th>
                 <th>Members</th>
                 <th>Approvers</th>
+                <th>ClinVar Submitter IDs</th>
             </tr>
         </thead>
         <tbody>
             {% for affiliation in affiliations %}
             <tr>
                 <td>
-                    <a href="/edit?affil={{affiliation.id}}">
+                    <a href="/edit/{{affiliation.id}}">
                         <button class="edit-button">Edit</button>
                     </a>
                     <a href="/affiliation/{{ affiliation.id }}">
@@ -47,9 +47,9 @@
                 <td>{{ affiliation.status }}</td>
                 <td>{{ affiliation.type if affiliation.type else "None" }}</td>
                 <td>{{ affiliation.family if affiliation.family else "None" }}</td>
-                <td>{{ affiliation.clinvar_submitter_ids if affiliation.clinvar_submitter_ids else "None" }}</td>
                 <td>{{ affiliation.members if affiliation.members else "None" }}</td>
                 <td>{{ affiliation.approvers if affiliation.approvers else "None" }}</td>
+                <td>{{ affiliation.clinvar_submitter_ids if affiliation.clinvar_submitter_ids else "None" }}</td>
             </tr>
             {% endfor %}
         </tbody>

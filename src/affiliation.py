@@ -25,9 +25,9 @@ class Affiliation:
         status: Optional[str] = None,
         type_: Optional[str] = None,
         family: Optional[str] = None,
-        members: Optional[List[str]] = None,
-        approvers: Optional[List[str]] = None,
-        clinvar_submitter_ids: Optional[List[int]] = None,
+        members: Optional[str] = None,
+        approvers: Optional[str] = None,
+        clinvar_submitter_ids: Optional[int] = None,
     ):
         """Initialize an affiliations object.
 
@@ -51,12 +51,30 @@ class Affiliation:
         self.status = status
         self.type = type_ if type_ else ""
         self.family = family if family else ""
-        self.members = members if members else []
-        self.approvers = approvers if approvers else []
-        self.clinvar_submitter_ids = (
-            clinvar_submitter_ids if clinvar_submitter_ids else []
-        )
+        self.members = members if members else ""
+        self.approvers = approvers if approvers else ""
+        self.clinvar_submitter_ids = clinvar_submitter_ids if clinvar_submitter_ids else ""
         self.errors: dict = {}
+
+    def save(cls, name, coordinator, coordinator_email, status, type_, family, members, approvers, clinvar_submitter_ids, id_):
+        con = sqlite3.connect(DB_FILE)  # type: ignore
+        cur = con.cursor()
+        logger.info(type(approvers))
+        try:
+            query = ("UPDATE affiliations SET name=?, coordinator=?, "
+                     "coordinator_email=?, status=?, type=?, family=?, "
+                     "members=?, approvers=?, clinvar_submitter_ids=? WHERE id=?")
+            cur.execute(query, (name, coordinator, coordinator_email, status,
+                        type_, family, members, approvers, clinvar_submitter_ids, id_))
+        except sqlite3.Error as err:
+            logger.error("Unable to update affiliation by ID.")
+            logger.error("Error code: %s", err.sqlite_errorcode)
+            logger.error("Error name: %s", err.sqlite_errorname)
+            con.rollback()
+            return False
+        con.commit()
+        con.close()
+        return True
 
     @classmethod
     def _row_to_affiliation(cls, row: tuple) -> "Affiliation":
