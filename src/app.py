@@ -68,20 +68,20 @@ def edit_post(affil_id):
     if not affil_id:
         return redirect(url_for("index"))
     affiliation = Affiliation.get_by_id(affil_id)
-    if affiliation.save(request.form['name'],
-                        request.form['coordinator'],
-                        request.form['coordinator_email'],
-                        request.form['status'],
-                        request.form['type'],
-                        request.form['family'],
-                        request.form['members'],
-                        request.form['approvers'],
-                        request.form['clinvar_submitter_ids'],
-                        affil_id):
+    new_values = {"name": request.form['name'],
+                  "coordinator": request.form['coordinator'],
+                  "coord_email": request.form['coordinator_email'],
+                  "status": request.form['status'],
+                  "type": request.form['type'],
+                  "family": request.form['family'],
+                  "members": request.form['members'],
+                  "approvers": request.form['approvers'],
+                  "clinvar_submitter_ids": request.form['clinvar_submitter_ids']
+                  }
+    if affiliation.save(new_values, affil_id):
         flash("Updated Affiliation")
         return redirect(url_for("index"))
-    else:
-        return render_template("edit.html", affiliation=affiliation)
+    return render_template("edit.html", affiliation=affiliation)
 
 
 @app.route("/login", methods=["GET", "POST"])

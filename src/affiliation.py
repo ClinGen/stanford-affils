@@ -56,16 +56,20 @@ class Affiliation:
         self.clinvar_submitter_ids = clinvar_submitter_ids if clinvar_submitter_ids else ""
         self.errors: dict = {}
 
-    def save(cls, name, coordinator, coordinator_email, status, type_, family, members, approvers, clinvar_submitter_ids, id_):
+    @classmethod
+    def save(cls, values_dict, id_):
+        """Save user input to the DB."""
         con = sqlite3.connect(DB_FILE)  # type: ignore
         cur = con.cursor()
-        logger.info(type(approvers))
         try:
             query = ("UPDATE affiliations SET name=?, coordinator=?, "
                      "coordinator_email=?, status=?, type=?, family=?, "
                      "members=?, approvers=?, clinvar_submitter_ids=? WHERE id=?")
-            cur.execute(query, (name, coordinator, coordinator_email, status,
-                        type_, family, members, approvers, clinvar_submitter_ids, id_))
+            cur.execute(query, (values_dict["name"], values_dict["coordinator"],
+                                values_dict["coord_email"], values_dict["status"],
+                                values_dict["type"], values_dict["family"],
+                                values_dict["members"], values_dict["approvers"],
+                                values_dict["clinvar_submitter_ids"], id_))
         except sqlite3.Error as err:
             logger.error("Unable to update affiliation by ID.")
             logger.error("Error code: %s", err.sqlite_errorcode)
