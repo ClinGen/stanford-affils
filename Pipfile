@@ -4,6 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+djangorestframework = "3.*"
+django-stubs = {extras = ["compatible-mypy"], version = "5.*"}
 
 [dev-packages]
 black = "==24.*"
