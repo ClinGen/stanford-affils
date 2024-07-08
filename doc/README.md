@@ -17,6 +17,7 @@ This is the documentation for the affiliations service. We follow the
   - [Organize imports and constants](./howto.md#organize-imports-and-constants)
   - [Write a TODO comment](./howto.md#write-a-todo-comment)
   - [Write a commit message](./howto.md#write-a-commit-message)
+  - [Name a Git branch](./howto.md#name-a-git-branch)
 - [Explanations](./explanation.md) (understanding-oriented)
   - Explanation, or discussions, clarify and illuminate a particular topic. They
     broaden the documentation’s coverage of a topic. Explanations can equally

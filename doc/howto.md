@@ -95,3 +95,25 @@ A commit should almost always be linked to a GitHub issue.
 For:
 https://github.com/org/repo/issues/123
 ```
+
+## Name a Git branch
+
+Here is the format we like to follow for branch names:
+
+```
+[initials]-[issue number]-[optional description]
+```
+
+For example, if your name is Ada Lovelace and the issue you're working on is
+#123 your branch name would be:
+
+```
+al-123
+```
+
+If you wanted to add an optional (short) description at the end, you could name
+it:
+
+```
+al-123-fix-foobar
+```
