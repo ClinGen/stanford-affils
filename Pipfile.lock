@@ -239,20 +239,20 @@
                 "essential"
             ],
             "hashes": [
-                "sha256:347a714dfc92653fdd0d8ed9801c82a01c51053c8fa0e40bcb880b39de8d06bd",
-                "sha256:7c954d4cea8337df4541493a7eb75f5d53b8e25fd6166ac6029bb012e7712575"
+                "sha256:3fdcfc90eb26ea5db97af1ca9fc9d21c50cc880d9ee00e7ab9140a5996a3619d",
+                "sha256:63a3938fdb43693128054d5044af76aef97bc15f66545d91ea9165904240930e"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==1.34.138"
+            "version": "==1.34.140"
         },
         "botocore-stubs": {
             "hashes": [
-                "sha256:62246d47195e8fc1939ad54ad116fd0a330bbd250b3dff6f98bd49da25a02bc0",
-                "sha256:f9556168eccc4525c7177a9cf5d69475b3fe375f95f95b88efcecf07455eefdd"
+                "sha256:3048f14af9cc52e28310c46c3e2651ee7497c94bffb702289cb3af6a4f13ae0c",
+                "sha256:f8942d5011deee1fbb20b755a14ce2f0ef3ca99ce5712e4c8b75685008dbfe63"
             ],
             "markers": "python_version >= '3.8' and python_version < '4.0'",
-            "version": "==1.34.138"
+            "version": "==1.34.140"
         },
         "chardet": {
             "hashes": [
@@ -820,11 +820,11 @@
         },
         "types-awscrt": {
             "hashes": [
-                "sha256:0beabdde0205dc1da679ea464fd3f98b570ef4f0fc825b155a974fb51b21e8d9",
-                "sha256:521ce54cc4dad9fe6480556bb0f8315a508106938ba1f2a0baccfcea7d4a4dee"
+                "sha256:026f882d4d23f04c5b2ab08d6fefd627842537009cd00e9f78dd4960314d51aa",
+                "sha256:06aa247fe5ccf0b86428e5289aeabf67f967e10861f211c16c19e7d2542a70a9"
             ],
             "markers": "python_version >= '3.7' and python_version < '4.0'",
-            "version": "==0.20.12"
+            "version": "==0.21.0"
         },
         "types-s3transfer": {
             "hashes": [
