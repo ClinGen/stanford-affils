@@ -5,7 +5,8 @@ name = "pypi"
 
 [packages]
 djangorestframework = "3.*"
-django-stubs = {extras = ["compatible-mypy"], version = "5.*"}
+django-stubs = {extras = ["compatible-mypy"] }
+psycopg = "3.*"
 
 [dev-packages]
 black = "==24.*"

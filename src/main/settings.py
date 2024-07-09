@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 # Built-in libraries:
 from pathlib import Path
+import os
+
+# Third-party dependencies:
+from dotenv import load_dotenv
+
+# Set environment variables.
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,6 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "affils",
 ]
 
 MIDDLEWARE = [
@@ -46,7 +55,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "affils.urls"
+ROOT_URLCONF = "main.urls"
 
 TEMPLATES = [
     {
@@ -64,14 +73,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "affils.wsgi.application"
+WSGI_APPLICATION = "main.wsgi.application"
 
 # Database:
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": f'django.db.backends.{os.getenv("AFFILS_DB_ENGINE")}',
+        "NAME": os.getenv("AFFILS_DB_NAME"),
+        "USER": os.getenv("AFFILS_DB_USER"),
+        "PASSWORD": os.getenv("AFFILS_DB_PASSWORD"),
+        "HOST": os.getenv("AFFILS_DB_HOST"),
+        "PORT": os.getenv("AFFILS_DB_PORT"),
     }
 }
 
