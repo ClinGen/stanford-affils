@@ -99,5 +99,11 @@
         <button style="margin-right: 10px;">Submit</button>
     </fieldset>
 </form>
+<div>
+    <form action="/delete/{{ affiliation.id }}" method="post">
+        <button>Delete</button>
+    </form>
+</div>
+
 {% endif %}
 {% endblock %}

@@ -132,6 +132,24 @@ class Affiliation:
         return True
 
     @classmethod
+    def delete(cls, id_):
+        """Remove affiliation from the DB."""
+        con = sqlite3.connect(DB_FILE)  # type: ignore
+        cur = con.cursor()
+        try:
+            query = ("DELETE FROM affiliations WHERE id=?")
+            cur.execute(query, (id_,))
+        except sqlite3.Error as err:
+            logger.error("Unable to update affiliation by ID.")
+            logger.error("Error code: %s", err.sqlite_errorcode)
+            logger.error("Error name: %s", err.sqlite_errorname)
+            con.rollback()
+            return False
+        con.commit()
+        con.close()
+        return True
+
+    @classmethod
     def _row_to_affiliation(cls, row: tuple) -> "Affiliation":
         """Convert table row to instance of affiliations object."""
         return cls(*row)

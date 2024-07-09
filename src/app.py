@@ -118,6 +118,14 @@ def edit_post(affil_id):
     return render_template("edit.html", affiliation=affiliation)
 
 
+@app.route("/delete/<affil_id>", methods=["POST"])
+def affil_delete_post(affil_id):
+    affiliation = Affiliation.get_by_id(affil_id)
+    affiliation.delete(affil_id)
+    flash("Deleted Affiliation")
+    return redirect(url_for("index"))
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """The login route.
