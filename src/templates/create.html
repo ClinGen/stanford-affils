@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>ClinGen Affiliations Service</h1>
+<nav>
+    <p>You are logged in as: {{ email }}</p>
+    <a href="/logout">Log out</a>
+</nav>
+{% endblock %}
+{% block content %}
+<div style="margin-top: 20px;">
+    <a href="/">
+        <button>Back</button>
+    </a>
+</div>
+<form action="/create" method="post">
+    <fieldset>
+        <div>
+            <div>
+                <label>ID: </label>
+                <input name="id" type="text" placeholder="ID" required />
+            </div>
+            <div>
+                <label>Name:</label>
+                <input name="name" type="text" placeholder="Name" required />
+            </div>
+            <div>
+                <label>Status:</label>
+                <select name="status" required>
+                    <option disabled selected value> -- select an option -- </option>
+                    <option>Active</option>
+                    <option>Pending</option>
+                    <option>Retired</option>
+                </select>
+
+            </div>
+            <div>
+                <label>Coordinator:</label>
+                <input name="coordinator" type="text" placeholder="Name" />
+            </div>
+            <div>
+                <label>Coordinator Email:</label>
+                <input name="coordinator_email" type="text" placeholder="user@example.com" />
+            </div>
+            <div>
+                <label>Family:</label>
+                <input name="family" type="text" placeholder="Family" />
+            </div>
+            <div>
+                <label>Type:</label>
+                <select name="type" required>
+                    <option disabled selected value> -- select an option -- </option>
+                    <option>Expert Panel</option>
+                    <option>Working Group</option>
+                    <option>Clinical Domain Working Group</option>
+
+                </select>
+            </div>
+        </div>
+        <div>
+            <label>Members:</label>
+            <textarea name="members" rows="5" cols="100" placeholder="Name One&#10;Name Two"></textarea>
+        </div>
+        <div>
+            <label>Approvers:</label>
+            <textarea name="approvers" rows="5" cols="100" placeholder="Name One&#10;Name Two"></textarea>
+        </div>
+        <div>
+            <label>ClinVar Submitter IDs:</label>
+            <textarea name="clinvar_submitter_ids" rows="5" cols="100" placeholder="001&#10;002"></textarea>
+        </div>
+        <button style="margin-right: 10px;">Submit</button>
+    </fieldset>
+</form>
+{% endblock %}

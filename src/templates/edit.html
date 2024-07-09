@@ -17,30 +17,29 @@
 </div>
 <form action="/edit/{{affiliation.id}}" method="post">
     <fieldset>
-        <button style="margin-right: 10px;">Submit</button>
         <div>
             <h3>ID: {{affiliation.id}}</h3>
         </div>
         <div>
             <div>
                 <label>Name:</label>
-                <input name="name" type="text" value="{{affiliation.name}}" placeholder="Name" />
+                <input name="name" type="text" value="{{affiliation.name}}" placeholder="Name" required />
             </div>
             <div>
                 <label>Status:</label>
                 <select name="status">
                     {% if affiliation.status == "Active" %}
-                    <option  selected>Active</option>
+                    <option selected>Active</option>
                     {% else %}
                     <option>Active</option>
                     {% endif %}
                     {% if affiliation.status == "Pending" %}
-                    <option  selected>Pending</option>
+                    <option selected>Pending</option>
                     {% else %}
                     <option>Pending</option>
                     {% endif %}
                     {% if affiliation.status == "Retired" %}
-                    <option  selected>Retired</option>
+                    <option selected>Retired</option>
                     {% else %}
                     <option>Retired</option>
                     {% endif %}
@@ -64,17 +63,17 @@
                 <label>Type:</label>
                 <select name="type">
                     {% if affiliation.type == "Expert Panel" %}
-                    <option  selected>Expert Panel</option>
+                    <option selected>Expert Panel</option>
                     {% else %}
                     <option>Expert Panel</option>
                     {% endif %}
                     {% if affiliation.type == "Working Group" %}
-                    <option  selected>Working Group</option>
+                    <option selected>Working Group</option>
                     {% else %}
                     <option>Working Group</option>
                     {% endif %}
                     {% if affiliation.type == "Clinical Domain Working Group" %}
-                    <option  selected>Clinical Domain Working Group</option>
+                    <option selected>Clinical Domain Working Group</option>
                     {% else %}
                     <option>Clinical Domain Working Group</option>
                     {% endif %}
@@ -97,6 +96,7 @@
             <textarea name="clinvar_submitter_ids" rows="5" cols="100"
                 placeholder="001&#10;002">{{affiliation.clinvar_submitter_ids}}</textarea>
         </div>
+        <button style="margin-right: 10px;">Submit</button>
     </fieldset>
 </form>
 {% endif %}

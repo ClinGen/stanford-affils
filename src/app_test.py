@@ -59,5 +59,5 @@ def test_edit_route():
     assert "Submit</button>" in response.text
     assert "<button>Back" in response.text
     assert "<label>Name:</label>" in response.text
-    assert '<select name="status">'in response.text
+    assert '<select name="status">' in response.text
     assert "<label>Family:</label>" in response.text

@@ -47,7 +47,40 @@ def index():
     return render_template("index.html", affiliations=affiliations_set, email=email)
 
 
-@app.route("/edit/<affil_id>",  methods=["GET"])
+@app.route("/create", methods=["GET"])
+def create_get():
+    """Create a new affiliation GET method"""
+    logger.info("User accessed create")
+    return render_template("create.html", affiliation=Affiliation())
+
+
+@app.route("/create", methods=["POST"])
+def create_post():
+    """Create a new affiliation POST method"""
+    logger.info("User accessed create")
+    affil = Affiliation(int(request.form["id"]))
+    if affil.get_by_id(affil.id):
+        flash("This ID already exists")
+        return render_template("create.html", affiliation=Affiliation())
+    user_values = {
+        "name": request.form["name"],
+        "coordinator": request.form["coordinator"],
+        "coord_email": request.form["coordinator_email"],
+        "status": request.form["status"],
+        "type": request.form["type"],
+        "family": request.form["family"],
+        "members": request.form["members"],
+        "approvers": request.form["approvers"],
+        "clinvar_submitter_ids": request.form["clinvar_submitter_ids"],
+    }
+    if affil.create(user_values, affil.id):
+        flash("Created Affiliation")
+        return redirect(url_for("index"))
+    flash("Could not create Affiliation")
+    return render_template("create.html", affiliation=Affiliation())
+
+
+@app.route("/edit/<affil_id>", methods=["GET"])
 def edit_get(affil_id):
     """Edit an existing affiliation."""
     logger.info("User accessed edit")
@@ -61,24 +94,25 @@ def edit_get(affil_id):
     return render_template("edit.html", affiliation=affiliation, email=email)
 
 
-@app.route("/edit/<affil_id>",  methods=["POST"])
+@app.route("/edit/<affil_id>", methods=["POST"])
 def edit_post(affil_id):
     """Edit an existing affiliation."""
     logger.info("User accessed edit")
     if not affil_id:
         return redirect(url_for("index"))
     affiliation = Affiliation.get_by_id(affil_id)
-    new_values = {"name": request.form['name'],
-                  "coordinator": request.form['coordinator'],
-                  "coord_email": request.form['coordinator_email'],
-                  "status": request.form['status'],
-                  "type": request.form['type'],
-                  "family": request.form['family'],
-                  "members": request.form['members'],
-                  "approvers": request.form['approvers'],
-                  "clinvar_submitter_ids": request.form['clinvar_submitter_ids']
-                  }
-    if affiliation.save(new_values, affil_id):
+    new_values = {
+        "name": request.form["name"],
+        "coordinator": request.form["coordinator"],
+        "coord_email": request.form["coordinator_email"],
+        "status": request.form["status"],
+        "type": request.form["type"],
+        "family": request.form["family"],
+        "members": request.form["members"],
+        "approvers": request.form["approvers"],
+        "clinvar_submitter_ids": request.form["clinvar_submitter_ids"],
+    }
+    if affiliation.update(new_values, affil_id):
         flash("Updated Affiliation")
         return redirect(url_for("index"))
     return render_template("edit.html", affiliation=affiliation)
