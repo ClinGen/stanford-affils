@@ -61,3 +61,14 @@ def test_edit_route():
     assert "<label>Name:</label>" in response.text
     assert '<select name="status">' in response.text
     assert "<label>Family:</label>" in response.text
+
+
+def test_create_route():
+    """Ensure create route redirects."""
+    response = CLIENT.get("/create")
+    assert response.status_code == 200
+    assert "Submit</button>" in response.text
+    assert "<button>Back" in response.text
+    assert "<label>Name:</label>" in response.text
+    assert '<select name="status" required>' in response.text
+    assert "<label>Family:</label>" in response.text
