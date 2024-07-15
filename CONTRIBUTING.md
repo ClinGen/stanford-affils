@@ -1,31 +1,41 @@
 # Contributing Guidelines
 
-Contributing and pull requests are welcome. If you would like to contribute, please open an issue first to discuss that changes that you would like made. Then follow the below Documentation Expectations.
+Contributing and pull requests are welcome. If you would like to contribute,
+please open an issue first to discuss that changes that you would like made.
+Then follow the below documentation expectations.
 
 ## Best practices
 
 See our Gecko Group developer best practices spreadsheet
 [here](https://docs.google.com/spreadsheets/d/1MLeEQE-v3eEnEtKNG4oJ8q6a8pal9q462TTgVcodcg4/edit?pli=1#gid=0).
-We are also working toward conforming to OpenSSF Best Practices. See [this page](https://www.bestpractices.dev/en/projects/8941) for more info.
+We are also working toward conforming to OpenSSF Best Practices.
+See [this page](https://www.bestpractices.dev/en/projects/8941) for more info.
 
 ## Documentation Guidelines
 
-- Our [documentation guides](./doc/documentation.md). How to do specific tasks and documentation expectations:
+- Our [how-to guides](./doc/how-to.md). How to do specific tasks
+  and documentation expectations.
 
 ## Opening an Issue
 
-Before creating a new issue, please check to see if that issue has already been raised.
+Before creating a new issue, please check to see if that issue has already
+been raised.
 
 ### Bugs / Feature Requests
 
-Please open an issue using the appropriate template detailing the issue you are encountering or the improvement/suggestion that you have for the Affiliation Service.
+Please open an issue using the appropriate template detailing the issue you are
+encountering or the improvement/suggestion that you have for the Affiliation
+Service.
 
-Please include any screenshots, screen recordings, and any examples with detailed descriptions so our developers can investigate further.
+Please include any screenshots, screen recordings, and any examples with
+detailed descriptions so our developers can investigate further.
 
 ## Submitting Pull Requests
 
-- Please follow the [PR template](./doc/pull_request_template.md) when creating your PR.
-- Smaller is better! A PR should preferrably contain isolated changes pertaining to a single bug fix or feature request.
+- Please follow the [PR template](./doc/pull_request_template.md) when
+  creating your PR.
+- Smaller is better! A PR should preferrably contain isolated changes
+  pertaining to a single bug fix or feature request.
 - Please follow the below coding style and conventions:
 
 ### Write a TODO comment
@@ -35,7 +45,8 @@ and a link to a GitHub issue describing the TODO in more depth.
 
 ### Styling your code
 
-Defer to the formatter (Black) and the linter (pylint). If neither of them have an opinion, refer to [Google's Python style guide](https://google.github.io/styleguide/pyguide.html).
+Defer to the formatter (Black) and the linter (pylint). If neither of them
+have an opinion, refer to [Google's Python style guide](https://google.github.io/styleguide/pyguide.html).
 
 ### Write a commit message
 

@@ -1,6 +1,15 @@
-# Documentation
+# How-to Guides
+
+Description from
+[Divio documentation](https://docs.divio.com/documentation-system/how-to-guides/):
+
+How-to guides take the reader through the steps required to solve a
+real-world problem. They are directions to achieve a specific end. This
+page is goal-oriented.
 
 ## Run code checks
+
+How to run code checks before pushing a pull request.
 
 Code should be:
 
@@ -17,6 +26,8 @@ inv check
 
 ## Write code that can be submitted to the main branch
 
+Expectations on how to write new code.
+
 - Must pass the `check` script.
 - New code must have automated tests.
 - New code must have docstrings.
@@ -28,6 +39,8 @@ inv check
 - If doing something complex or weird, there should be an explanation for it.
 
 ## Organize imports and constants
+
+How to organize imports and constants in your file.
 
 At the top of any given module there will probably be imports and constants. Our
 preferred way of organizing them is as follows:
@@ -51,9 +64,16 @@ Each of the sections should be sorted alphabetically.
 
 ## Environment variables
 
-There's a `.env.template` file that is the source of truth for environment
-variable keys. You're supposed to create a `.env` file file based on
-`.env.template`. The keys in each environment variable file should stay the same
-at all times. This is enforced programmatically using Invoke tasks. (See the
-`tasks.py` file for more details on this.) The values of the keys can differ
-between files, of course.
+How to create environment variaables. There's a `.env.template` file that is
+the source of truth for environment variable keys.
+
+- Create a copy of `.env.template` and name it `.env`
+- Do not rename any of keys for the envornment variables.
+- Change the path for `AFFILS_DB_FILE` and placeholder values.
+
+## Contributing
+
+How to contribute to the Affiliations Serive.
+
+Please see our [Contributing guidelines](./CONTRIBUTING.md) for more
+information about contributing!
