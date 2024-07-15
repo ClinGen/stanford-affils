@@ -1,54 +1,57 @@
 """Views for the affiliations service."""
 
+# pylint: disable=redefined-builtin
+# pylint: disable=unused-argument
+
 # Third-party dependencies:
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 # In-house code:
 from affiliations.models import Affiliation
 from affiliations.serializers import AffiliationSerializer
 
 
-@csrf_exempt
-def affiliations_list(request):  # pylint: disable=inconsistent-return-statements
+@api_view(["GET", "POST"])
+def affiliations_list(  # pylint: disable=inconsistent-return-statements
+    request, format=None
+):
     """List all affiliations, or create a new affiliation."""
     if request.method == "GET":
         affiliations = Affiliation.objects.all()
         serializer = AffiliationSerializer(affiliations, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     if request.method == "POST":
-        data = JSONParser().parse(request)
-        serializer = AffiliationSerializer(data=data)
+        serializer = AffiliationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
+@api_view(["GET", "PUT", "DELETE"])
 def affiliations_detail(  # pylint: disable=inconsistent-return-statements
-    request, affiliation_id
+    request, affiliation_id, format=None
 ):
     """Retrieve, update or delete an affiliation."""
     try:
         affiliation = Affiliation.objects.get(affiliation_id=affiliation_id)
     except Affiliation.DoesNotExist:
-        return HttpResponse(status=404)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
         serializer = AffiliationSerializer(affiliation)
-        return JsonResponse(serializer.data)
+        return Response(serializer.data)
 
     if request.method == "PUT":
-        data = JSONParser().parse(request)
-        serializer = AffiliationSerializer(affiliation, data=data)
+        serializer = AffiliationSerializer(affiliation, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == "DELETE":
         affiliation.delete()
-        return HttpResponse(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)
