@@ -10,7 +10,7 @@ from affiliations import views
 
 urlpatterns: list[URLResolver | URLPattern] = [
     path("", views.AffiliationsList.as_view()),
-    path("<int:affiliation_id>/", views.AffiliationsDetail.as_view()),
+    path("<int:pk>/", views.AffiliationsDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

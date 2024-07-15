@@ -60,7 +60,7 @@ ROOT_URLCONF = "main.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [f"{BASE_DIR}/affiliations/templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -119,3 +119,10 @@ STATIC_URL = "static/"
 # Default primary key field type:
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+        "affiliations.renderers.BrowsableAPIRendererWithoutForms",
+    ),
+}
