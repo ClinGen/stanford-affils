@@ -4,7 +4,7 @@
 from django.contrib import admin
 
 # In-house code:
-from affils.models import Affiliation
+from affiliations.models import Affiliation
 
 
 class AffiliationsAdmin(admin.ModelAdmin):

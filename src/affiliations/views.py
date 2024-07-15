@@ -6,8 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 
 # In-house code:
-from affils.models import Affiliation
-from affils.serializers import AffiliationSerializer
+from affiliations.models import Affiliation
+from affiliations.serializers import AffiliationSerializer
 
 
 @csrf_exempt

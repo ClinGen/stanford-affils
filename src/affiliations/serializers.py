@@ -4,7 +4,7 @@
 from rest_framework import serializers
 
 # In-house code:
-from affils.models import Affiliation
+from affiliations.models import Affiliation
 
 
 class AffiliationSerializer(serializers.ModelSerializer):

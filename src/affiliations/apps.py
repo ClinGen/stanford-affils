@@ -4,8 +4,8 @@
 from django.apps import AppConfig
 
 
-class MainConfig(AppConfig):
+class AffiliationsConfig(AppConfig):
     """Configure the affiliations application."""
 
     default_auto_field = "django.db.models.BigAutoField"
-    name = "affils"
+    name = "affiliations"

@@ -3,4 +3,4 @@ disable = [
     "too-few-public-methods",  # Django REST needs classes that just have attributes.
     "no-member"                # Django creates methods for models.
 ]
-ignore-paths = "src/affils/migrations"
+ignore-paths = "src/affiliations/migrations"
