@@ -8,9 +8,11 @@ from affils.models import Affiliation
 
 
 class AffiliationSerializer(serializers.ModelSerializer):
-    """Serialize Affiliation instances."""
+    """Serialize Affiliation objects."""
 
     class Meta:
+        """Describe the fields on an Affiliation object."""
+
         model = Affiliation
         fields = [
             "affiliation_id",
@@ -26,7 +28,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create and return an Affiliations instance."""
-        return Affiliation.objects.create(**validated_data)
+        return Affiliation.objects.create(**validated_data)  # pylint: disable=no-member
 
     def update(self, instance, validated_data):
         """Update and return an existing Affiliations instance."""

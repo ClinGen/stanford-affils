@@ -15,6 +15,7 @@ mdformat = "0.*"
 mypy = "==1.*"
 pylint = "==3.*"
 python-dotenv = "==1.*"
+djangorestframework-stubs = {extras = ["compatible-mypy"], version = "*"}
 
 [requires]
 python_version = "3.12"

@@ -7,15 +7,15 @@ from django.db import models
 class Affiliation(models.Model):
     """Define the shape of an affiliation."""
 
-    affiliation_id = models.IntegerField()
-    name = models.CharField()
-    coordinator = models.CharField()
-    status = models.CharField()
-    type = models.CharField()
-    family = models.CharField()
-    members = models.CharField()
-    approvers = models.CharField()
-    clinvar_submitter_ids = models.CharField()
+    affiliation_id: models.IntegerField = models.IntegerField()
+    name: models.CharField = models.CharField()
+    coordinator: models.CharField = models.CharField()
+    status: models.CharField = models.CharField()
+    type: models.CharField = models.CharField()
+    family: models.CharField = models.CharField()
+    members: models.CharField = models.CharField()
+    approvers: models.CharField = models.CharField()
+    clinvar_submitter_ids: models.CharField = models.CharField()
 
     def __str__(self):
         """Provide a string representation of an affiliation."""

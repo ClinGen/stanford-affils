@@ -8,6 +8,8 @@ from affils.models import Affiliation
 
 
 class AffiliationsAdmin(admin.ModelAdmin):
+    """Configure the affiliations admin panel."""
+
     search_fields = ["affiliation_id", "name"]
 
 
