@@ -9,8 +9,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from affiliations import views
 
 urlpatterns: list[URLResolver | URLPattern] = [
-    path("", views.affiliations_list),
-    path("<int:affiliation_id>/", views.affiliations_detail),
+    path("", views.AffiliationsList.as_view()),
+    path("<int:affiliation_id>/", views.AffiliationsDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
