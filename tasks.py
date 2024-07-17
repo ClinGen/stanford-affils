@@ -4,6 +4,8 @@ All command line tasks should be defined in this file. The only
 exception to this is managing dependencies via Pipenv.
 """
 
+import os
+
 # Invoke always requires a context parameter, even if it ends up going
 # unused. As of this writing, there are a handful of tasks that don't
 # use their context parameters.
@@ -14,7 +16,11 @@ import sys
 
 # Third-party dependencies:
 from dotenv import dotenv_values
+from dotenv import load_dotenv
 from invoke import task
+
+# Set environment variables.
+load_dotenv()
 
 # Environment variable files:
 ENV_TEMPLATE = ".env.template"
@@ -57,7 +63,7 @@ def envsame(c):
 @task
 def test(c):
     """Run test suite."""
-    c.run("cd src && python manage.py test")
+    c.run(f"cd {os.getenv('AFFILS_WORKING_DIR')}/src && python manage.py test")
 
 
 @task(pre=[fmt, lint, types, envsame, test])

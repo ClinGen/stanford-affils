@@ -2,15 +2,25 @@ name: continuous integration
 on: [push, pull_request]
 # These keys should match the keys in .env.template
 env:
-  AFFILS_DB_NAME: "affils.db"
-  AFFILS_DB_FILE: "${{ github.workspace }}/affils.db"
-  AFFILS_FLASK_SECRET_KEY: "gottaPutSomethingHereSoGitHubActionsWorks"
-  AFFILS_AWS_REGION: "us-west-2"
+  AFFILS_DB_ENGINE: "postgresql"
+  AFFILS_DB_NAME: "postgres"
+  AFFILS_DB_USER: "postgres"
+  AFFILS_DB_PASSWORD: "postgres"
+  AFFILS_DB_HOST: "127.0.0.1"
+  AFFILS_DB_PORT: "5432"
+  AFFILS_WORKING_DIR: ${{ github.workspace }}
 permissions:
   contents: read
 jobs:
   check:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.12
@@ -21,8 +31,6 @@ jobs:
         run: pip install pipenv --user
       - name: install dependencies
         run: pipenv sync --dev # Installs all deps, including dev deps, from Pipfile.lock.
-      - name: seed the database
-        run: pipenv run invoke dbseed
       - name: format
         run: pipenv run invoke fmt
       - name: lint
