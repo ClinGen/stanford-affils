@@ -37,6 +37,7 @@ def fmt(c):
 def lint(c):
     """Run the linter."""
     c.run("pylint src")
+    c.run("pylint tasks.py")
 
 
 @task
@@ -53,8 +54,12 @@ def envsame(c):
         sys.exit(1)
 
 
-@task(pre=[fmt, lint, types, envsame])
+@task
+def test(c):
+    """Run test suite."""
+    c.run("cd src && python manage.py test")
+
+
+@task(pre=[fmt, lint, types, envsame, test])
 def check(c):
     """Run all code checks."""
-    # Also lint this file.
-    c.run("pylint tasks.py")
