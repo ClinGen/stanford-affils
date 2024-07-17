@@ -1,8 +1,4 @@
-"""Script for running any/all command line tasks for this project.
-
-All command line tasks should be defined in this file. The only
-exception to this is managing dependencies via Pipenv.
-"""
+"""Script for common command line tasks for this project."""
 
 import os
 
