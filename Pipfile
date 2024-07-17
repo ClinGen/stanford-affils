@@ -5,17 +5,17 @@ name = "pypi"
 
 [packages]
 djangorestframework = "3.*"
-django-stubs = {extras = ["compatible-mypy"] }
 psycopg = "3.*"
 
 [dev-packages]
 black = "==24.*"
+django-stubs = {extras = ["compatible-mypy"], version = "5.*"}
+djangorestframework-stubs = {extras = ["compatible-mypy"], version = "3.*"}
 invoke = "==2.*"
 mdformat = "0.*"
 mypy = "==1.*"
 pylint = "==3.*"
 python-dotenv = "==1.*"
-djangorestframework-stubs = {extras = ["compatible-mypy"], version = "3.*"}
 
 [requires]
 python_version = "3.12"
