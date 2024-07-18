@@ -25,6 +25,7 @@ We follow the [Divio documentation organization system](https://documentation.di
 - [Tutorials](./tutorials.md#get-started). Guides to getting set up and other
   learning oriented tasks.
 - Setting up [environment variables](./how-to.md#environment-variables)
+  - Why you might want to [configure environment variables](https://12factor.net/config).
 
 ## Explanations
 
