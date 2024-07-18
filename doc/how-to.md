@@ -7,7 +7,7 @@ How-to guides take the reader through the steps required to solve a
 real-world problem. They are directions to achieve a specific end. This
 page is goal-oriented.
 
-## Run code checks
+## Run Code Checks
 
 How to run code checks before pushing a pull request.
 
@@ -24,7 +24,7 @@ To run these checks:
 inv check
 ```
 
-## Write code that can be submitted to the main branch
+## Write Code That Can Be Submitted to the Main Branch
 
 Expectations on how to write new code.
 
@@ -38,7 +38,7 @@ Expectations on how to write new code.
   written explanation.
 - If doing something complex or weird, there should be an explanation for it.
 
-## Organize imports and constants
+## Organize Imports and Constants
 
 How to organize imports and constants in your file.
 
@@ -62,18 +62,18 @@ BAR = 123
 
 Each of the sections should be sorted alphabetically.
 
-## Environment variables
+## Environment Variables
 
-How to create environment variaables. There's a `.env.template` file that is
+How to create environment variables. There's a `.env.template` file that is
 the source of truth for environment variable keys.
 
 - Create a copy of `.env.template` and name it `.env`
-- Do not rename any of keys for the envornment variables.
+- Do not rename any of keys for the environment variables.
 - Change the path for `AFFILS_DB_FILE` and placeholder values.
 
 ## Contributing
 
-How to contribute to the Affiliations Serive.
+How to contribute to the affiliations service.
 
 Please see our [Contributing guidelines](./CONTRIBUTING.md) for more
 information about contributing!

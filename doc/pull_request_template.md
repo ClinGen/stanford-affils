@@ -2,7 +2,7 @@
 
 Please describe your changes and the related issue or bug.
 
-## Issue ticket number and link
+## Issue Ticket Number and Link
 
 Please include the issue ticket number and link. This project only accepts pull requests related to open issues. Add `closes #XXXX` in your comment to auto-close the issue that this PR fixes.
 

@@ -4,7 +4,7 @@ Contributing and pull requests are welcome. If you would like to contribute,
 please open an issue first to discuss that changes that you would like made.
 Then follow the below documentation expectations.
 
-## Best practices
+## Best Practices
 
 See our Gecko Group developer best practices spreadsheet
 [here](https://docs.google.com/spreadsheets/d/1MLeEQE-v3eEnEtKNG4oJ8q6a8pal9q462TTgVcodcg4/edit?pli=1#gid=0).
@@ -34,7 +34,7 @@ detailed descriptions so our developers can investigate further.
 
 - Please follow the [PR template](./doc/pull_request_template.md) when
   creating your PR.
-- Smaller is better! A PR should preferrably contain isolated changes
+- Smaller is better! A PR should preferably contain isolated changes
   pertaining to a single bug fix or feature request.
 - Please follow the below coding style and conventions:
 
@@ -43,12 +43,12 @@ detailed descriptions so our developers can investigate further.
 TODO comments should include the name of the person who wrote the TODO comment
 and a link to a GitHub issue describing the TODO in more depth.
 
-### Styling your code
+### Styling your Code
 
 Defer to the formatter (Black) and the linter (pylint). If neither of them
 have an opinion, refer to [Google's Python style guide](https://google.github.io/styleguide/pyguide.html).
 
-### Write a commit message
+### Write a Commit Message
 
 When writing a commit, follow the example provided here:
 
@@ -77,7 +77,7 @@ For:
 https://github.com/org/repo/issues/123
 ```
 
-### Name a Git branch
+### Name a Git Branch
 
 Here is the format we like to follow for branch names:
 

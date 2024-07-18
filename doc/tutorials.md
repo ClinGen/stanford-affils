@@ -8,7 +8,7 @@ to complete a project of some kind.
 This page is learning-oriented, and specifically, oriented towards learning
 how rather than learning what.
 
-## Setting up your environment
+## Setting Up Your Environment
 
 1. Install Python 3.12+.
 2. Install [Pipenv](https://pipenv.pypa.io/en/latest/index.html):

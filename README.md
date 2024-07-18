@@ -1,9 +1,10 @@
 # ClinGen Affiliation Service
 
-This service provides a way for ClinGen users to interact (CRUD) with the
-database that contains the information about ClinGen Working Group affiliations.
-An affiliation is used to associate a curator to a specialized working group
-that is focused on/in a specific gene type or disease type.
+This service provides a web interface for ClinGen admins to create, view, 
+update, and destroy ClinGen affiliations. ClinGen affiliations are groups of 
+biocurators who work together to curate genes and variants in the gene curation 
+interface (GCI) and the variant curation interface (VCI), respectively. 
+This service also provides a JSON API.
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8941/badge)](https://www.bestpractices.dev/projects/8941)
 
