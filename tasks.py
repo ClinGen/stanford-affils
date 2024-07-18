@@ -1,8 +1,6 @@
-"""Script for running any/all command line tasks for this project.
+"""Script for common command line tasks for this project."""
 
-All command line tasks should be defined in this file. The only
-exception to this is managing dependencies via Pipenv.
-"""
+import os
 
 # Invoke always requires a context parameter, even if it ends up going
 # unused. As of this writing, there are a handful of tasks that don't
@@ -14,7 +12,11 @@ import sys
 
 # Third-party dependencies:
 from dotenv import dotenv_values
+from dotenv import load_dotenv
 from invoke import task
+
+# Set environment variables.
+load_dotenv()
 
 # Environment variable files:
 ENV_TEMPLATE = ".env.template"
@@ -37,62 +39,13 @@ def fmt(c):
 def lint(c):
     """Run the linter."""
     c.run("pylint src")
+    c.run("pylint tasks.py")
 
 
 @task
 def types(c):
     """Check types."""
     c.run("mypy .")
-
-
-@task
-def test(c):
-    """Run the test suite."""
-    c.run("coverage run -m pytest && coverage report")
-
-
-@task
-def sqlschema(c):
-    """Generate a schema SQL script.
-
-    This script will create the necessary table(s) and columns.
-
-    This task assumes you are in the root directory of the repo.
-    """
-    c.run(
-        f"sqlite3 {ACTUAL_CONF.get("AFFILS_DB_NAME", "affils.db")} .schema > ./src/sql/schema.sql"
-    )
-
-
-@task
-def sqldump(c):
-    """Generate a dump SQL script.
-
-    This script can be used to seed the DB with some values.
-
-    This task assumes you are in the root directory of the repo.
-    """
-    c.run(
-        f"sqlite3 {ACTUAL_CONF.get("AFFILS_DB_NAME", "affils.db")} .dump > ./src/sql/dump.sql"
-    )
-
-
-@task
-def sqlfmt(c):
-    """Format the SQL scripts."""
-    c.run("sqlfluff format --dialect sqlite")
-
-
-@task
-def sqlfix(c):
-    """Attempt to auto-fix SQL scripts."""
-    c.run("sqlfluff fix --dialect sqlite")
-
-
-@task
-def sqllint(c):
-    """Lint the SQL scripts."""
-    c.run("sqlfluff lint --dialect sqlite")
 
 
 @task
@@ -103,42 +56,12 @@ def envsame(c):
         sys.exit(1)
 
 
-@task(pre=[fmt, lint, types, test, sqlfmt, sqlfix, sqllint, envsame])
+@task
+def test(c):
+    """Run test suite."""
+    c.run(f"cd {os.getenv('AFFILS_WORKING_DIR')}/src && python manage.py test")
+
+
+@task(pre=[fmt, lint, types, envsame, test])
 def check(c):
     """Run all code checks."""
-    # Also lint this file.
-    c.run("pylint tasks.py")
-
-
-@task
-def dbmake(c):
-    """Create the affiliations database if it doesn't exist.
-
-    This task assumes you are in the root directory of the repo.
-    """
-    # Here we don't use the environment variable for the database name
-    # because we want to avoid complexity in GitHub Actions. (I don't
-    # want to manually add environment variables to GitHub Actions.)
-    c.run("sqlite3 affils.db < ./src/sql/schema.sql")
-
-
-@task
-def dbseed(c):
-    """Seed the affiliations database with values.
-
-    This task assumes you are in the root directory of the repo.
-    """
-    # Here we don't use the environment variable for the database name
-    # because we want to avoid complexity in GitHub Actions. (I don't
-    # want to manually add environment variables to GitHub Actions.)
-    c.run("sqlite3 affils.db < ./src/sql/dump.sql")
-
-
-@task
-def dev(c):
-    """Run the development server.
-
-    Assumes you've activated the virtual environment. Also assumes
-    you're in the root directory.
-    """
-    c.run(f"source {ENV_ACTUAL} && cd src && flask run")
