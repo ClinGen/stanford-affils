@@ -1,5 +1,13 @@
 # Tutorials
 
+Description from
+[Divio documentation](https://docs.divio.com/documentation-system/tutorials/):
+
+Tutorials are lessons that take the reader through a series of steps
+to complete a project of some kind.
+This page is learning-oriented, and specifically, oriented towards learning
+how rather than learning what.
+
 ## Get started
 
 - Install Python 3.12+.
