@@ -20,21 +20,19 @@ class Affiliation(models.Model):
 
 
 class SubmitterId(models.Model):
-    affiliation = models.ForeignKey(
-        Affiliation, null=True, on_delete=models.CASCADE)
+    affiliation = models.ForeignKey(Affiliation, null=True, on_delete=models.CASCADE)
     clinvar_submitter_id: models.CharField = models.CharField()
 
 
 class Approver(models.Model):
-    affiliation = models.ForeignKey(
-        Affiliation, null=True, on_delete=models.CASCADE)
+    affiliation = models.ForeignKey(Affiliation, null=True, on_delete=models.CASCADE)
     approver: models.CharField = models.CharField()
 
 
 class Coordinator(models.Model):
     """Define the shape of coordinator objects"""
-    affiliation = models.ForeignKey(
-        Affiliation, null=True, on_delete=models.CASCADE)
+
+    affiliation = models.ForeignKey(Affiliation, null=True, on_delete=models.CASCADE)
     coordinator_name: models.CharField = models.CharField(max_length=200)
     coordinator_email: models.EmailField = models.EmailField()
 
