@@ -13,12 +13,22 @@ class Affiliation(models.Model):
     type: models.CharField = models.CharField()
     family: models.CharField = models.CharField()
     members: models.CharField = models.CharField()
-    approvers: models.CharField = models.CharField()
-    clinvar_submitter_ids: models.CharField = models.CharField()
 
     def __str__(self):
         """Provide a string representation of an affiliation."""
         return f"Affiliation {self.affiliation_id} {self.name}"
+
+
+class SubmitterId(models.Model):
+    affiliation = models.ForeignKey(
+        Affiliation, null=True, on_delete=models.CASCADE)
+    clinvar_submitter_id: models.CharField = models.CharField()
+
+
+class Approver(models.Model):
+    affiliation = models.ForeignKey(
+        Affiliation, null=True, on_delete=models.CASCADE)
+    approver: models.CharField = models.CharField()
 
 
 class Coordinator(models.Model):
