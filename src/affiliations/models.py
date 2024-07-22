@@ -40,4 +40,4 @@ class Coordinator(models.Model):
 
     def __str__(self):
         """Provide a string for header"""
-        return self.coordinator_name
+        return f"{self.coordinator_name}"
