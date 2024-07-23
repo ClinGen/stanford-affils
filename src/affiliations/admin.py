@@ -12,8 +12,6 @@ class AffiliationsAdmin(admin.ModelAdmin):
 
     search_fields = ["affiliation_id", "name"]
     list_display = ["affiliation_id", "name", "status", "type", "family"]
-    fields = ("affiliation_id", "coordinator", "name", "status", "type",
-              "family", "members", "approvers", "clinvar_submitter_ids")
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
