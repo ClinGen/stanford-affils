@@ -10,6 +10,7 @@ class Affiliation(models.Model):
     affiliation_id: models.IntegerField = models.IntegerField()
     name: models.CharField = models.CharField()
     coordinator: models.CharField = models.CharField()
+    coordinator_email: models.EmailField = models.EmailField()
     status: models.CharField = models.CharField()
     type: models.CharField = models.CharField()
     family: models.CharField = models.CharField()

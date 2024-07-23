@@ -18,6 +18,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
             "affiliation_id",
             "name",
             "coordinator",
+            "coordinator_email",
             "status",
             "type",
             "family",
@@ -35,6 +36,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
         instance.affiliation_id = validated_data.IntegerField()
         instance.name = validated_data.CharField()
         instance.coordinator = validated_data.CharField()
+        instance.coordinator_email = validated_data.EmailField()
         instance.status = validated_data.CharField()
         instance.type = validated_data.CharField()
         instance.family = validated_data.CharField()
