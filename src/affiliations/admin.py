@@ -2,12 +2,14 @@
 
 # Third-party dependencies:
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 # In-house code:
 from affiliations.models import Affiliation
 
 
-class AffiliationsAdmin(admin.ModelAdmin):
+@admin.register(Affiliation)
+class AffiliationsAdmin(ModelAdmin):
     """Configure the affiliations admin panel."""
 
     search_fields = ["affiliation_id", "full_name", "abbreviated_name"]
@@ -29,10 +31,3 @@ class AffiliationsAdmin(admin.ModelAdmin):
             "affiliation_id",
             "members",
         ]
-
-
-# Add models we want to be able to edit in the admin interface.
-admin.site.register(Affiliation, AffiliationsAdmin)
-
-# Change the admin site's display name.
-admin.site.site_header = "Affiliations Service Admin Panel"
