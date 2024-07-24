@@ -16,7 +16,8 @@ class AffiliationsViewsBaseTestCase(TestCase):
         """Seed the test database with some test data."""
         cls.kanto_affiliation = {
             "affiliation_id": 1,
-            "name": "Kanto Pokémon",
+            "full_name": "Kanto Pokémon",
+            "abbreviated_name": "Kanto",
             "coordinator": "Professor Oak",
             "coordinator_email": "ProfessorOak@email.com",
             "status": "Inactive",
@@ -28,7 +29,8 @@ class AffiliationsViewsBaseTestCase(TestCase):
         }
         cls.johto_affiliation = {
             "affiliation_id": 2,
-            "name": "Johto Pokémon",
+            "full_name": "Johto Pokémon",
+            "abbreviated_name": "Johto",
             "coordinator": "Professor Elm",
             "coordinator_email": "ProfessorElm@email.com",
             "status": "Retired",
@@ -40,7 +42,8 @@ class AffiliationsViewsBaseTestCase(TestCase):
         }
         cls.hoenn_affiliation = {
             "affiliation_id": 3,
-            "name": "Hoenn Pokémon",
+            "full_name": "Hoenn Pokémon",
+            "abbreviated_name": "Hoenn",
             "coordinator": "Professor Birch",
             "coordinator_email": "ProfessorBirch@email.com",
             "status": "Active",
