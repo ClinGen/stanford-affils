@@ -2,9 +2,8 @@
 
 # Third-party dependencies:
 from django.contrib import admin
-from unfold.admin import ModelAdmin # type: ignore
 from django import forms
-
+from unfold.admin import ModelAdmin # type: ignore
 
 # In-house code:
 from affiliations.models import Affiliation
@@ -61,7 +60,7 @@ class AffiliationForm(forms.ModelForm):
         }
 
 
-class AffiliationsAdmin(admin.ModelAdmin):
+class AffiliationsAdmin(ModelAdmin):
     """Configure the affiliations admin panel."""
 
     form = AffiliationForm
