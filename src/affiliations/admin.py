@@ -11,7 +11,7 @@ class AffiliationsAdmin(admin.ModelAdmin):
     """Configure the affiliations admin panel."""
 
     search_fields = ["affiliation_id", "name"]
-    list_display = ["affiliation_id", "name", "status", "type", "family"]
+    list_display = ["affiliation_id", "name", "status", "type", "clinical_domain_working_group"]
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None:

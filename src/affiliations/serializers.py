@@ -21,7 +21,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
             "coordinator_email",
             "status",
             "type",
-            "family",
+            "clinical_domain_working_group",
             "members",
             "approvers",
             "clinvar_submitter_ids",
@@ -39,7 +39,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
         instance.coordinator_email = validated_data.EmailField()
         instance.status = validated_data.CharField()
         instance.type = validated_data.CharField()
-        instance.family = validated_data.CharField()
+        instance.clinical_domain_working_group = validated_data.CharField()
         instance.members = validated_data.CharField()
         instance.approvers = validated_data.CharField()
         instance.clinvar_submitter_ids = validated_data.CharField()

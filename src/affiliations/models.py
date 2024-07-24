@@ -13,7 +13,7 @@ class Affiliation(models.Model):
     coordinator_email: models.EmailField = models.EmailField()
     status: models.CharField = models.CharField()
     type: models.CharField = models.CharField()
-    family: models.CharField = models.CharField()
+    clinical_domain_working_group: models.CharField = models.CharField()
     members: models.CharField = models.CharField()
     approvers: models.CharField = models.CharField()
     clinvar_submitter_ids: models.CharField = models.CharField()
