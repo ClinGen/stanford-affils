@@ -1,8 +1,8 @@
 """Admin config for the affiliations service."""
 
 # Third-party dependencies:
-from django.contrib import admin
 from django import forms
+from django.contrib import admin
 from unfold.admin import ModelAdmin # type: ignore
 
 # In-house code:
