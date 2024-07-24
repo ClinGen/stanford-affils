@@ -9,7 +9,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from affiliations import views
 
 urlpatterns: list[URLResolver | URLPattern] = [
-    path("'admin/", views.AffiliationsList.as_view()),
+    path("'", views.AffiliationsList.as_view()),
     path("<int:pk>/", views.AffiliationsDetail.as_view()),
 ]
 

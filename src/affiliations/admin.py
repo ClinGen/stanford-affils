@@ -21,8 +21,9 @@ class AffiliationsAdmin(ModelAdmin):
         "clinical_domain_working_group",
     ]
 
-    def get_readonly_fields(self, obj=None):
+    def get_readonly_fields(self, request, obj=None):
         """ID is editable upon creation, afterwards, it is read only"""
+        # pylint:disable=unused-argument
         if obj is None:
             return [
                 "members",
