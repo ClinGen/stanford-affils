@@ -5,9 +5,10 @@ from django.contrib import admin
 
 # In-house code:
 from affiliations.models import Affiliation
+from unfold.admin import ModelAdmin
 
 
-class AffiliationsAdmin(admin.ModelAdmin):
+class AffiliationsAdmin(ModelAdmin):
     """Configure the affiliations admin panel."""
 
     search_fields = ["affiliation_id", "full_name", "abbreviated_name"]
