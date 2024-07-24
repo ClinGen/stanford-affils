@@ -9,39 +9,53 @@ from affiliations.models import Affiliation
 
 
 class AffiliationForm(forms.ModelForm):
+    """Create forms to display information in Admin page."""
+
     class Meta:
+        """Meta class for forms"""
+
         fields = "__all__"
         model = Affiliation
         widgets = {
-            "status": forms.Select(choices=[
-                ("Active", "Active"),
-                ("Applying", "Applying"),
-                ("Inactive", "Inactive"),
-                ("Retired", "Retired")]),
-            "type": forms.Select(choices=[
-                ("Variant Curation Expert Panel", "Variant Curation Expert Panel"),
-                ("Gene Curation Expert Panel", "Gene Curation Expert Panel"),
-                ("Independent Curation Group", "Independent Curation Group")]),
-            "clinical_domain_working_group": forms.Select(choices=[
-                ("None", "None"),
-                ("Cardiovascular", "Cardiovascular"),
-                ("Hearing Loss", "Hearing Loss"),
-                ("Hemostasis/Thrombosis", "Hemostasis/Thrombosis"),
-                ("Hereditary Cancer", "Hereditary Cancer"),
-                ("Immunology", "Immunology"),
-                ("Inborn Errors of Metabolism", "Inborn Errors of Metabolism"),
-                ("Kidney Disease", "Kidney Disease"),
-                ("Neurodevelopmental Disorders", "Neurodevelopmental Disorders"),
-                ("Neurological Disorders", "Neurological Disorders"),
-                ("Ocular", "Ocular"),
-                ("Other", "Other"),
-                ("Pulmonary", "Pulmonary"),
-                ("RASopathy", "RASopathy"),
-                ("Rheumatologic Autoimmune Disease", "Rheumatologic Autoimmune Disease"),
-                ("Skeletal Disorders", "Skeletal Disorders"),
-                ("Somatic Cancer", "Somatic Cancer"),
-                ])
-                
+            "status": forms.Select(
+                choices=[
+                    ("Active", "Active"),
+                    ("Applying", "Applying"),
+                    ("Inactive", "Inactive"),
+                    ("Retired", "Retired"),
+                ]
+            ),
+            "type": forms.Select(
+                choices=[
+                    ("Variant Curation Expert Panel", "Variant Curation Expert Panel"),
+                    ("Gene Curation Expert Panel", "Gene Curation Expert Panel"),
+                    ("Independent Curation Group", "Independent Curation Group"),
+                ]
+            ),
+            "clinical_domain_working_group": forms.Select(
+                choices=[
+                    ("None", "None"),
+                    ("Cardiovascular", "Cardiovascular"),
+                    ("Hearing Loss", "Hearing Loss"),
+                    ("Hemostasis/Thrombosis", "Hemostasis/Thrombosis"),
+                    ("Hereditary Cancer", "Hereditary Cancer"),
+                    ("Immunology", "Immunology"),
+                    ("Inborn Errors of Metabolism", "Inborn Errors of Metabolism"),
+                    ("Kidney Disease", "Kidney Disease"),
+                    ("Neurodevelopmental Disorders", "Neurodevelopmental Disorders"),
+                    ("Neurological Disorders", "Neurological Disorders"),
+                    ("Ocular", "Ocular"),
+                    ("Other", "Other"),
+                    ("Pulmonary", "Pulmonary"),
+                    ("RASopathy", "RASopathy"),
+                    (
+                        "Rheumatologic Autoimmune Disease",
+                        "Rheumatologic Autoimmune Disease",
+                    ),
+                    ("Skeletal Disorders", "Skeletal Disorders"),
+                    ("Somatic Cancer", "Somatic Cancer"),
+                ]
+            ),
         }
 
 
