@@ -8,15 +8,17 @@ class Affiliation(models.Model):
     """Define the shape of an affiliation."""
 
     affiliation_id: models.IntegerField = models.IntegerField()
-    name: models.CharField = models.CharField()
+    full_name: models.CharField = models.CharField()
+    abbreviated_name: models.CharField = models.CharField(blank=True, null=True)
     coordinator: models.CharField = models.CharField()
+    coordinator_email: models.EmailField = models.EmailField()
     status: models.CharField = models.CharField()
     type: models.CharField = models.CharField()
-    family: models.CharField = models.CharField()
+    clinical_domain_working_group: models.CharField = models.CharField()
     members: models.CharField = models.CharField()
     approvers: models.CharField = models.CharField()
     clinvar_submitter_ids: models.CharField = models.CharField()
 
     def __str__(self):
         """Provide a string representation of an affiliation."""
-        return f"Affiliation {self.affiliation_id} {self.name}"
+        return f"Affiliation {self.affiliation_id} {self.full_name}"

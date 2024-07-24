@@ -3,9 +3,9 @@
 Description from
 [Divio documentation](https://docs.divio.com/documentation-system/how-to-guides/):
 
-How-to guides take the reader through the steps required to solve a
-real-world problem. They are directions to achieve a specific end. This
-page is goal-oriented.
+How-to guides take the reader through the steps required to solve a real-world
+problem. They are directions to achieve a specific end. This page is
+goal-oriented.
 
 ## Run Code Checks
 
@@ -64,8 +64,8 @@ Each of the sections should be sorted alphabetically.
 
 ## Environment Variables
 
-How to create environment variables. There's a `.env.template` file that is
-the source of truth for environment variable keys.
+How to create environment variables. There's a `.env.template` file that is the
+source of truth for environment variable keys.
 
 - Create a copy of `.env.template` and name it `.env`
 - Do not rename any of keys for the environment variables.
@@ -75,5 +75,5 @@ the source of truth for environment variable keys.
 
 How to contribute to the affiliations service.
 
-Please see our [Contributing guidelines](./CONTRIBUTING.md) for more
-information about contributing!
+Please see our [Contributing guidelines](./CONTRIBUTING.md) for more information
+about contributing!

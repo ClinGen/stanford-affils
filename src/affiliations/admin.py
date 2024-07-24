@@ -2,15 +2,86 @@
 
 # Third-party dependencies:
 from django.contrib import admin
+from django import forms
 
 # In-house code:
 from affiliations.models import Affiliation
 
 
+class AffiliationForm(forms.ModelForm):
+    """Create forms to display information in Admin page."""
+
+    class Meta:
+        """Meta class for forms"""
+
+        fields = "__all__"
+        model = Affiliation
+        widgets = {
+            "status": forms.Select(
+                choices=[
+                    ("Active", "Active"),
+                    ("Applying", "Applying"),
+                    ("Inactive", "Inactive"),
+                    ("Retired", "Retired"),
+                ]
+            ),
+            "type": forms.Select(
+                choices=[
+                    ("Variant Curation Expert Panel", "Variant Curation Expert Panel"),
+                    ("Gene Curation Expert Panel", "Gene Curation Expert Panel"),
+                    ("Independent Curation Group", "Independent Curation Group"),
+                ]
+            ),
+            "clinical_domain_working_group": forms.Select(
+                choices=[
+                    ("None", "None"),
+                    ("Cardiovascular", "Cardiovascular"),
+                    ("Hearing Loss", "Hearing Loss"),
+                    ("Hemostasis/Thrombosis", "Hemostasis/Thrombosis"),
+                    ("Hereditary Cancer", "Hereditary Cancer"),
+                    ("Immunology", "Immunology"),
+                    ("Inborn Errors of Metabolism", "Inborn Errors of Metabolism"),
+                    ("Kidney Disease", "Kidney Disease"),
+                    ("Neurodevelopmental Disorders", "Neurodevelopmental Disorders"),
+                    ("Neurological Disorders", "Neurological Disorders"),
+                    ("Ocular", "Ocular"),
+                    ("Other", "Other"),
+                    ("Pulmonary", "Pulmonary"),
+                    ("RASopathy", "RASopathy"),
+                    (
+                        "Rheumatologic Autoimmune Disease",
+                        "Rheumatologic Autoimmune Disease",
+                    ),
+                    ("Skeletal Disorders", "Skeletal Disorders"),
+                    ("Somatic Cancer", "Somatic Cancer"),
+                ]
+            ),
+        }
+
+
 class AffiliationsAdmin(admin.ModelAdmin):
     """Configure the affiliations admin panel."""
 
-    search_fields = ["affiliation_id", "name"]
+    form = AffiliationForm
+    search_fields = ["affiliation_id", "full_name", "abbreviated_name"]
+    list_display = [
+        "affiliation_id",
+        "full_name",
+        "abbreviated_name",
+        "status",
+        "type",
+        "clinical_domain_working_group",
+    ]
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None:
+            return [
+                "members",
+            ]
+        return [
+            "affiliation_id",
+            "members",
+        ]
 
 
 # Add models we want to be able to edit in the admin interface.
