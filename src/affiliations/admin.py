@@ -2,10 +2,10 @@
 
 # Third-party dependencies:
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 # In-house code:
 from affiliations.models import Affiliation
-from unfold.admin import ModelAdmin
 
 
 class AffiliationsAdmin(ModelAdmin):
