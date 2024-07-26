@@ -6,7 +6,7 @@ from django.contrib import admin
 from unfold.admin import ModelAdmin  # type: ignore
 
 # In-house code:
-from affiliations.models import Affiliation, Coordinator
+from affiliations.models import Affiliation, Coordinator, Approver
 
 
 class AffiliationForm(forms.ModelForm):
@@ -64,7 +64,14 @@ class CoordinatorInlineAdmin(admin.TabularInline):
     """Configure the coordinators admin panel."""
 
     model = Coordinator
-    extra = 0
+    extra = 1
+
+
+class ApproverInlineAdmin(admin.TabularInline):
+    """Configure the approvers admin panel."""
+
+    model = Approver
+    extra = 1
 
 
 class AffiliationsAdmin(ModelAdmin):
@@ -81,7 +88,7 @@ class AffiliationsAdmin(ModelAdmin):
         "type",
         "clinical_domain_working_group",
     ]
-    inlines = [CoordinatorInlineAdmin]
+    inlines = [CoordinatorInlineAdmin, ApproverInlineAdmin]
 
     def get_readonly_fields(self, request, obj=None):
         """ID is editable upon creation, afterwards, it is read only"""

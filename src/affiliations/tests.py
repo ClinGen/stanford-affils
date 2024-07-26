@@ -5,7 +5,7 @@ from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from affiliations.views import AffiliationsList
 from affiliations.views import AffiliationsDetail
-from affiliations.models import Affiliation, Coordinator
+from affiliations.models import Affiliation, Coordinator, Approver
 
 
 class AffiliationsViewsBaseTestCase(TestCase):
@@ -24,7 +24,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Indigo League",
             "members": "Bulbasaur, Charmander, Squirtle",
-            "approvers": "Mew",
             "clinvar_submitter_ids": "11, 22, 33",
         }
         cls.expected_kanto_affiliation = {
@@ -41,7 +40,11 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Indigo League",
             "members": "Bulbasaur, Charmander, Squirtle",
-            "approvers": "Mew",
+            "approvers": [
+                {
+                    "approver_name": "Mew",
+                }
+            ],
             "clinvar_submitter_ids": "11, 22, 33",
         }
         cls.johto_affiliation = {
@@ -52,7 +55,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Johto League",
             "members": "Chikorita, Cyndaquil, Totodile",
-            "approvers": "Celebi",
             "clinvar_submitter_ids": "44, 55, 66",
         }
         cls.expected_johto_affiliation = {
@@ -69,7 +71,11 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Johto League",
             "members": "Chikorita, Cyndaquil, Totodile",
-            "approvers": "Celebi",
+            "approvers": [
+                {
+                    "approver_name": "Celebi",
+                }
+            ],
             "clinvar_submitter_ids": "44, 55, 66",
         }
         cls.hoenn_affiliation = {
@@ -80,7 +86,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Hoenn League",
             "members": "Treecko, Torchic, Mudkip",
-            "approvers": "Groudon, Kyogre",
             "clinvar_submitter_ids": "77, 88, 99",
         }
         cls.expected_hoenn_affiliation = {
@@ -97,7 +102,14 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Hoenn League",
             "members": "Treecko, Torchic, Mudkip",
-            "approvers": "Groudon, Kyogre",
+            "approvers": [
+                {
+                    "approver_name": "Groudon",
+                },
+                {
+                    "approver_name": "Kyogre",
+                },
+            ],
             "clinvar_submitter_ids": "77, 88, 99",
         }
 
@@ -107,6 +119,10 @@ class AffiliationsViewsBaseTestCase(TestCase):
             coordinator_name="Professor Oak",
             coordinator_email="ProfessorOak@email.com",
         )
+        Approver.objects.create(
+            affiliation=kanto_affil,
+            approver_name="Mew",
+        )
 
         johto_affil = Affiliation.objects.create(**cls.johto_affiliation)
         Coordinator.objects.create(
@@ -114,12 +130,24 @@ class AffiliationsViewsBaseTestCase(TestCase):
             coordinator_name="Professor Elm",
             coordinator_email="ProfessorElm@email.com",
         )
+        Approver.objects.create(
+            affiliation=johto_affil,
+            approver_name="Celebi",
+        )
 
         hoenn_affil = Affiliation.objects.create(**cls.hoenn_affiliation)
         Coordinator.objects.create(
             affiliation=hoenn_affil,
             coordinator_name="Professor Birch",
             coordinator_email="ProfessorBirch@email.com",
+        )
+        Approver.objects.create(
+            affiliation=hoenn_affil,
+            approver_name="Groudon",
+        )
+        Approver.objects.create(
+            affiliation=hoenn_affil,
+            approver_name="Kyogre",
         )
 
 
