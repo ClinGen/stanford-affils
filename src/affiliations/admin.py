@@ -3,10 +3,10 @@
 # Third-party dependencies:
 from django import forms
 from django.contrib import admin
-from unfold.admin import ModelAdmin # type: ignore
+from unfold.admin import ModelAdmin  # type: ignore
 
 # In-house code:
-from affiliations.models import Affiliation
+from affiliations.models import Affiliation, Coordinator
 
 
 class AffiliationForm(forms.ModelForm):
@@ -60,11 +60,19 @@ class AffiliationForm(forms.ModelForm):
         }
 
 
+class CoordinatorInlineAdmin(admin.TabularInline):
+    """Configure the coordinators admin panel."""
+
+    model = Coordinator
+    extra = 0
+
+
 class AffiliationsAdmin(ModelAdmin):
     """Configure the affiliations admin panel."""
 
     form = AffiliationForm
     search_fields = ["affiliation_id", "full_name", "abbreviated_name"]
+    # pylint:disable=duplicate-code
     list_display = [
         "affiliation_id",
         "full_name",
@@ -73,6 +81,7 @@ class AffiliationsAdmin(ModelAdmin):
         "type",
         "clinical_domain_working_group",
     ]
+    inlines = [CoordinatorInlineAdmin]
 
     def get_readonly_fields(self, request, obj=None):
         """ID is editable upon creation, afterwards, it is read only"""

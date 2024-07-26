@@ -5,11 +5,13 @@ from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from affiliations.views import AffiliationsList
 from affiliations.views import AffiliationsDetail
-from affiliations.models import Affiliation
+from affiliations.models import Affiliation, Coordinator
 
 
 class AffiliationsViewsBaseTestCase(TestCase):
     """A base test class with setup for testing affiliations views."""
+
+    maxDiff = None
 
     @classmethod
     def setUpTestData(cls):
@@ -18,8 +20,23 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "affiliation_id": 1,
             "full_name": "Kanto Pokémon",
             "abbreviated_name": "Kanto",
-            "coordinator": "Professor Oak",
-            "coordinator_email": "ProfessorOak@email.com",
+            "status": "Inactive",
+            "type": "Cool",
+            "clinical_domain_working_group": "Indigo League",
+            "members": "Bulbasaur, Charmander, Squirtle",
+            "approvers": "Mew",
+            "clinvar_submitter_ids": "11, 22, 33",
+        }
+        cls.expected_kanto_affiliation = {
+            "affiliation_id": 1,
+            "full_name": "Kanto Pokémon",
+            "abbreviated_name": "Kanto",
+            "coordinators": [
+                {
+                    "coordinator_name": "Professor Oak",
+                    "coordinator_email": "ProfessorOak@email.com",
+                }
+            ],
             "status": "Inactive",
             "type": "Cool",
             "clinical_domain_working_group": "Indigo League",
@@ -31,8 +48,23 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "affiliation_id": 2,
             "full_name": "Johto Pokémon",
             "abbreviated_name": "Johto",
-            "coordinator": "Professor Elm",
-            "coordinator_email": "ProfessorElm@email.com",
+            "status": "Retired",
+            "type": "Cool",
+            "clinical_domain_working_group": "Johto League",
+            "members": "Chikorita, Cyndaquil, Totodile",
+            "approvers": "Celebi",
+            "clinvar_submitter_ids": "44, 55, 66",
+        }
+        cls.expected_johto_affiliation = {
+            "affiliation_id": 2,
+            "full_name": "Johto Pokémon",
+            "abbreviated_name": "Johto",
+            "coordinators": [
+                {
+                    "coordinator_name": "Professor Elm",
+                    "coordinator_email": "ProfessorElm@email.com",
+                }
+            ],
             "status": "Retired",
             "type": "Cool",
             "clinical_domain_working_group": "Johto League",
@@ -44,8 +76,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "affiliation_id": 3,
             "full_name": "Hoenn Pokémon",
             "abbreviated_name": "Hoenn",
-            "coordinator": "Professor Birch",
-            "coordinator_email": "ProfessorBirch@email.com",
             "status": "Active",
             "type": "Cool",
             "clinical_domain_working_group": "Hoenn League",
@@ -53,9 +83,44 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "approvers": "Groudon, Kyogre",
             "clinvar_submitter_ids": "77, 88, 99",
         }
-        Affiliation.objects.create(**cls.kanto_affiliation)
-        Affiliation.objects.create(**cls.johto_affiliation)
-        Affiliation.objects.create(**cls.hoenn_affiliation)
+        cls.expected_hoenn_affiliation = {
+            "affiliation_id": 3,
+            "full_name": "Hoenn Pokémon",
+            "abbreviated_name": "Hoenn",
+            "coordinators": [
+                {
+                    "coordinator_name": "Professor Birch",
+                    "coordinator_email": "ProfessorBirch@email.com",
+                }
+            ],
+            "status": "Active",
+            "type": "Cool",
+            "clinical_domain_working_group": "Hoenn League",
+            "members": "Treecko, Torchic, Mudkip",
+            "approvers": "Groudon, Kyogre",
+            "clinvar_submitter_ids": "77, 88, 99",
+        }
+
+        kanto_affil = Affiliation.objects.create(**cls.kanto_affiliation)
+        Coordinator.objects.create(
+            affiliation=kanto_affil,
+            coordinator_name="Professor Oak",
+            coordinator_email="ProfessorOak@email.com",
+        )
+
+        johto_affil = Affiliation.objects.create(**cls.johto_affiliation)
+        Coordinator.objects.create(
+            affiliation=johto_affil,
+            coordinator_name="Professor Elm",
+            coordinator_email="ProfessorElm@email.com",
+        )
+
+        hoenn_affil = Affiliation.objects.create(**cls.hoenn_affiliation)
+        Coordinator.objects.create(
+            affiliation=hoenn_affil,
+            coordinator_name="Professor Birch",
+            coordinator_email="ProfessorBirch@email.com",
+        )
 
 
 class AffiliationsListTestCase(AffiliationsViewsBaseTestCase):
@@ -67,9 +132,17 @@ class AffiliationsListTestCase(AffiliationsViewsBaseTestCase):
         view = AffiliationsList.as_view()
         request = factory.get("/")
         response = view(request)
-        self.assertEqual(
-            response.data,
-            [self.kanto_affiliation, self.johto_affiliation, self.hoenn_affiliation],
+        self.assertDictEqual(
+            response.data[0],
+            self.expected_kanto_affiliation,
+        )
+        self.assertDictEqual(
+            response.data[1],
+            self.expected_johto_affiliation,
+        )
+        self.assertDictEqual(
+            response.data[2],
+            self.expected_hoenn_affiliation,
         )
 
 
@@ -83,12 +156,12 @@ class AffiliationsDetailTestCase(AffiliationsViewsBaseTestCase):
         primary_key = 1
         request = factory.get(f"/{primary_key}")
         response = view(request, pk=primary_key)
-        self.assertEqual(response.data, self.kanto_affiliation)
+        self.assertDictEqual(response.data, self.expected_kanto_affiliation)
         primary_key = 2
         request = factory.get(f"/{primary_key}")
         response = view(request, pk=primary_key)
-        self.assertEqual(response.data, self.johto_affiliation)
+        self.assertEqual(response.data, self.expected_johto_affiliation)
         primary_key = 3
         request = factory.get(f"/{primary_key}")
         response = view(request, pk=primary_key)
-        self.assertEqual(response.data, self.hoenn_affiliation)
+        self.assertEqual(response.data, self.expected_hoenn_affiliation)
