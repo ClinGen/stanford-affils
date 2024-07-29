@@ -13,12 +13,18 @@ class Affiliation(models.Model):
     will share this ID. Affiliations that share this ID will have different
     curation_panel_ids.
     """
-    affiliation_id: models.IntegerField = models.IntegerField()
+    affiliation_id: models.IntegerField = models.IntegerField(
+        help_text="10000 number ID"
+    )
     """
     4000 or 5000 ID. This ID can be null as independent groups will not have
     either of these IDs.
     """
-    curation_panel_id: models.IntegerField = models.IntegerField(blank=True, null=True)
+    curation_panel_id: models.IntegerField = models.IntegerField(
+        blank=True,
+        null=True,
+        help_text="GCEP or VCEP ID. If Independent Curation Group, leave this field blank.",
+    )
     full_name: models.CharField = models.CharField()
     abbreviated_name: models.CharField = models.CharField(blank=True, null=True)
     status: models.CharField = models.CharField()
