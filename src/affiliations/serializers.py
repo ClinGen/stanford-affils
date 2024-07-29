@@ -59,6 +59,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
         """Create and return an Affiliations instance."""
         coordinators_data = validated_data.pop("coordinators")
         approvers_data = validated_data.pop("approvers")
+
         affil = Affiliation.objects.create(
             **validated_data
         )  # pylint: disable=no-member
@@ -73,7 +74,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
         coordinator_data = validated_data.pop("coordinators")
         coordinators = instance.coordinators
 
-        approver_data = validated_data.pop("approver")
+        approver_data = validated_data.pop("approvers")
         approvers = instance.approvers
 
         instance.affiliation_id = validated_data.IntegerField()
@@ -98,4 +99,5 @@ class AffiliationSerializer(serializers.ModelSerializer):
             "approver_name", approvers.approver_name
         )
         approvers.save()
+
         return instance

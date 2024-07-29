@@ -4,8 +4,6 @@
 from django import forms
 from django.contrib import admin
 from unfold.admin import ModelAdmin  # type: ignore
-
-# In-house code:
 from affiliations.models import Affiliation, Coordinator, Approver
 
 
@@ -88,7 +86,9 @@ class AffiliationsAdmin(ModelAdmin):
         "type",
         "clinical_domain_working_group",
     ]
+
     inlines = [CoordinatorInlineAdmin, ApproverInlineAdmin]
+
 
     def get_readonly_fields(self, request, obj=None):
         """ID is editable upon creation, afterwards, it is read only"""
