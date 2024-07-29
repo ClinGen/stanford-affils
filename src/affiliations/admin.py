@@ -97,6 +97,7 @@ class AffiliationsAdmin(ModelAdmin):
     ]
     inlines = [CoordinatorInlineAdmin, ApproverInlineAdmin, SubmitterInlineAdmin]
 
+
     def get_readonly_fields(self, request, obj=None):
         """ID is editable upon creation, afterwards, it is read only"""
         # pylint:disable=unused-argument

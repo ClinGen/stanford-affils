@@ -26,23 +26,17 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "members": "Bulbasaur, Charmander, Squirtle",
         }
         cls.expected_kanto_affiliation = {
-            "affiliation_id": 1,
-            "full_name": "Kanto Pokémon",
-            "abbreviated_name": "Kanto",
+            **cls.kanto_affiliation,
             "coordinators": [
                 {
                     "coordinator_name": "Professor Oak",
                     "coordinator_email": "ProfessorOak@email.com",
-                }
+                },
             ],
-            "status": "Inactive",
-            "type": "Cool",
-            "clinical_domain_working_group": "Indigo League",
-            "members": "Bulbasaur, Charmander, Squirtle",
             "approvers": [
                 {
                     "approver_name": "Mew",
-                }
+                },
             ],
             "clinvar_submitter_ids": [
                 {
@@ -66,23 +60,17 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "members": "Chikorita, Cyndaquil, Totodile",
         }
         cls.expected_johto_affiliation = {
-            "affiliation_id": 2,
-            "full_name": "Johto Pokémon",
-            "abbreviated_name": "Johto",
+            **cls.johto_affiliation,
             "coordinators": [
                 {
                     "coordinator_name": "Professor Elm",
                     "coordinator_email": "ProfessorElm@email.com",
-                }
+                },
             ],
-            "status": "Retired",
-            "type": "Cool",
-            "clinical_domain_working_group": "Johto League",
-            "members": "Chikorita, Cyndaquil, Totodile",
             "approvers": [
                 {
                     "approver_name": "Celebi",
-                }
+                },
             ],
             "clinvar_submitter_ids": [
                 {
@@ -106,9 +94,7 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "members": "Treecko, Torchic, Mudkip",
         }
         cls.expected_hoenn_affiliation = {
-            "affiliation_id": 3,
-            "full_name": "Hoenn Pokémon",
-            "abbreviated_name": "Hoenn",
+            **cls.hoenn_affiliation,
             "coordinators": [
                 {
                     "coordinator_name": "Professor Birch",
@@ -119,6 +105,8 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Hoenn League",
             "members": "Treecko, Torchic, Mudkip",
+                },
+            ],
             "approvers": [
                 {
                     "approver_name": "Groudon",
@@ -184,7 +172,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
             affiliation=johto_affil,
             clinvar_submitter_id="66",
         )
-
         hoenn_affil = Affiliation.objects.create(**cls.hoenn_affiliation)
         Coordinator.objects.create(
             affiliation=hoenn_affil,
@@ -199,7 +186,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
             affiliation=hoenn_affil,
             approver_name="Kyogre",
         )
-
         Submitter.objects.create(
             affiliation=hoenn_affil,
             clinvar_submitter_id="77",
