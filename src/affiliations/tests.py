@@ -28,21 +28,13 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "clinvar_submitter_ids": "11, 22, 33",
         }
         cls.expected_kanto_affiliation = {
-            "affiliation_id": 1,
-            "full_name": "Kanto Pokémon",
-            "abbreviated_name": "Kanto",
+            **cls.kanto_affiliation,
             "coordinators": [
                 {
                     "coordinator_name": "Professor Oak",
                     "coordinator_email": "ProfessorOak@email.com",
                 }
             ],
-            "status": "Inactive",
-            "type": "Cool",
-            "clinical_domain_working_group": "Indigo League",
-            "members": "Bulbasaur, Charmander, Squirtle",
-            "approvers": "Mew",
-            "clinvar_submitter_ids": "11, 22, 33",
         }
         cls.johto_affiliation = {
             "affiliation_id": 2,
@@ -56,21 +48,13 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "clinvar_submitter_ids": "44, 55, 66",
         }
         cls.expected_johto_affiliation = {
-            "affiliation_id": 2,
-            "full_name": "Johto Pokémon",
-            "abbreviated_name": "Johto",
+            **cls.johto_affiliation,
             "coordinators": [
                 {
                     "coordinator_name": "Professor Elm",
                     "coordinator_email": "ProfessorElm@email.com",
                 }
             ],
-            "status": "Retired",
-            "type": "Cool",
-            "clinical_domain_working_group": "Johto League",
-            "members": "Chikorita, Cyndaquil, Totodile",
-            "approvers": "Celebi",
-            "clinvar_submitter_ids": "44, 55, 66",
         }
         cls.hoenn_affiliation = {
             "affiliation_id": 3,
@@ -84,21 +68,13 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "clinvar_submitter_ids": "77, 88, 99",
         }
         cls.expected_hoenn_affiliation = {
-            "affiliation_id": 3,
-            "full_name": "Hoenn Pokémon",
-            "abbreviated_name": "Hoenn",
+            **cls.hoenn_affiliation,
             "coordinators": [
                 {
                     "coordinator_name": "Professor Birch",
                     "coordinator_email": "ProfessorBirch@email.com",
                 }
             ],
-            "status": "Active",
-            "type": "Cool",
-            "clinical_domain_working_group": "Hoenn League",
-            "members": "Treecko, Torchic, Mudkip",
-            "approvers": "Groudon, Kyogre",
-            "clinvar_submitter_ids": "77, 88, 99",
         }
 
         kanto_affil = Affiliation.objects.create(**cls.kanto_affiliation)
