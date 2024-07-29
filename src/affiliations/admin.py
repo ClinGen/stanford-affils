@@ -1,11 +1,12 @@
 """Admin config for the affiliations service."""
 
 # Third-party dependencies:
-from django.contrib import admin
 from django import forms
+from django.contrib import admin
+from unfold.admin import ModelAdmin  # type: ignore
 
 # In-house code:
-from affiliations.models import Affiliation
+from affiliations.models import Affiliation, Coordinator, Approver, Submitter
 
 
 class AffiliationForm(forms.ModelForm):
@@ -59,11 +60,33 @@ class AffiliationForm(forms.ModelForm):
         }
 
 
-class AffiliationsAdmin(admin.ModelAdmin):
+class CoordinatorInlineAdmin(admin.TabularInline):
+    """Configure the coordinators admin panel."""
+
+    model = Coordinator
+    extra = 1
+
+
+class ApproverInlineAdmin(admin.TabularInline):
+    """Configure the approvers admin panel."""
+
+    model = Approver
+    extra = 1
+
+
+class SubmitterInlineAdmin(admin.TabularInline):
+    """Configure the clinvar submitter IDs admin panel."""
+
+    model = Submitter
+    extra = 1
+
+
+class AffiliationsAdmin(ModelAdmin):
     """Configure the affiliations admin panel."""
 
     form = AffiliationForm
     search_fields = ["affiliation_id", "full_name", "abbreviated_name"]
+    # pylint:disable=duplicate-code
     list_display = [
         "affiliation_id",
         "full_name",
@@ -72,8 +95,11 @@ class AffiliationsAdmin(admin.ModelAdmin):
         "type",
         "clinical_domain_working_group",
     ]
+    inlines = [CoordinatorInlineAdmin, ApproverInlineAdmin, SubmitterInlineAdmin]
 
     def get_readonly_fields(self, request, obj=None):
+        """ID is editable upon creation, afterwards, it is read only"""
+        # pylint:disable=unused-argument
         if obj is None:
             return [
                 "members",
