@@ -7,7 +7,6 @@ from rest_framework import serializers
 from affiliations.models import Affiliation, Coordinator, Approver, Submitter
 
 
-
 class CoordinatorSerializer(serializers.ModelSerializer):
     """Serialize Coordinator objects."""
 
@@ -93,7 +92,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
 
         approver_data = validated_data.pop("approvers")
         approvers = instance.approvers
-        
+
         submitter_id_data = validated_data.pop("clinvar_submitter_ids")
         clinvar_submitter_ids = instance.clinvar_submitter_ids
 

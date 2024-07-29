@@ -101,12 +101,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
                     "coordinator_email": "ProfessorBirch@email.com",
                 }
             ],
-            "status": "Active",
-            "type": "Cool",
-            "clinical_domain_working_group": "Hoenn League",
-            "members": "Treecko, Torchic, Mudkip",
-                },
-            ],
             "approvers": [
                 {
                     "approver_name": "Groudon",
