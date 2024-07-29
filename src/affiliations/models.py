@@ -2,6 +2,7 @@
 
 # Third-party dependencies:
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class Affiliation(models.Model):
@@ -34,6 +35,15 @@ class Affiliation(models.Model):
     def __str__(self):
         """Provide a string representation of an affiliation."""
         return f"Affiliation {self.affiliation_id} {self.full_name}"
+
+    def clean(self):
+        if (
+            self.type == "Independent Curation Group"
+            and self.curation_panel_id is not None
+        ):
+            raise ValidationError(
+                "If Independent Curation Group is selected, Curation Panel ID must be blank."
+            )
 
 
 class Coordinator(models.Model):
