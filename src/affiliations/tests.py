@@ -38,6 +38,7 @@ class AffiliationsViewsBaseTestCase(TestCase):
                 {
                     "approver_name": "Mew",
                 },
+            ],
         }
         cls.johto_affiliation = {
             "affiliation_id": 2,
