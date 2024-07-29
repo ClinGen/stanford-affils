@@ -5,7 +5,7 @@ from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from affiliations.views import AffiliationsList
 from affiliations.views import AffiliationsDetail
-from affiliations.models import Affiliation, Coordinator, Approver
+from affiliations.models import Affiliation, Coordinator, Approver, Submitter
 
 
 class AffiliationsViewsBaseTestCase(TestCase):
@@ -24,7 +24,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Indigo League",
             "members": "Bulbasaur, Charmander, Squirtle",
-            "clinvar_submitter_ids": "11, 22, 33",
         }
         cls.expected_kanto_affiliation = {
             "affiliation_id": 1,
@@ -45,7 +44,17 @@ class AffiliationsViewsBaseTestCase(TestCase):
                     "approver_name": "Mew",
                 }
             ],
-            "clinvar_submitter_ids": "11, 22, 33",
+            "clinvar_submitter_ids": [
+                {
+                    "clinvar_submitter_id": "11",
+                },
+                {
+                    "clinvar_submitter_id": "22",
+                },
+                {
+                    "clinvar_submitter_id": "33",
+                },
+            ],
         }
         cls.johto_affiliation = {
             "affiliation_id": 2,
@@ -55,7 +64,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Johto League",
             "members": "Chikorita, Cyndaquil, Totodile",
-            "clinvar_submitter_ids": "44, 55, 66",
         }
         cls.expected_johto_affiliation = {
             "affiliation_id": 2,
@@ -76,7 +84,17 @@ class AffiliationsViewsBaseTestCase(TestCase):
                     "approver_name": "Celebi",
                 }
             ],
-            "clinvar_submitter_ids": "44, 55, 66",
+            "clinvar_submitter_ids": [
+                {
+                    "clinvar_submitter_id": "44",
+                },
+                {
+                    "clinvar_submitter_id": "55",
+                },
+                {
+                    "clinvar_submitter_id": "66",
+                },
+            ],
         }
         cls.hoenn_affiliation = {
             "affiliation_id": 3,
@@ -86,7 +104,6 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Hoenn League",
             "members": "Treecko, Torchic, Mudkip",
-            "clinvar_submitter_ids": "77, 88, 99",
         }
         cls.expected_hoenn_affiliation = {
             "affiliation_id": 3,
@@ -110,7 +127,17 @@ class AffiliationsViewsBaseTestCase(TestCase):
                     "approver_name": "Kyogre",
                 },
             ],
-            "clinvar_submitter_ids": "77, 88, 99",
+            "clinvar_submitter_ids": [
+                {
+                    "clinvar_submitter_id": "77",
+                },
+                {
+                    "clinvar_submitter_id": "88",
+                },
+                {
+                    "clinvar_submitter_id": "99",
+                },
+            ],
         }
 
         kanto_affil = Affiliation.objects.create(**cls.kanto_affiliation)
@@ -123,7 +150,18 @@ class AffiliationsViewsBaseTestCase(TestCase):
             affiliation=kanto_affil,
             approver_name="Mew",
         )
-
+        Submitter.objects.create(
+            affiliation=kanto_affil,
+            clinvar_submitter_id="11",
+        )
+        Submitter.objects.create(
+            affiliation=kanto_affil,
+            clinvar_submitter_id="22",
+        )
+        Submitter.objects.create(
+            affiliation=kanto_affil,
+            clinvar_submitter_id="33",
+        )
         johto_affil = Affiliation.objects.create(**cls.johto_affiliation)
         Coordinator.objects.create(
             affiliation=johto_affil,
@@ -133,6 +171,18 @@ class AffiliationsViewsBaseTestCase(TestCase):
         Approver.objects.create(
             affiliation=johto_affil,
             approver_name="Celebi",
+        )
+        Submitter.objects.create(
+            affiliation=johto_affil,
+            clinvar_submitter_id="44",
+        )
+        Submitter.objects.create(
+            affiliation=johto_affil,
+            clinvar_submitter_id="55",
+        )
+        Submitter.objects.create(
+            affiliation=johto_affil,
+            clinvar_submitter_id="66",
         )
 
         hoenn_affil = Affiliation.objects.create(**cls.hoenn_affiliation)
@@ -148,6 +198,19 @@ class AffiliationsViewsBaseTestCase(TestCase):
         Approver.objects.create(
             affiliation=hoenn_affil,
             approver_name="Kyogre",
+        )
+
+        Submitter.objects.create(
+            affiliation=hoenn_affil,
+            clinvar_submitter_id="77",
+        )
+        Submitter.objects.create(
+            affiliation=hoenn_affil,
+            clinvar_submitter_id="88",
+        )
+        Submitter.objects.create(
+            affiliation=hoenn_affil,
+            clinvar_submitter_id="99",
         )
 
 
