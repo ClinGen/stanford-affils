@@ -57,6 +57,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
         model = Affiliation
         fields = [
             "affiliation_id",
+            "curation_panel_id",
             "full_name",
             "abbreviated_name",
             "status",
@@ -97,6 +98,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
         clinvar_submitter_ids = instance.clinvar_submitter_ids
 
         instance.affiliation_id = validated_data.IntegerField()
+        instance.curation_panel_id = validated_data.IntegerField()
         instance.full_name = validated_data.CharField()
         instance.abbreviated_name = validated_data.CharField()
         instance.status = validated_data.CharField()

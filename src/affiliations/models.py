@@ -7,11 +7,21 @@ from django.db import models
 class Affiliation(models.Model):
     """Define the shape of an affiliation."""
 
+    type: models.CharField = models.CharField()
+    """
+    10000 ID. All affiliations will have this ID, however, some affiliations
+    will share this ID. Affiliations that share this ID will have different
+    curation_panel_ids.
+    """
     affiliation_id: models.IntegerField = models.IntegerField()
+    """
+    4000 or 5000 ID. This ID can be null as independent groups will not have
+    either of these IDs.
+    """
+    curation_panel_id: models.IntegerField = models.IntegerField(blank=True, null=True)
     full_name: models.CharField = models.CharField()
     abbreviated_name: models.CharField = models.CharField(blank=True, null=True)
     status: models.CharField = models.CharField()
-    type: models.CharField = models.CharField()
     clinical_domain_working_group: models.CharField = models.CharField()
     members: models.CharField = models.CharField()
 
