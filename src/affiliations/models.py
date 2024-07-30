@@ -18,7 +18,7 @@ class Affiliation(models.Model):
         help_text="10000 number ID"
     )
     """
-    4000 or 5000 ID. This ID can be null as independent groups will not have
+    40000 or 50000 ID. This ID can be null as independent groups will not have
     either of these IDs.
     """
     curation_panel_id: models.IntegerField = models.IntegerField(
@@ -42,7 +42,28 @@ class Affiliation(models.Model):
             and self.curation_panel_id is not None
         ):
             raise ValidationError(
-                "If Independent Curation Group is selected, Curation Panel ID must be blank."
+                """If type Independent Curation Group is selected, Curation Panel 
+                ID must be left blank."""
+            )
+        if self.affiliation_id < 10000 or self.affiliation_id >= 20000:
+            raise ValidationError(
+                """Valid Affiliation ID's should be in the 10000 number range. 
+                Please include a valid Affiliation ID."""
+            )
+        if self.type == "Gene Curation Expert Panel" and (
+            self.curation_panel_id < 40000 or self.curation_panel_id >= 50000
+        ):
+            raise ValidationError(
+                """Valid GCEP ID's should be in the 40000 number range. 
+                Please include a valid Curation Panel ID."""
+            )
+
+        if self.type == "Variant Curation Expert Panel" and (
+            self.curation_panel_id < 50000 or self.curation_panel_id >= 60000
+        ):
+            raise ValidationError(
+                """Valid VCEP ID's should be in the  50000 number range. 
+                Please include a valid Curation Panel ID."""
             )
 
 
