@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 # Built-in libraries:
 from pathlib import Path
 import os
+from django.templatetags.static import static
 
 # Third-party dependencies:
 from dotenv import load_dotenv
+
 
 # Set environment variables.
 load_dotenv()

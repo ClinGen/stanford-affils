@@ -15,7 +15,8 @@ class Affiliation(models.Model):
     curation_panel_ids.
     """
     affiliation_id: models.IntegerField = models.IntegerField(
-        help_text="10000 number ID"
+        help_text="10000 number ID",
+        verbose_name="Affiliation ID",
     )
     """
     40000 or 50000 ID. This ID can be null as independent groups will not have
@@ -25,11 +26,14 @@ class Affiliation(models.Model):
         blank=True,
         null=True,
         help_text="GCEP or VCEP ID. If Independent Curation Group, leave this field blank.",
+        verbose_name="Curation Panel ID",
     )
-    full_name: models.CharField = models.CharField()
-    abbreviated_name: models.CharField = models.CharField(blank=True, null=True)
+    full_name: models.CharField = models.CharField(verbose_name="Full Name")
+    abbreviated_name: models.CharField = models.CharField(
+        blank=True, null=True, verbose_name="Abbreviated Name")
     status: models.CharField = models.CharField()
-    clinical_domain_working_group: models.CharField = models.CharField()
+    clinical_domain_working_group: models.CharField = models.CharField(
+        verbose_name="CDWG")
     members: models.CharField = models.CharField()
 
     def __str__(self):
@@ -73,8 +77,10 @@ class Coordinator(models.Model):
     affiliation = models.ForeignKey(
         Affiliation, related_name="coordinators", on_delete=models.CASCADE
     )  # type: object
-    coordinator_name: models.CharField = models.CharField()
-    coordinator_email: models.EmailField = models.EmailField()
+    coordinator_name: models.CharField = models.CharField(
+        verbose_name="Coordinator Name")
+    coordinator_email: models.EmailField = models.EmailField(
+        verbose_name="Coordinator Email")
 
 
 class Approver(models.Model):
@@ -83,7 +89,8 @@ class Approver(models.Model):
     affiliation = models.ForeignKey(
         Affiliation, related_name="approvers", on_delete=models.CASCADE
     )  # type: object
-    approver_name: models.CharField = models.CharField()
+    approver_name: models.CharField = models.CharField(
+        verbose_name="Approver Name")
 
 
 class Submitter(models.Model):
@@ -92,4 +99,5 @@ class Submitter(models.Model):
     affiliation = models.ForeignKey(
         Affiliation, related_name="clinvar_submitter_ids", on_delete=models.CASCADE
     )  # type: object
-    clinvar_submitter_id: models.CharField = models.CharField()
+    clinvar_submitter_id: models.CharField = models.CharField(
+        verbose_name="ClinVar Submitter ID")

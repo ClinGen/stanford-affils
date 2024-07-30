@@ -3,7 +3,7 @@
 # Third-party dependencies:
 from django import forms
 from django.contrib import admin
-from unfold.admin import ModelAdmin  # type: ignore
+from unfold.admin import ModelAdmin, TabularInline, UnfoldAdminSelectWidget  # type: ignore
 
 # In-house code:
 from affiliations.models import Affiliation, Coordinator, Approver, Submitter
@@ -18,7 +18,7 @@ class AffiliationForm(forms.ModelForm):
         fields = "__all__"
         model = Affiliation
         widgets = {
-            "status": forms.Select(
+            "status": UnfoldAdminSelectWidget(
                 choices=[
                     ("Active", "Active"),
                     ("Applying", "Applying"),
@@ -26,14 +26,15 @@ class AffiliationForm(forms.ModelForm):
                     ("Retired", "Retired"),
                 ]
             ),
-            "type": forms.Select(
+            "type": UnfoldAdminSelectWidget(
                 choices=[
-                    ("Variant Curation Expert Panel", "Variant Curation Expert Panel"),
+                    ("Variant Curation Expert Panel",
+                     "Variant Curation Expert Panel"),
                     ("Gene Curation Expert Panel", "Gene Curation Expert Panel"),
                     ("Independent Curation Group", "Independent Curation Group"),
                 ]
             ),
-            "clinical_domain_working_group": forms.Select(
+            "clinical_domain_working_group": UnfoldAdminSelectWidget(
                 choices=[
                     ("None", "None"),
                     ("Cardiovascular", "Cardiovascular"),
@@ -43,7 +44,8 @@ class AffiliationForm(forms.ModelForm):
                     ("Immunology", "Immunology"),
                     ("Inborn Errors of Metabolism", "Inborn Errors of Metabolism"),
                     ("Kidney Disease", "Kidney Disease"),
-                    ("Neurodevelopmental Disorders", "Neurodevelopmental Disorders"),
+                    ("Neurodevelopmental Disorders",
+                     "Neurodevelopmental Disorders"),
                     ("Neurological Disorders", "Neurological Disorders"),
                     ("Ocular", "Ocular"),
                     ("Other", "Other"),
@@ -60,21 +62,21 @@ class AffiliationForm(forms.ModelForm):
         }
 
 
-class CoordinatorInlineAdmin(admin.TabularInline):
+class CoordinatorInlineAdmin(TabularInline):
     """Configure the coordinators admin panel."""
 
     model = Coordinator
     extra = 1
 
 
-class ApproverInlineAdmin(admin.TabularInline):
+class ApproverInlineAdmin(TabularInline):
     """Configure the approvers admin panel."""
 
     model = Approver
     extra = 1
 
 
-class SubmitterInlineAdmin(admin.TabularInline):
+class SubmitterInlineAdmin(TabularInline):
     """Configure the clinvar submitter IDs admin panel."""
 
     model = Submitter
@@ -101,7 +103,19 @@ class AffiliationsAdmin(ModelAdmin):
         "type",
         "clinical_domain_working_group",
     ]
-    inlines = [CoordinatorInlineAdmin, ApproverInlineAdmin, SubmitterInlineAdmin]
+
+    # pylint:disable=duplicate-code
+    list_display_links = [
+        "affiliation_id",
+        "curation_panel_id",
+        "full_name",
+        "abbreviated_name",
+        "status",
+        "type",
+        "clinical_domain_working_group",
+    ]
+    inlines = [CoordinatorInlineAdmin,
+               ApproverInlineAdmin, SubmitterInlineAdmin]
 
     def get_readonly_fields(self, request, obj=None):
         """ID is editable upon creation, afterwards, it is read only"""
