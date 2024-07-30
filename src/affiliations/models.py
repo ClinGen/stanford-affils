@@ -30,10 +30,12 @@ class Affiliation(models.Model):
     )
     full_name: models.CharField = models.CharField(verbose_name="Full Name")
     abbreviated_name: models.CharField = models.CharField(
-        blank=True, null=True, verbose_name="Abbreviated Name")
+        blank=True, null=True, verbose_name="Abbreviated Name"
+    )
     status: models.CharField = models.CharField()
     clinical_domain_working_group: models.CharField = models.CharField(
-        verbose_name="CDWG")
+        verbose_name="CDWG"
+    )
     members: models.CharField = models.CharField()
 
     def __str__(self):
@@ -78,9 +80,11 @@ class Coordinator(models.Model):
         Affiliation, related_name="coordinators", on_delete=models.CASCADE
     )  # type: object
     coordinator_name: models.CharField = models.CharField(
-        verbose_name="Coordinator Name")
+        verbose_name="Coordinator Name"
+    )
     coordinator_email: models.EmailField = models.EmailField(
-        verbose_name="Coordinator Email")
+        verbose_name="Coordinator Email"
+    )
 
 
 class Approver(models.Model):
@@ -89,8 +93,7 @@ class Approver(models.Model):
     affiliation = models.ForeignKey(
         Affiliation, related_name="approvers", on_delete=models.CASCADE
     )  # type: object
-    approver_name: models.CharField = models.CharField(
-        verbose_name="Approver Name")
+    approver_name: models.CharField = models.CharField(verbose_name="Approver Name")
 
 
 class Submitter(models.Model):
@@ -100,4 +103,5 @@ class Submitter(models.Model):
         Affiliation, related_name="clinvar_submitter_ids", on_delete=models.CASCADE
     )  # type: object
     clinvar_submitter_id: models.CharField = models.CharField(
-        verbose_name="ClinVar Submitter ID")
+        verbose_name="ClinVar Submitter ID"
+    )
