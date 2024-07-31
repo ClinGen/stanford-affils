@@ -85,10 +85,16 @@ class AffiliationsAdmin(ModelAdmin):
     """Configure the affiliations admin panel."""
 
     form = AffiliationForm
-    search_fields = ["affiliation_id", "full_name", "abbreviated_name"]
+    search_fields = [
+        "affiliation_id",
+        "curation_panel_id",
+        "full_name",
+        "abbreviated_name",
+    ]
     # pylint:disable=duplicate-code
     list_display = [
         "affiliation_id",
+        "curation_panel_id",
         "full_name",
         "abbreviated_name",
         "status",
@@ -106,6 +112,7 @@ class AffiliationsAdmin(ModelAdmin):
             ]
         return [
             "affiliation_id",
+            "curation_panel_id",
             "members",
         ]
 
