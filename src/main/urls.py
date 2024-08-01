@@ -12,7 +12,3 @@ urlpatterns = [
     path("", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
 ]
-
-admin.site.site_title = "Affils Service"
-admin.site.site_header = "Affiliation Service Panel"
-admin.site.index_title = "Welcome to the ClinGen Affiliation Service Portal"

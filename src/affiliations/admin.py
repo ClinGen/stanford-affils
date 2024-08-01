@@ -28,7 +28,6 @@ from affiliations.models import (
 
 # Unregistering base Django Admin User and Group to use Unfold User and Group
 # instead for styling purposes.
-
 admin.site.unregister(User)
 admin.site.unregister(Group)
 
@@ -166,3 +165,8 @@ class AffiliationsAdmin(ModelAdmin):
 
 # Add models we want to be able to edit in the admin interface.
 admin.site.register(Affiliation, AffiliationsAdmin)
+
+# Change the admin site's display name.
+admin.site.site_title = "Affils Service"
+admin.site.site_header = "Affiliation Service Panel"
+admin.site.index_title = "Welcome to the ClinGen Affiliation Service Portal"
