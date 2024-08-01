@@ -71,6 +71,9 @@ source of truth for environment variable keys.
 - Do not rename any of keys for the environment variables.
 - Change the path for `AFFILS_DB_FILE` and placeholder values.
 
+## Affiliation Service User Guides
+TBD link to documentation for Affiliation Service users on how to do specific tasks on the site.
+
 ## Contributing
 
 How to contribute to the affiliations service.
