@@ -40,10 +40,20 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
 
+    class Media:
+        """Media styling for selector widget on User page"""
+
+        css = {"all": ("css/permissions.css",)}
+
 
 @admin.register(Group)
 class GroupAdmin(BaseGroupAdmin, ModelAdmin):
     """Register Unfold group admin for styling of Group page."""
+
+    class Media:
+        """Media styling for selector widget on Group page"""
+
+        css = {"all": ("css/permissions.css",)}
 
 
 class AffiliationForm(forms.ModelForm):
@@ -103,11 +113,13 @@ class CoordinatorInlineAdmin(TabularInline):
     model = Coordinator
     extra = 1
 
+
 class ApproverInlineAdmin(TabularInline):
     """Configure the approvers admin panel."""
 
     model = Approver
     extra = 1
+
 
 class SubmitterInlineAdmin(TabularInline):
     """Configure the clinvar submitter IDs admin panel."""

@@ -1,0 +1,17 @@
+.selector {
+    width: fit-content;
+    max-width: 100%;
+}
+
+.selector select {
+    width: fit-content;
+    max-width: 100%;
+    height: 17.2em;
+}
+
+.selector-available, .selector-chosen {
+    float: left;
+    width: fit-content;
+    max-width: 100%;
+    text-align: center;
+}
