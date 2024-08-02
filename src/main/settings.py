@@ -135,8 +135,8 @@ UNFOLD = {
         {
             "rel": "icon",
             "sizes": "32x32",
-            "type": "image/svg",
-            "href": lambda request: static("images/clingen-logo-only.svg"),
+            "type": "image/png",
+            "href": lambda request: static("images/favicon-32x32.png"),
         },
     ],
     "COLORS": {
