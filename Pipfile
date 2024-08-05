@@ -7,6 +7,7 @@ name = "pypi"
 djangorestframework = "3.*"
 psycopg = "3.*"
 django-unfold = "*"
+django-admin-logs = "*"
 
 [dev-packages]
 black = "==24.*"
