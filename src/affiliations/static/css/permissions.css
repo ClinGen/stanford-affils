@@ -1,0 +1,28 @@
+.selector {
+    width: max-content;
+    max-width: max-content;
+
+}
+
+.selector select {
+    width: max-content;
+    height: 20em;
+}
+
+.selector-available, .selector-chosen {
+    float: left;
+    width: max-content;
+    max-width: max-content;
+    text-align: center;
+}
+
+#id_permissions_from.filtered, 
+#id_permissions_to.filtered,
+#id_user_permissions_from.filtered,
+#id_user_permissions_to.filtered,
+#id_groups_from.filtered,
+#id_groups_to.filtered {
+    width: max-content;
+    max-width: max-content;
+
+}
