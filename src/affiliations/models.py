@@ -43,34 +43,39 @@ class Affiliation(models.Model):
         return f"Affiliation {self.affiliation_id} {self.full_name}"
 
     def clean(self):
-        if (
-            self.type == "Independent Curation Group"
-            and self.curation_panel_id is not None
-        ):
-            raise ValidationError(
-                """If type Independent Curation Group is selected, Curation Panel 
-                ID must be left blank."""
-            )
-        if self.affiliation_id < 10000 or self.affiliation_id >= 20000:
-            raise ValidationError(
-                """Valid Affiliation ID's should be in the 10000 number range. 
-                Please include a valid Affiliation ID."""
-            )
-        if self.type == "Gene Curation Expert Panel" and (
-            self.curation_panel_id < 40000 or self.curation_panel_id >= 50000
-        ):
-            raise ValidationError(
-                """Valid GCEP ID's should be in the 40000 number range. 
-                Please include a valid Curation Panel ID."""
-            )
-
-        if self.type == "Variant Curation Expert Panel" and (
-            self.curation_panel_id < 50000 or self.curation_panel_id >= 60000
-        ):
-            raise ValidationError(
-                """Valid VCEP ID's should be in the  50000 number range. 
-                Please include a valid Curation Panel ID."""
-            )
+        if self.affiliation_id is None or self.full_name is None:
+            # Allow Django to handle require field validation error.
+            pass
+        else:
+            if (
+                self.type == "Independent Curation Group"
+                and self.curation_panel_id is not None
+            ):
+                raise ValidationError(
+                    """If type Independent Curation Group is selected, Curation Panel
+                    ID must be left blank."""
+                )
+            if self.affiliation_id < 10000 or self.affiliation_id >= 20000:
+                raise ValidationError(
+                    """Valid Affiliation ID's should be in the 10000 number range.
+                    Please include a valid Affiliation ID."""
+                )
+            if self.type == "Gene Curation Expert Panel":
+                if self.curation_panel_id is None or (
+                    self.curation_panel_id < 40000 or self.curation_panel_id >= 50000
+                ):
+                    raise ValidationError(
+                        """Valid GCEP ID's should be in the 40000 number range. 
+                        Please include a valid Curation Panel ID."""
+                    )
+            if self.type == "Variant Curation Expert Panel":
+                if self.curation_panel_id is None or (
+                    self.curation_panel_id < 50000 or self.curation_panel_id >= 60000
+                ):
+                    raise ValidationError(
+                        """Valid VCEP ID's should be in the  50000 number range. 
+                        Please include a valid Curation Panel ID."""
+                    )
 
 
 class Coordinator(models.Model):
