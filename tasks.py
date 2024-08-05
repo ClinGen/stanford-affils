@@ -34,6 +34,11 @@ def fmt(c):
     c.run("mdformat README.md")
     c.run("mdformat doc")
 
+@task
+def fmtcheck(c):
+    """Checks if the code is formatted properly."""
+    c.run("black --check .")
+
 
 @task
 def lint(c):

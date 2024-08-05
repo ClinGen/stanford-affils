@@ -32,7 +32,7 @@ jobs:
       - name: install dependencies
         run: pipenv sync --dev # Installs all deps, including dev deps, from Pipfile.lock.
       - name: format
-        run: pipenv run invoke fmt
+        run: pipenv run invoke fmtcheck
       - name: lint
         run: pipenv run invoke lint
       - name: check types
