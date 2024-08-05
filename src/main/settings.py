@@ -15,6 +15,7 @@ import os
 
 # Third-party dependencies:
 from dotenv import load_dotenv
+from django.templatetags.static import static
 
 
 # Set environment variables.
@@ -127,4 +128,29 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "affiliations.renderers.BrowsableAPIRendererWithoutForms",
     ),
+}
+
+UNFOLD = {
+    "SITE_FAVICONS": [
+        {
+            "rel": "icon",
+            "sizes": "32x32",
+            "type": "image/png",
+            "href": lambda request: static("images/favicon-32x32.png"),
+        },
+    ],
+    "COLORS": {
+        "primary": {
+            "100": "210 227 247",
+            "200": "197 222 252",
+            "300": "179 213 252",
+            "400": "121 180 252",
+            "500": "51 121 183",
+            "600": "23 162 184",
+            "700": "30 81 131",
+            "800": "22 55 96",
+            "900": "22 55 96",
+            "950": "22 55 96",
+        },
+    },
 }
