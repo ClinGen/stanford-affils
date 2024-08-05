@@ -72,7 +72,9 @@ source of truth for environment variable keys.
 - Change the path for `AFFILS_DB_FILE` and placeholder values.
 
 ## Affiliation Service User Guides
-TBD link to documentation for Affiliation Service users on how to do specific tasks on the site.
+
+TBD link to documentation for Affiliation Service users on how to do specific
+tasks on the site.
 
 ## Contributing
 
