@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "affiliations",
-    'django_admin_logs',
+    "django_admin_logs",
 ]
 
 MIDDLEWARE = [
@@ -132,7 +132,7 @@ REST_FRAMEWORK = {
 
 # Logging
 
-# By default, Django creates log entries with the message “No fields changed” 
-# when an unchanged object is saved in the admin interface. 
+# By default, Django creates log entries with the message “No fields changed”
+# when an unchanged object is saved in the admin interface.
 # To prevent such log entries from being created set below to True.
-DJANGO_ADMIN_LOGS_IGNORE_UNCHANGED = True 
+DJANGO_ADMIN_LOGS_IGNORE_UNCHANGED = True
