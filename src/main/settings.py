@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "affiliations",
+    "django_admin_logs",
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,11 @@ UNFOLD = {
         },
     },
 }
+
+# django-admin-logs
+
+# By default, Django creates log entries with the message “No fields changed”
+# when an unchanged object is saved in the admin interface. The below prevents 
+# such log entries from being created.
+
+DJANGO_ADMIN_LOGS_IGNORE_UNCHANGED = True

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "97cb5de0805fd0394c01681ff7db9e3326fc041cc98084e6825b1ae748b91267"
+            "sha256": "d7fbc6b9d3f65728d283ea31fdd1b574952e4e2d7a685336e3e0abc5f72d591d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -26,11 +26,20 @@
         },
         "django": {
             "hashes": [
-                "sha256:bd4505cae0b9bd642313e8fb71810893df5dc2ffcacaa67a33af2d5cd61888f2",
-                "sha256:f216510ace3de5de01329463a315a629f33480e893a9024fc93d8c32c22913da"
+                "sha256:848a5980e8efb76eea70872fb0e4bc5e371619c70fffbe48e3e1b50b2c09455d",
+                "sha256:d3b811bf5371a26def053d7ee42a9df1267ef7622323fe70a601936725aa4557"
             ],
             "markers": "python_version >= '3.10'",
-            "version": "==5.0.7"
+            "version": "==5.1"
+        },
+        "django-admin-logs": {
+            "hashes": [
+                "sha256:251614a2aa15d5bdd57fe90f9f263d38e6123ea77f52af07393eecdae684e05a",
+                "sha256:4bb69c6e2bfaa7bd47ecf5c13674623e2be3b39c1550f39b2500450e6b2bdc62"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.6'",
+            "version": "==1.2.0"
         },
         "django-unfold": {
             "hashes": [
@@ -244,11 +253,11 @@
         },
         "django": {
             "hashes": [
-                "sha256:bd4505cae0b9bd642313e8fb71810893df5dc2ffcacaa67a33af2d5cd61888f2",
-                "sha256:f216510ace3de5de01329463a315a629f33480e893a9024fc93d8c32c22913da"
+                "sha256:848a5980e8efb76eea70872fb0e4bc5e371619c70fffbe48e3e1b50b2c09455d",
+                "sha256:d3b811bf5371a26def053d7ee42a9df1267ef7622323fe70a601936725aa4557"
             ],
             "markers": "python_version >= '3.10'",
-            "version": "==5.0.7"
+            "version": "==5.1"
         },
         "django-stubs": {
             "extras": [
@@ -263,11 +272,11 @@
         },
         "django-stubs-ext": {
             "hashes": [
-                "sha256:409c62585d7f996cef5c760e6e27ea3ff29f961c943747e67519c837422cad32",
-                "sha256:8d8efec5a86241266bec94a528fe21258ad90d78c67307f3ae5f36e81de97f12"
+                "sha256:85da065224204774208be29c7d02b4482d5a69218a728465c2fbe41725fdc819",
+                "sha256:910cbaff3d1e8e806a5c27d5ddd4088535aae8371ea921b7fd680fdfa5f14e30"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==5.0.2"
+            "version": "==5.0.4"
         },
         "djangorestframework-stubs": {
             "extras": [
