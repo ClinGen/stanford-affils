@@ -45,20 +45,29 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
         """Media styling for selector widget on User page"""
 
         css = {"all": ("css/permissions.css",)}
-    
+
     def get_fieldsets(self, request, obj=None):
+        """Restrict what non-superusers can view/edit."""
         if not obj:
             return self.add_fieldsets
 
         if request.user.is_superuser:
-            perm_fields = ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
+            perm_fields = (
+                "is_active",
+                "is_staff",
+                "is_superuser",
+                "groups",
+                "user_permissions",
+            )
         else:
-            perm_fields = ('is_active', 'is_staff', 'groups', 'user_permissions')
+            perm_fields = ("is_active", "is_staff", "groups", "user_permissions")
 
-        return [(None, {'fields': ('username', 'password')}),
-                (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-                (_('Permissions'), {'fields': perm_fields}),
-                (_('Important dates'), {'fields': ('last_login', 'date_joined')})]
+        return [
+            (None, {"fields": ("username", "password")}),
+            (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+            (_("Permissions"), {"fields": perm_fields}),
+            (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+        ]
 
 
 @admin.register(Group)
