@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
+from django.utils.translation import gettext_lazy as _
 
 from unfold.forms import (  # type: ignore
     AdminPasswordChangeForm,
@@ -44,6 +45,20 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
         """Media styling for selector widget on User page"""
 
         css = {"all": ("css/permissions.css",)}
+    
+    def get_fieldsets(self, request, obj=None):
+        if not obj:
+            return self.add_fieldsets
+
+        if request.user.is_superuser:
+            perm_fields = ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
+        else:
+            perm_fields = ('is_active', 'is_staff', 'groups', 'user_permissions')
+
+        return [(None, {'fields': ('username', 'password')}),
+                (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+                (_('Permissions'), {'fields': perm_fields}),
+                (_('Important dates'), {'fields': ('last_login', 'date_joined')})]
 
 
 @admin.register(Group)
