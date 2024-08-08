@@ -71,6 +71,7 @@ class AffiliationForm(forms.ModelForm):
                     ("Applying", "Applying"),
                     ("Inactive", "Inactive"),
                     ("Retired", "Retired"),
+                    ("Archived", "Archived"),
                 ]
             ),
             "type": UnfoldAdminSelectWidget(
@@ -176,6 +177,11 @@ class AffiliationsAdmin(ModelAdmin):
             "members",
         ]
 
+    def has_delete_permission(self, request, obj=None):
+        """Disables the ability to delete an affiliation."""
+        # pylint:disable=unused-argument
+        return False
+
 
 # Add models we want to be able to edit in the admin interface.
 admin.site.register(Affiliation, AffiliationsAdmin)
@@ -184,3 +190,6 @@ admin.site.register(Affiliation, AffiliationsAdmin)
 admin.site.site_title = "Affils Service"
 admin.site.site_header = "Affiliation Service Panel"
 admin.site.index_title = "Welcome to the ClinGen Affiliation Service Portal"
+
+# Disables the ability to bulk delete on the Affiliations Service.
+admin.site.disable_action("delete_selected")
