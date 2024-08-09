@@ -47,7 +47,9 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
         css = {"all": ("css/permissions.css",)}
 
     def get_fieldsets(self, request, obj=None):
-        """Restrict what non-superusers can view/edit."""
+        """Restricts which fields users can view. Superusers are able to 
+        view everything and have the option to create other superusers. 
+        While non-superusers have the ability to manage other staff level users."""
         if not obj:
             return self.add_fieldsets
 
