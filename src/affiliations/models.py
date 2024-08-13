@@ -2,7 +2,6 @@
 
 # Third-party dependencies:
 from django.db import models
-from django.core.exceptions import ValidationError
 
 
 class Affiliation(models.Model):
@@ -41,55 +40,6 @@ class Affiliation(models.Model):
     def __str__(self):
         """Provide a string representation of an affiliation."""
         return f"Affiliation {self.affiliation_id} {self.full_name}"
-
-    def clean(self):
-        if self.affiliation_id is None or self.full_name is None:
-            # Allow Django to handle require field validation error.
-            pass
-        else:
-            if Affiliation.objects.filter(
-                affiliation_id=self.affiliation_id, expert_panel_id=self.expert_panel_id
-            ).exists():
-                raise ValidationError(
-                    """This Affiliation ID and Expert Panel ID already exist."""
-                )
-            if (
-                self.type == "Independent Curation Group"
-                and self.expert_panel_id is not None
-            ):
-                raise ValidationError(
-                    """If type Independent Curation Group is selected, Expert Panel
-                    ID must be left blank."""
-                )
-            if self.affiliation_id < 10000 or self.affiliation_id >= 20000:
-                raise ValidationError(
-                    """Valid Affiliation ID's should be in the 10000 number range.
-                    Please include a valid Affiliation ID."""
-                )
-            if self.type == "Gene Curation Expert Panel":
-                if self.expert_panel_id is None or (
-                    self.expert_panel_id < 40000 or self.expert_panel_id >= 50000
-                ):
-                    raise ValidationError(
-                        """Valid GCEP ID's should be in the 40000 number range. 
-                        Please include a valid Expert Panel ID."""
-                    )
-                if self.affiliation_id - 10000 != self.expert_panel_id - 40000:
-                    raise ValidationError(
-                        """The Affiliation ID and Expert Panel ID do not match."""
-                    )
-            if self.type == "Variant Curation Expert Panel":
-                if self.expert_panel_id is None or (
-                    self.expert_panel_id < 50000 or self.expert_panel_id >= 60000
-                ):
-                    raise ValidationError(
-                        """Valid VCEP ID's should be in the  50000 number range. 
-                        Please include a valid Expert Panel ID."""
-                    )
-                if self.affiliation_id - 10000 != self.expert_panel_id - 50000:
-                    raise ValidationError(
-                        """The Affiliation ID and Expert Panel ID do not match."""
-                    )
 
 
 class Coordinator(models.Model):

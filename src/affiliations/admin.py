@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from unfold.forms import (  # type: ignore
     AdminPasswordChangeForm,
@@ -131,6 +132,79 @@ class AffiliationForm(forms.ModelForm):
                 ]
             ),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        affil_id = cleaned_data.get("affiliation_id")
+        ep_id = cleaned_data.get("expert_panel_id")
+        _type = cleaned_data.get("type")
+        full_name = cleaned_data.get("full_name")
+
+        if affil_id is None or full_name is None:
+            # Allow Django to handle require field validation error.
+            pass
+        if self.instance.pk is not None:
+            return
+        if Affiliation.objects.filter(
+            affiliation_id=affil_id, expert_panel_id=ep_id
+        ).exists():
+            self.add_error(
+                None,
+                ValidationError(
+                    "This Affiliation ID and Expert Panel ID pair already exist."
+                ),
+            )
+        if (
+            _type == "Independent Curation Group"
+            and self.cleaned_data["expert_panel_id"] is not None
+        ):
+            self.add_error(
+                "expert_panel_id",
+                ValidationError(
+                    "If type Independent Curation Group is selected, "
+                    "Expert Panel ID must be left blank."
+                ),
+            )
+            if affil_id < 10000 or affil_id >= 20000:
+                self.add_error(
+                    "affiliation_id",
+                    ValidationError(
+                        "Valid Affiliation ID's should be in the 10000 number range. "
+                        "Please include a valid Affiliation ID."
+                    ),
+                )
+        if _type == "Gene Curation Expert Panel":
+            if ep_id is None or (ep_id < 40000 or ep_id >= 50000):
+                self.add_error(
+                    "expert_panel_id",
+                    ValidationError(
+                        "Valid GCEP ID's should be in the 40000 number range. "
+                        "Please include a valid Expert Panel ID."
+                    ),
+                )
+            if affil_id - 10000 != ep_id - 40000:
+                self.add_error(
+                    None,
+                    ValidationError(
+                        "The Affiliation ID and Expert Panel ID do not match."
+                    ),
+                )
+        if _type == "Variant Curation Expert Panel":
+            if ep_id is None or (ep_id < 50000 or ep_id >= 60000):
+                self.add_error(
+                    "expert_panel_id",
+                    ValidationError(
+                        "Valid VCEP ID's should be in the  50000 number range. "
+                        "Please include a valid Expert Panel ID."
+                    ),
+                )
+            if affil_id - 10000 != ep_id - 50000:
+                self.add_error(
+                    None,
+                    ValidationError(
+                        "The Affiliation ID and Expert Panel ID do not match."
+                    ),
+                )
 
 
 class CoordinatorInlineAdmin(TabularInline):
