@@ -306,6 +306,45 @@ class TestInvalidTypeAndIDCreateForm(TestCase):
         mock_add_error.assert_has_calls(calls)
 
 
+class TestInvalidAffilandExpertPanelMatchCreateForm(TestCase):
+    """A test class for testing validation error on Affiliation ID
+    and Expert Panel match."""
+
+    @classmethod
+    def test_invalid_matching_ids_creation(cls):
+        """Attempting to seed the test database with some test data, then make
+        sure we are triggering the ValidationError"""
+
+        cls.invalid_matching_ids_affiliation = {
+            "affiliation_id": 14285,
+            "expert_panel_id": 54284,
+            "full_name": "Affil and EP ID Don't Match",
+            "abbreviated_name": "Invalid Matching IDs",
+            "status": "Active",
+            "type": "Variant Curation Expert Panel",
+            "clinical_domain_working_group": "Somatic Cancer",
+            "members": "Piplup, Toxicroak, Weavile",
+        }
+
+        cls.invalid_matching_ids_affil = Affiliation.objects.create(
+            **cls.invalid_matching_ids_affiliation
+        )
+
+    @mock.patch("affiliations.admin.AffiliationForm.add_error")
+    def test_response(self, mock_add_error):
+        """Make sure we are triggering the add_error function in clean method"""
+        invalid_matching_ids = AffiliationForm(self.invalid_matching_ids_affil)
+        invalid_matching_ids.cleaned_data = self.invalid_matching_ids_affiliation
+        invalid_matching_ids.clean()
+        calls = [
+            mock.call(
+                None,
+                ValidationError("The Affiliation ID and Expert Panel ID do not match."),
+            )
+        ]
+        mock_add_error.assert_has_calls(calls)
+
+
 class AffiliationsListTestCase(AffiliationsViewsBaseTestCase):
     """Test the affiliations list view."""
 
