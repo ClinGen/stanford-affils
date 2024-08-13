@@ -156,7 +156,7 @@ class AffiliationForm(forms.ModelForm):
                         "Please include a valid Expert Panel ID."
                     ),
                 )
-            if affil_id - 10000 != affil_id - 40000:
+            if affil_id - 10000 != ep_id - 40000:
                 self.add_error(
                     None,
                     ValidationError(
@@ -172,7 +172,7 @@ class AffiliationForm(forms.ModelForm):
                         "Please include a valid Expert Panel ID."
                     ),
                 )
-            if affil_id - 10000 != affil_id - 50000:
+            if affil_id - 10000 != ep_id - 50000:
                 self.add_error(
                     None,
                     ValidationError(
