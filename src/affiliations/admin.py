@@ -233,16 +233,20 @@ class AffiliationsAdmin(ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         """Fields that are editable upon creation, afterwards, are read only"""
-        # pylint:disable=unused-argument
-        if obj is None:
-            return [
-                "members",
-            ]
+        # If the affiliation has not been created (is new) only return Members as read only
+        # Otherwise, check to see if user has the staff role and is not a superuser,
+        # Then return the full list of read only fields.
+        # This allows superusers to edit these fields in the case of affiliation creation error.
+        if obj is not None:
+            if request.user.is_staff and not request.user.is_superuser:
+                return [
+                    "affiliation_id",
+                    "expert_panel_id",
+                    "type",
+                    "clinical_domain_working_group",
+                    "members",
+                ]
         return [
-            "affiliation_id",
-            "expert_panel_id",
-            "type",
-            "clinical_domain_working_group",
             "members",
         ]
 
