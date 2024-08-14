@@ -195,12 +195,16 @@ class AffiliationsAdmin(ModelAdmin):
     """Configure the affiliations admin panel."""
 
     form = AffiliationForm
+
+    # Controls which fields are searchable via the search bar.
     search_fields = [
         "affiliation_id",
         "expert_panel_id",
         "full_name",
         "abbreviated_name",
     ]
+
+    # Controls what fields are listed in overview header.
     # pylint:disable=duplicate-code
     list_display = [
         "affiliation_id",
@@ -212,6 +216,7 @@ class AffiliationsAdmin(ModelAdmin):
         "clinical_domain_working_group",
     ]
 
+    # Controls what columns are "clickable" to enter detailed view.
     # pylint:disable=duplicate-code
     list_display_links = [
         "affiliation_id",
@@ -222,6 +227,8 @@ class AffiliationsAdmin(ModelAdmin):
         "type",
         "clinical_domain_working_group",
     ]
+
+    # Controls what fields can be filtered on.
     list_filter = [
         ("status", MultipleChoicesDropdownFilter),
         ("type", ChoicesDropdownFilter),
@@ -229,6 +236,8 @@ class AffiliationsAdmin(ModelAdmin):
     ]
     list_filter_submit = True  # Submit button at the bottom of filter tab.
     list_fullwidth = True
+
+    # Controls the visual order of fields listed.
     fields = (
         "affiliation_id",
         "expert_panel_id",
