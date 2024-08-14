@@ -229,6 +229,16 @@ class AffiliationsAdmin(ModelAdmin):
     ]
     list_filter_submit = True  # Submit button at the bottom of filter tab.
     list_fullwidth = True
+    fields = (
+        "affiliation_id",
+        "expert_panel_id",
+        "type",
+        "full_name",
+        "abbreviated_name",
+        "status",
+        "clinical_domain_working_group",
+        "members",
+    )
     inlines = [CoordinatorInlineAdmin, ApproverInlineAdmin, SubmitterInlineAdmin]
 
     def get_readonly_fields(self, request, obj=None):
