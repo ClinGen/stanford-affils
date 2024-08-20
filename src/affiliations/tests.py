@@ -279,7 +279,7 @@ class TestInvalidTypeAndIDCreateForm(TestCase):
             "full_name": "Invalid Type with ID Affiliation",
             "abbreviated_name": "Invalid Type with ID",
             "status": "Retired",
-            "type": "Independent Curation Group",
+            "type": "INDEPENDENT_CURATION",
             "clinical_domain_working_group": "Kidney Disease",
             "members": "Chikorita, Cyndaquil, Totodile",
         }
@@ -321,7 +321,7 @@ class TestInvalidTypeAndIDCreateFormSCVCEP(TestCase):
             "full_name": "Invalid Type with ID Affiliation",
             "abbreviated_name": "Invalid Type with ID",
             "status": "Retired",
-            "type": "Somatic Cancer Variant Curation Expert Panel",
+            "type": "SC_VCEP",
             "clinical_domain_working_group": "Kidney Disease",
             "members": "Chikorita, Cyndaquil, Totodile",
         }
