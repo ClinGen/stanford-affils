@@ -21,6 +21,7 @@ class AffiliationType(models.TextChoices):  # pylint: disable=too-many-ancestors
     VCEP = "VCEP", _("Variant Curation Expert Panel")
     GCEP = "GCEP", _("Gene Curation Expert Panel")
     INDEPENDENT_CURATION = "INDEPENDENT_CURATION", _("Independent Curation Group")
+    SC_VCEP = "SC_VCEP", _("Somatic Cancer Variant Curation Expert Panel")
 
 
 class AffiliationCDWG(models.TextChoices):  # pylint: disable=too-many-ancestors
