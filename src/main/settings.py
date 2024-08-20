@@ -39,6 +39,7 @@ ALLOWED_HOSTS: list[str] = []
 INSTALLED_APPS = [
     "unfold",
     "unfold.contrib.filters",
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -79,6 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "main.wsgi.application"
+ASGI_APPLICATION = "main.asgi.application"
 
 # Database:
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

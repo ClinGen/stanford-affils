@@ -8,6 +8,7 @@ djangorestframework = "3.*"
 psycopg = "3.*"
 django-unfold = "0.*"
 django-admin-logs = "1.*"
+daphne = "*"
 
 [dev-packages]
 black = "==24.*"
