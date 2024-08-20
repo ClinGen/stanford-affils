@@ -118,13 +118,17 @@ class AffiliationForm(forms.ModelForm):
                 ),
             )
         if (
-            _type == "Independent Curation Group"
+            _type
+            in (
+                "SC_VCEP",
+                "INDEPENDENT_CURATION",
+            )
             and self.cleaned_data["expert_panel_id"] is not None
         ):
             self.add_error(
                 "expert_panel_id",
                 ValidationError(
-                    "If type Independent Curation Group is selected, "
+                    "If type Independent Curation Group or SC-VCEP is selected, "
                     "Expert Panel ID must be left blank."
                 ),
             )

@@ -298,7 +298,49 @@ class TestInvalidTypeAndIDCreateForm(TestCase):
             mock.call(
                 "expert_panel_id",
                 ValidationError(
-                    "If type Independent Curation Group is selected, "
+                    "If type Independent Curation Group or SC-VCEP is selected, "
+                    "Expert Panel ID must be left blank."
+                ),
+            )
+        ]
+        mock_add_error.assert_has_calls(calls)
+
+
+class TestInvalidTypeAndIDCreateFormSCVCEP(TestCase):
+    """A test class for testing validation error on Independent Curation Group
+    type with a expert_panel_id value"""
+
+    @classmethod
+    def test_invalid_type_and_id_creation(cls):
+        """Attempting to seed the test database with some test data, then make
+        sure we are triggering the ValidationError"""
+
+        cls.invalid_type_and_id_affiliation = {
+            "affiliation_id": 10001,
+            "expert_panel_id": 60000,
+            "full_name": "Invalid Type with ID Affiliation",
+            "abbreviated_name": "Invalid Type with ID",
+            "status": "Retired",
+            "type": "Somatic Cancer Variant Curation Expert Panel",
+            "clinical_domain_working_group": "Kidney Disease",
+            "members": "Chikorita, Cyndaquil, Totodile",
+        }
+
+        cls.invalid_type_and_id_affil = Affiliation.objects.create(
+            **cls.invalid_type_and_id_affiliation
+        )
+
+    @mock.patch("affiliations.admin.AffiliationForm.add_error")
+    def test_response(self, mock_add_error):
+        """Make sure we are triggering the add_error function in clean method"""
+        invalid_type = AffiliationForm(self.invalid_type_and_id_affil)
+        invalid_type.cleaned_data = self.invalid_type_and_id_affiliation
+        invalid_type.clean()
+        calls = [
+            mock.call(
+                "expert_panel_id",
+                ValidationError(
+                    "If type Independent Curation Group or SC-VCEP is selected, "
                     "Expert Panel ID must be left blank."
                 ),
             )
