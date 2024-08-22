@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "rest_framework",
     "affiliations",
@@ -60,7 +59,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "main.urls"
@@ -114,13 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-STORAGES = {
-    # ...
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-
 # Internationalization:
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 LANGUAGE_CODE = "en-us"
@@ -130,15 +121,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images):
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [BASE_DIR / "affiliations" / "static"]
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-MEDIA_ROOT = BASE_DIR / "media"
-
-MEDIA_URL = "/media/"
+STATIC_URL = "static/"
 
 # Default primary key field type:
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
