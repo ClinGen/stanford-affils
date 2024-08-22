@@ -9,6 +9,7 @@ psycopg = "3.*"
 django-unfold = "0.*"
 django-admin-logs = "1.*"
 daphne = "4.*"
+whitenoise = "6.*"
 
 [dev-packages]
 black = "==24.*"
