@@ -9,7 +9,7 @@ oriented towards learning how rather than learning what.
 
 ## Get started
 
-- Install Python 3.12+.
+- Install Python 3.10+.
 - Install [Pipenv](https://pipenv.pypa.io/en/latest/index.html):
   `pip install --user pipenv`.
 - Activate a virtual environment: `pipenv shell`.
