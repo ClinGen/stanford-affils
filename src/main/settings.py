@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 # Built-in libraries:
 from pathlib import Path
 import os
+from os.path import join, dirname
+
 
 # Third-party dependencies:
 from dotenv import load_dotenv
@@ -19,7 +21,8 @@ from django.templatetags.static import static
 
 
 # Set environment variables.
-load_dotenv()
+dotenv_path = join(dirname(__file__), ".env")
+load_dotenv(dotenv_path)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,12 +32,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret.
-SECRET_KEY = "django-insecure-e9^@hkx*@hqh()&qrle@0z5awy$ao_erfzd1)_4s9a_@cz3^tz"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: Don't run with debug turned on in production.
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS: list[str] = []
+ALLOWED_HOSTS = ["affils.clinicalgenome.org"]
 
 INSTALLED_APPS = [
     "unfold",
