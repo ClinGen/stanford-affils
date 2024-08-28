@@ -123,7 +123,7 @@ class AffiliationForm(forms.ModelForm):
                 "SC_VCEP",
                 "INDEPENDENT_CURATION",
             )
-            and self.cleaned_data["expert_panel_id"] is not None
+            and ep_id is not None
         ):
             self.add_error(
                 "expert_panel_id",
@@ -132,15 +132,15 @@ class AffiliationForm(forms.ModelForm):
                     "Expert Panel ID must be left blank."
                 ),
             )
-            if affil_id < 10000 or affil_id >= 20000:
-                self.add_error(
-                    "affiliation_id",
-                    ValidationError(
-                        "Valid Affiliation ID's should be in the 10000 number range. "
-                        "Please include a valid Affiliation ID."
-                    ),
+        if affil_id < 10000 or affil_id >= 20000:
+            self.add_error(
+                "affiliation_id",
+                ValidationError(
+                    "Valid Affiliation ID's should be in the 10000 number range. "
+                    "Please include a valid Affiliation ID."
+                ),
                 )
-        if _type == "Gene Curation Expert Panel":
+        if _type == "GCEP":
             if ep_id is None or (ep_id < 40000 or ep_id >= 50000):
                 self.add_error(
                     "expert_panel_id",
@@ -149,14 +149,14 @@ class AffiliationForm(forms.ModelForm):
                         "Please include a valid Expert Panel ID."
                     ),
                 )
-            if affil_id - 10000 != ep_id - 40000:
+            elif affil_id - 10000 != ep_id - 40000:
                 self.add_error(
                     None,
                     ValidationError(
                         "The Affiliation ID and Expert Panel ID do not match."
                     ),
                 )
-        if _type == "Variant Curation Expert Panel":
+        if _type == "VCEP":
             if ep_id is None or (ep_id < 50000 or ep_id >= 60000):
                 self.add_error(
                     "expert_panel_id",
@@ -165,7 +165,7 @@ class AffiliationForm(forms.ModelForm):
                         "Please include a valid Expert Panel ID."
                     ),
                 )
-            if affil_id - 10000 != ep_id - 50000:
+            elif affil_id - 10000 != ep_id - 50000:
                 self.add_error(
                     None,
                     ValidationError(
