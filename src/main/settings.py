@@ -12,17 +12,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 # Built-in libraries:
 from pathlib import Path
 import os
-from os.path import join, dirname
-
 
 # Third-party dependencies:
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from django.templatetags.static import static
 
 
 # Set environment variables.
-dotenv_path = join(dirname(__file__), ".env")
-load_dotenv(dotenv_path)
+load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,12 +29,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret.
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: Don't run with debug turned on in production.
 DEBUG = False
 
-ALLOWED_HOSTS = ["affils.clinicalgenome.org"]
+ALLOWED_HOSTS = ["http://affils.clinicalgenome.org/", "127.0.0.1"]
 
 INSTALLED_APPS = [
     "unfold",
@@ -91,12 +88,12 @@ ASGI_APPLICATION = "main.asgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES = {
     "default": {
-        "ENGINE": f'django.db.backends.{os.getenv("AFFILS_DB_ENGINE")}',
-        "NAME": os.getenv("AFFILS_DB_NAME"),
-        "USER": os.getenv("AFFILS_DB_USER"),
-        "PASSWORD": os.getenv("AFFILS_DB_PASSWORD"),
-        "HOST": os.getenv("AFFILS_DB_HOST"),
-        "PORT": os.getenv("AFFILS_DB_PORT"),
+        "ENGINE": f'django.db.backends.{os.environ.get("AFFILS_DB_ENGINE")}',
+        "NAME": os.environ.get("AFFILS_DB_NAME"),
+        "USER": os.environ.get("AFFILS_DB_USER"),
+        "PASSWORD": os.environ.get("AFFILS_DB_PASSWORD"),
+        "HOST": os.environ.get("AFFILS_DB_HOST"),
+        "PORT": os.environ.get("AFFILS_DB_PORT"),
     }
 }
 
