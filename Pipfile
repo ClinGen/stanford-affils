@@ -11,7 +11,8 @@ django-admin-logs = "1.*"
 daphne = "4.*"
 whitenoise = "6.*"
 python-dotenv = "1.*"
-tomli = "*"
+tomli = "2.*"
+dill = "0.*"
 
 [dev-packages]
 black = "==24.*"

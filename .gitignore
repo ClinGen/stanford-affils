@@ -9,3 +9,4 @@ __pycache__
 
 # Database:
 affils.db
+/src/staticfiles
