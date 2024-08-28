@@ -160,7 +160,7 @@ class TestInvalidAffilCreateForm(TestCase):
             "full_name": "Invalid Affil ID Affiliation",
             "abbreviated_name": "Invalid Affil ID",
             "status": "Retired",
-            "type": "Gene Curation Expert Panel",
+            "type": "GCEP",
             "clinical_domain_working_group": "Kidney Disease",
             "members": "Chikorita, Cyndaquil, Totodile",
         }
@@ -176,9 +176,16 @@ class TestInvalidAffilCreateForm(TestCase):
         invalid_affil.clean()
         calls = [
             mock.call(
+                "affiliation_id",
+                ValidationError(
+                    "Valid Affiliation ID's should be in the 10000 number range. "
+                    "Please include a valid Affiliation ID."
+                ),
+            ),
+            mock.call(
                 None,
                 ValidationError("The Affiliation ID and Expert Panel ID do not match."),
-            )
+            ),
         ]
         mock_add_error.assert_has_calls(calls)
 
@@ -196,7 +203,7 @@ class TestInvalidGCEPCreateForm(TestCase):
             "full_name": "Invalid GCEP ID Affiliation",
             "abbreviated_name": "Invalid GCEP ID",
             "status": "Retired",
-            "type": "Gene Curation Expert Panel",
+            "type": "GCEP",
             "clinical_domain_working_group": "Kidney Disease",
             "members": "Chikorita, Cyndaquil, Totodile",
         }
@@ -237,7 +244,7 @@ class TestInvalidVCEPCreateForm(TestCase):
             "full_name": "Invalid VCEP ID Affiliation",
             "abbreviated_name": "Invalid VCEP ID",
             "status": "Retired",
-            "type": "Variant Curation Expert Panel",
+            "type": "VCEP",
             "clinical_domain_working_group": "Kidney Disease",
             "members": "Chikorita, Cyndaquil, Totodile",
         }
@@ -363,7 +370,7 @@ class TestInvalidAffilandExpertPanelMatchCreateForm(TestCase):
             "full_name": "Affil and EP ID Don't Match",
             "abbreviated_name": "Invalid Matching IDs",
             "status": "Active",
-            "type": "Variant Curation Expert Panel",
+            "type": "VCEP",
             "clinical_domain_working_group": "Somatic Cancer",
             "members": "Piplup, Toxicroak, Weavile",
         }
