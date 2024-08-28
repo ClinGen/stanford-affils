@@ -139,7 +139,7 @@ class AffiliationForm(forms.ModelForm):
                     "Valid Affiliation ID's should be in the 10000 number range. "
                     "Please include a valid Affiliation ID."
                 ),
-                )
+            )
         if _type == "GCEP":
             if ep_id is None or (ep_id < 40000 or ep_id >= 50000):
                 self.add_error(
