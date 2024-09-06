@@ -96,6 +96,15 @@ class AffiliationForm(forms.ModelForm):
         fields = "__all__"
         model = Affiliation
 
+    affil_id_choice = forms.ChoiceField(
+        label="Affiliation Type",
+        widget=forms.RadioSelect,
+        choices=(
+            ("new", "New Affiliation"),
+            ("sibling", "Sibling Affiliation"),
+        ),
+    )
+
     def clean(self):
         cleaned_data = super().clean()
         affil_id = cleaned_data.get("affiliation_id")
@@ -199,6 +208,11 @@ class AffiliationsAdmin(ModelAdmin):
     """Configure the affiliations admin panel."""
 
     form = AffiliationForm
+
+    class Media:
+        """Media class for modeladmin"""
+
+        js = ["js/admin_hide_attribute.js"]
 
     # Controls which fields are searchable via the search bar.
     search_fields = [
@@ -310,6 +324,6 @@ class AffiliationsAdmin(ModelAdmin):
 admin.site.register(Affiliation, AffiliationsAdmin)
 
 # Change the admin site's display name.
-admin.site.site_title = "Affils Service"
+admin.site.site_title = "Affiliation Service"
 admin.site.site_header = "Affiliation Service Panel"
 admin.site.index_title = "Welcome to the ClinGen Affiliation Service Portal"
