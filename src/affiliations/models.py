@@ -61,7 +61,6 @@ class Affiliation(models.Model):
     expert_panel_ids.
     """
     affiliation_id: models.IntegerField = models.IntegerField(
-        help_text="10000 number ID",
         verbose_name="Affiliation ID",
     )
     """

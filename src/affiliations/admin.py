@@ -17,6 +17,8 @@ from unfold.forms import (  # type: ignore
 from unfold.admin import (  # type: ignore
     ModelAdmin,
     TabularInline,
+    UnfoldAdminRadioSelectWidget,
+    UnfoldAdminSelectWidget,
 )
 
 from unfold.contrib.filters.admin import (  # type: ignore
@@ -96,9 +98,17 @@ class AffiliationForm(forms.ModelForm):
         fields = "__all__"
         model = Affiliation
 
-    affil_id_choice = forms.ChoiceField(
+    sib_affil_id_choices = forms.ModelChoiceField(
+        label="Existing Affiliation IDs",
+        widget=UnfoldAdminSelectWidget,
+        queryset=Affiliation.objects.values_list("affiliation_id", flat=True)
+        .order_by("affiliation_id")
+        .distinct(),
+    )
+
+    affil_id_type_choice = forms.ChoiceField(
         label="Affiliation Type",
-        widget=forms.RadioSelect,
+        widget=UnfoldAdminRadioSelectWidget,
         choices=(
             ("new", "New Affiliation"),
             ("sibling", "Sibling Affiliation"),
