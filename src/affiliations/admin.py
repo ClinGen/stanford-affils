@@ -7,7 +7,6 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
 
 from unfold.forms import (  # type: ignore
     AdminPasswordChangeForm,
@@ -98,99 +97,51 @@ class AffiliationForm(forms.ModelForm):
         fields = "__all__"
         model = Affiliation
 
-    sib_affil_id_choices = forms.ModelChoiceField(
-        label="Existing Affiliation IDs",
-        widget=UnfoldAdminSelectWidget,
-        queryset=Affiliation.objects.values_list("affiliation_id", flat=True)
-        .order_by("affiliation_id")
-        .distinct(),
-    )
-
+    # User will select if affiliation input is new or a "sibling" affiliation.
     affil_id_type_choice = forms.ChoiceField(
         label="Affiliation Type",
         widget=UnfoldAdminRadioSelectWidget,
+        initial="new",
         choices=(
             ("new", "New Affiliation"),
             ("sibling", "Sibling Affiliation"),
         ),
     )
 
+    # Sibling affiliation queries DB for all existing affiliation IDs to select
+    # as Affil ID.
+    sib_affil_id_choices = forms.ModelChoiceField(
+        label="Existing Affiliation IDs",
+        required=False,
+        widget=UnfoldAdminSelectWidget,
+        queryset=Affiliation.objects.all()
+        .values_list("affiliation_id", flat=True)
+        .order_by("affiliation_id")
+        .distinct(),
+    )
+
     def clean(self):
         cleaned_data = super().clean()
         affil_id = cleaned_data.get("affiliation_id")
-        ep_id = cleaned_data.get("expert_panel_id")
-        _type = cleaned_data.get("type")
-        full_name = cleaned_data.get("full_name")
+        affil_id_type_choice = cleaned_data.get("affil_id_type_choice")
+        sib_affil_id = cleaned_data.get("sib_affil_id_choices")
 
-        if affil_id is None or full_name is None:
-            # Allow Django to handle require field validation error.
-            pass
-        if self.instance.pk is not None:
-            return
-        if Affiliation.objects.filter(
-            affiliation_id=affil_id, expert_panel_id=ep_id
-        ).exists():
-            self.add_error(
-                None,
-                ValidationError(
-                    "This Affiliation ID and Expert Panel ID pair already exist."
-                ),
+        # if self.instance.pk is not None:
+        #     return
+        if affil_id_type_choice == "new":
+            existing_affil_ids = (
+                Affiliation.objects.values_list("affiliation_id", flat=True)
+                .order_by("affiliation_id")
+                .distinct()
             )
-        if (
-            _type
-            in (
-                "SC_VCEP",
-                "INDEPENDENT_CURATION",
-            )
-            and ep_id is not None
-        ):
-            self.add_error(
-                "expert_panel_id",
-                ValidationError(
-                    "If type Independent Curation Group or SC-VCEP is selected, "
-                    "Expert Panel ID must be left blank."
-                ),
-            )
-        if affil_id < 10000 or affil_id >= 20000:
-            self.add_error(
-                "affiliation_id",
-                ValidationError(
-                    "Valid Affiliation ID's should be in the 10000 number range. "
-                    "Please include a valid Affiliation ID."
-                ),
-            )
-        if _type == "GCEP":
-            if ep_id is None or (ep_id < 40000 or ep_id >= 50000):
-                self.add_error(
-                    "expert_panel_id",
-                    ValidationError(
-                        "Valid GCEP ID's should be in the 40000 number range. "
-                        "Please include a valid Expert Panel ID."
-                    ),
-                )
-            elif affil_id - 10000 != ep_id - 40000:
-                self.add_error(
-                    None,
-                    ValidationError(
-                        "The Affiliation ID and Expert Panel ID do not match."
-                    ),
-                )
-        if _type == "VCEP":
-            if ep_id is None or (ep_id < 50000 or ep_id >= 60000):
-                self.add_error(
-                    "expert_panel_id",
-                    ValidationError(
-                        "Valid VCEP ID's should be in the  50000 number range. "
-                        "Please include a valid Expert Panel ID."
-                    ),
-                )
-            elif affil_id - 10000 != ep_id - 50000:
-                self.add_error(
-                    None,
-                    ValidationError(
-                        "The Affiliation ID and Expert Panel ID do not match."
-                    ),
-                )
+            last_ind = existing_affil_ids.count()
+            affil_id = existing_affil_ids[last_ind - 1] + 1
+            cleaned_data["affiliation_id"] = affil_id
+        elif affil_id_type_choice == "sibling":
+            affil_id = sib_affil_id
+            cleaned_data["affiliation_id"] = sib_affil_id
+
+        return cleaned_data
 
 
 class CoordinatorInlineAdmin(TabularInline):
