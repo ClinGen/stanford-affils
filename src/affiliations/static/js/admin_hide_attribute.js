@@ -1,3 +1,10 @@
+function hideAffilandEpID() {
+    const affilIDField = document.querySelector(".form-row.field-affiliation_id");
+    affilIDField.style.display = "none";
+
+    const EpIDField = document.querySelector(".form-row.field-expert_panel_id");
+    EpIDField.style.display = "none";
+}
 function toggleAffilID(value) {
     const affilIDWrapper = document.querySelector(".form-row.field-sib_affil_id_choices");
     if (value === "sibling") {
@@ -25,4 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         toggleAffilID(affilRadioChoiceTwo.value);
     }
+
+    hideAffilandEpID();
 });
