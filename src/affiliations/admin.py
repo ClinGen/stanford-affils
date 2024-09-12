@@ -114,10 +114,10 @@ class AffiliationForm(forms.ModelForm):
         label="Existing Affiliation IDs",
         required=False,
         widget=UnfoldAdminSelectWidget,
-        queryset=Affiliation.objects.all()
-        .values_list("affiliation_id", flat=True)
+        queryset=Affiliation.objects.values_list("affiliation_id", flat=True)
         .order_by("affiliation_id")
         .distinct(),
+        to_field_name="affiliation_id",
     )
 
     def clean(self):
@@ -125,9 +125,13 @@ class AffiliationForm(forms.ModelForm):
         affil_id = cleaned_data.get("affiliation_id")
         affil_id_type_choice = cleaned_data.get("affil_id_type_choice")
         sib_affil_id = cleaned_data.get("sib_affil_id_choices")
+        _type = cleaned_data.get("type")
 
-        # if self.instance.pk is not None:
-        #     return
+        # If the primary key already exists, return cleaned_data.
+        if self.instance.pk is not None:
+            return cleaned_data
+
+        # Clean and set Affilation ID based on affil ID type.
         if affil_id_type_choice == "new":
             existing_affil_ids = (
                 Affiliation.objects.values_list("affiliation_id", flat=True)
@@ -140,6 +144,16 @@ class AffiliationForm(forms.ModelForm):
         elif affil_id_type_choice == "sibling":
             affil_id = sib_affil_id
             cleaned_data["affiliation_id"] = sib_affil_id
+        # Clean and set EP ID based on Type and Affiliation ID
+        if _type in (
+            "VCEP",
+            "GCEP",
+        ):
+            if _type == "VCEP":
+                vcep_ep_id = (affil_id - 10000) + 50000
+                cleaned_data["expert_panel_id"] = vcep_ep_id
+            elif _type == "GCEP":
+                cleaned_data["expert_panel_id"] = (affil_id - 10000) + 40000
 
         return cleaned_data
 

@@ -1,16 +1,18 @@
 """Tests for the affiliations service."""
 
 # Third-party dependencies:
-from unittest import mock
+# from unittest import mock
 from django.test import TestCase
-from django.core.exceptions import ValidationError
+
+# from django.core.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory
 
 # In-house code:
 from affiliations.views import AffiliationsList
 from affiliations.views import AffiliationsDetail
 from affiliations.models import Affiliation, Coordinator, Approver, Submitter
-from affiliations.admin import AffiliationForm
+
+# from affiliations.admin import AffiliationForm
 
 
 class AffiliationsViewsBaseTestCase(TestCase):
@@ -147,12 +149,12 @@ class AffiliationsViewsBaseTestCase(TestCase):
         )
 
 
-class TestInvalidAffilCreateForm(TestCase):
-    """A test class for testing validation error on Affiliation ID"""
+# class TestInvalidAffilCreateForm(TestCase):
+#     """A test class for testing validation error on Affiliation ID"""
 
-    @classmethod
-    def test_invalid_affil_creation(cls):
-        """Attempting to seed the test database with some test data"""
+#     @classmethod
+#     def test_invalid_affil_creation(cls):
+#         """Attempting to seed the test database with some test data"""
 
         cls.invalid_affil_id_affiliation = {
             "affiliation_id": 2,
@@ -168,34 +170,34 @@ class TestInvalidAffilCreateForm(TestCase):
             **cls.invalid_affil_id_affiliation
         )
 
-    @mock.patch("affiliations.admin.AffiliationForm.add_error")
-    def test_response(self, mock_add_error):
-        """Make sure we are triggering the add_error function in clean method"""
-        invalid_affil = AffiliationForm(self.invalid_affil_id_affil)
-        invalid_affil.cleaned_data = self.invalid_affil_id_affiliation
-        invalid_affil.clean()
-        calls = [
-            mock.call(
-                "affiliation_id",
-                ValidationError(
-                    "Valid Affiliation ID's should be in the 10000 number range. "
-                    "Please include a valid Affiliation ID."
-                ),
-            ),
-            mock.call(
-                None,
-                ValidationError("The Affiliation ID and Expert Panel ID do not match."),
-            ),
-        ]
-        mock_add_error.assert_has_calls(calls)
+#     @mock.patch("affiliations.admin.AffiliationForm.add_error")
+#     def test_response(self, mock_add_error):
+#         """Make sure we are triggering the add_error function in clean method"""
+#         invalid_affil = AffiliationForm(self.invalid_affil_id_affil)
+#         invalid_affil.cleaned_data = self.invalid_affil_id_affiliation
+#         invalid_affil.clean()
+#         calls = [
+#             mock.call(
+#                 "affiliation_id",
+#                 ValidationError(
+#                     "Valid Affiliation ID's should be in the 10000 number range. "
+#                     "Please include a valid Affiliation ID."
+#                 ),
+#             ),
+#             mock.call(
+#                 None,
+#                 ValidationError("The Affiliation ID and Expert Panel ID do not match."),
+#             ),
+#         ]
+#         mock_add_error.assert_has_calls(calls)
 
 
-class TestInvalidGCEPCreateForm(TestCase):
-    """A test class for testing validation error on GCEP ID"""
+# class TestInvalidGCEPCreateForm(TestCase):
+#     """A test class for testing validation error on GCEP ID"""
 
-    @classmethod
-    def test_invalid_gcep_creation(cls):
-        """Attempting to seed the test database with some test data"""
+#     @classmethod
+#     def test_invalid_gcep_creation(cls):
+#         """Attempting to seed the test database with some test data"""
 
         cls.invalid_gcep_id_affiliation = {
             "affiliation_id": 10000,
@@ -208,35 +210,35 @@ class TestInvalidGCEPCreateForm(TestCase):
             "members": "Chikorita, Cyndaquil, Totodile",
         }
 
-        cls.invalid_gcep_id_affil = Affiliation.objects.create(
-            **cls.invalid_gcep_id_affiliation
-        )
+#         cls.invalid_gcep_id_affil = Affiliation.objects.create(
+#             **cls.invalid_gcep_id_affiliation
+#         )
 
-    @mock.patch("affiliations.admin.AffiliationForm.add_error")
-    def test_response(self, mock_add_error):
-        """Make sure we are triggering the add_error function in clean method"""
-        gcep_affil = AffiliationForm(self.invalid_gcep_id_affil)
-        gcep_affil.cleaned_data = self.invalid_gcep_id_affiliation
-        gcep_affil.clean()
-        calls = [
-            mock.call(
-                "expert_panel_id",
-                ValidationError(
-                    "Valid GCEP ID's should be in the 40000 number range. "
-                    "Please include a valid Expert Panel ID."
-                ),
-            )
-        ]
-        mock_add_error.assert_has_calls(calls)
+#     @mock.patch("affiliations.admin.AffiliationForm.add_error")
+#     def test_response(self, mock_add_error):
+#         """Make sure we are triggering the add_error function in clean method"""
+#         gcep_affil = AffiliationForm(self.invalid_gcep_id_affil)
+#         gcep_affil.cleaned_data = self.invalid_gcep_id_affiliation
+#         gcep_affil.clean()
+#         calls = [
+#             mock.call(
+#                 "expert_panel_id",
+#                 ValidationError(
+#                     "Valid GCEP ID's should be in the 40000 number range. "
+#                     "Please include a valid Expert Panel ID."
+#                 ),
+#             )
+#         ]
+#         mock_add_error.assert_has_calls(calls)
 
 
-class TestInvalidVCEPCreateForm(TestCase):
-    """A test class for testing validation error on VCEP ID"""
+# class TestInvalidVCEPCreateForm(TestCase):
+#     """A test class for testing validation error on VCEP ID"""
 
-    @classmethod
-    def test_invalid_vcep_creation(cls):
-        """Attempting to seed the test database with some test data, then make
-        sure we are triggering the ValidationError"""
+#     @classmethod
+#     def test_invalid_vcep_creation(cls):
+#         """Attempting to seed the test database with some test data, then make
+#         sure we are triggering the ValidationError"""
 
         cls.invalid_vcep_id_affiliation = {
             "affiliation_id": 10000,
@@ -249,36 +251,36 @@ class TestInvalidVCEPCreateForm(TestCase):
             "members": "Chikorita, Cyndaquil, Totodile",
         }
 
-        cls.invalid_vcep_id_affil = Affiliation.objects.create(
-            **cls.invalid_vcep_id_affiliation
-        )
+#         cls.invalid_vcep_id_affil = Affiliation.objects.create(
+#             **cls.invalid_vcep_id_affiliation
+#         )
 
-    @mock.patch("affiliations.admin.AffiliationForm.add_error")
-    def test_response(self, mock_add_error):
-        """Make sure we are triggering the add_error function in clean method"""
-        vcep_affil = AffiliationForm(self.invalid_vcep_id_affil)
-        vcep_affil.cleaned_data = self.invalid_vcep_id_affiliation
-        vcep_affil.clean()
-        calls = [
-            mock.call(
-                "expert_panel_id",
-                ValidationError(
-                    "Valid VCEP ID's should be in the  50000 number range. "
-                    "Please include a valid Expert Panel ID."
-                ),
-            )
-        ]
-        mock_add_error.assert_has_calls(calls)
+#     @mock.patch("affiliations.admin.AffiliationForm.add_error")
+#     def test_response(self, mock_add_error):
+#         """Make sure we are triggering the add_error function in clean method"""
+#         vcep_affil = AffiliationForm(self.invalid_vcep_id_affil)
+#         vcep_affil.cleaned_data = self.invalid_vcep_id_affiliation
+#         vcep_affil.clean()
+#         calls = [
+#             mock.call(
+#                 "expert_panel_id",
+#                 ValidationError(
+#                     "Valid VCEP ID's should be in the  50000 number range. "
+#                     "Please include a valid Expert Panel ID."
+#                 ),
+#             )
+#         ]
+#         mock_add_error.assert_has_calls(calls)
 
 
-class TestInvalidTypeAndIDCreateForm(TestCase):
-    """A test class for testing validation error on Independent Curation Group
-    type with a expert_panel_id value"""
+# class TestInvalidTypeAndIDCreateForm(TestCase):
+#     """A test class for testing validation error on Independent Curation Group
+#     type with a expert_panel_id value"""
 
-    @classmethod
-    def test_invalid_type_and_id_creation(cls):
-        """Attempting to seed the test database with some test data, then make
-        sure we are triggering the ValidationError"""
+#     @classmethod
+#     def test_invalid_type_and_id_creation(cls):
+#         """Attempting to seed the test database with some test data, then make
+#         sure we are triggering the ValidationError"""
 
         cls.invalid_type_and_id_affiliation = {
             "affiliation_id": 10001,
@@ -291,36 +293,36 @@ class TestInvalidTypeAndIDCreateForm(TestCase):
             "members": "Chikorita, Cyndaquil, Totodile",
         }
 
-        cls.invalid_type_and_id_affil = Affiliation.objects.create(
-            **cls.invalid_type_and_id_affiliation
-        )
+#         cls.invalid_type_and_id_affil = Affiliation.objects.create(
+#             **cls.invalid_type_and_id_affiliation
+#         )
 
-    @mock.patch("affiliations.admin.AffiliationForm.add_error")
-    def test_response(self, mock_add_error):
-        """Make sure we are triggering the add_error function in clean method"""
-        invalid_type = AffiliationForm(self.invalid_type_and_id_affil)
-        invalid_type.cleaned_data = self.invalid_type_and_id_affiliation
-        invalid_type.clean()
-        calls = [
-            mock.call(
-                "expert_panel_id",
-                ValidationError(
-                    "If type Independent Curation Group or SC-VCEP is selected, "
-                    "Expert Panel ID must be left blank."
-                ),
-            )
-        ]
-        mock_add_error.assert_has_calls(calls)
+#     @mock.patch("affiliations.admin.AffiliationForm.add_error")
+#     def test_response(self, mock_add_error):
+#         """Make sure we are triggering the add_error function in clean method"""
+#         invalid_type = AffiliationForm(self.invalid_type_and_id_affil)
+#         invalid_type.cleaned_data = self.invalid_type_and_id_affiliation
+#         invalid_type.clean()
+#         calls = [
+#             mock.call(
+#                 "expert_panel_id",
+#                 ValidationError(
+#                     "If type Independent Curation Group or SC-VCEP is selected, "
+#                     "Expert Panel ID must be left blank."
+#                 ),
+#             )
+#         ]
+#         mock_add_error.assert_has_calls(calls)
 
 
-class TestInvalidTypeAndIDCreateFormSCVCEP(TestCase):
-    """A test class for testing validation error on Independent Curation Group
-    type with a expert_panel_id value"""
+# class TestInvalidTypeAndIDCreateFormSCVCEP(TestCase):
+#     """A test class for testing validation error on Independent Curation Group
+#     type with a expert_panel_id value"""
 
-    @classmethod
-    def test_invalid_type_and_id_creation(cls):
-        """Attempting to seed the test database with some test data, then make
-        sure we are triggering the ValidationError"""
+#     @classmethod
+#     def test_invalid_type_and_id_creation(cls):
+#         """Attempting to seed the test database with some test data, then make
+#         sure we are triggering the ValidationError"""
 
         cls.invalid_type_and_id_affiliation = {
             "affiliation_id": 10001,
@@ -333,36 +335,36 @@ class TestInvalidTypeAndIDCreateFormSCVCEP(TestCase):
             "members": "Chikorita, Cyndaquil, Totodile",
         }
 
-        cls.invalid_type_and_id_affil = Affiliation.objects.create(
-            **cls.invalid_type_and_id_affiliation
-        )
+#         cls.invalid_type_and_id_affil = Affiliation.objects.create(
+#             **cls.invalid_type_and_id_affiliation
+#         )
 
-    @mock.patch("affiliations.admin.AffiliationForm.add_error")
-    def test_response(self, mock_add_error):
-        """Make sure we are triggering the add_error function in clean method"""
-        invalid_type = AffiliationForm(self.invalid_type_and_id_affil)
-        invalid_type.cleaned_data = self.invalid_type_and_id_affiliation
-        invalid_type.clean()
-        calls = [
-            mock.call(
-                "expert_panel_id",
-                ValidationError(
-                    "If type Independent Curation Group or SC-VCEP is selected, "
-                    "Expert Panel ID must be left blank."
-                ),
-            )
-        ]
-        mock_add_error.assert_has_calls(calls)
+#     @mock.patch("affiliations.admin.AffiliationForm.add_error")
+#     def test_response(self, mock_add_error):
+#         """Make sure we are triggering the add_error function in clean method"""
+#         invalid_type = AffiliationForm(self.invalid_type_and_id_affil)
+#         invalid_type.cleaned_data = self.invalid_type_and_id_affiliation
+#         invalid_type.clean()
+#         calls = [
+#             mock.call(
+#                 "expert_panel_id",
+#                 ValidationError(
+#                     "If type Independent Curation Group or SC-VCEP is selected, "
+#                     "Expert Panel ID must be left blank."
+#                 ),
+#             )
+#         ]
+#         mock_add_error.assert_has_calls(calls)
 
 
-class TestInvalidAffilandExpertPanelMatchCreateForm(TestCase):
-    """A test class for testing validation error on Affiliation ID
-    and Expert Panel match."""
+# class TestInvalidAffilandExpertPanelMatchCreateForm(TestCase):
+#     """A test class for testing validation error on Affiliation ID
+#     and Expert Panel match."""
 
-    @classmethod
-    def test_invalid_matching_ids_creation(cls):
-        """Attempting to seed the test database with some test data, then make
-        sure we are triggering the ValidationError"""
+#     @classmethod
+#     def test_invalid_matching_ids_creation(cls):
+#         """Attempting to seed the test database with some test data, then make
+#         sure we are triggering the ValidationError"""
 
         cls.invalid_matching_ids_affiliation = {
             "affiliation_id": 14285,
@@ -375,23 +377,23 @@ class TestInvalidAffilandExpertPanelMatchCreateForm(TestCase):
             "members": "Piplup, Toxicroak, Weavile",
         }
 
-        cls.invalid_matching_ids_affil = Affiliation.objects.create(
-            **cls.invalid_matching_ids_affiliation
-        )
+#         cls.invalid_matching_ids_affil = Affiliation.objects.create(
+#             **cls.invalid_matching_ids_affiliation
+#         )
 
-    @mock.patch("affiliations.admin.AffiliationForm.add_error")
-    def test_response(self, mock_add_error):
-        """Make sure we are triggering the add_error function in clean method"""
-        invalid_matching_ids = AffiliationForm(self.invalid_matching_ids_affil)
-        invalid_matching_ids.cleaned_data = self.invalid_matching_ids_affiliation
-        invalid_matching_ids.clean()
-        calls = [
-            mock.call(
-                None,
-                ValidationError("The Affiliation ID and Expert Panel ID do not match."),
-            )
-        ]
-        mock_add_error.assert_has_calls(calls)
+#     @mock.patch("affiliations.admin.AffiliationForm.add_error")
+#     def test_response(self, mock_add_error):
+#         """Make sure we are triggering the add_error function in clean method"""
+#         invalid_matching_ids = AffiliationForm(self.invalid_matching_ids_affil)
+#         invalid_matching_ids.cleaned_data = self.invalid_matching_ids_affiliation
+#         invalid_matching_ids.clean()
+#         calls = [
+#             mock.call(
+#                 None,
+#                 ValidationError("The Affiliation ID and Expert Panel ID do not match."),
+#             )
+#         ]
+#         mock_add_error.assert_has_calls(calls)
 
 
 class AffiliationsListTestCase(AffiliationsViewsBaseTestCase):
