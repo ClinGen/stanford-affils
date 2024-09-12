@@ -8,6 +8,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.db import transaction
 
 from unfold.forms import (  # type: ignore
     AdminPasswordChangeForm,
@@ -121,31 +122,32 @@ class AffiliationForm(forms.ModelForm):
         to_field_name="affiliation_id",
     )
 
-    def clean(self):
-        cleaned_data = super().clean()
-        affil_id = cleaned_data.get("affiliation_id")
-        ep_id = cleaned_data.get("expert_panel_id")
+    def _handle_clean_affiliation_id(self, cleaned_data):
+        """Clean and set Affiliation ID based on affil ID type."""
+
         affil_id_type_choice = cleaned_data.get("affil_id_type_choice")
         sib_affil_id = cleaned_data.get("sib_affil_id_choices")
-        _type = cleaned_data.get("type")
         cdwg = cleaned_data.get("clinical_domain_working_group")
 
-        # If the primary key already exists, return cleaned_data.
-        if self.instance.pk is not None:
-            return cleaned_data
-
-        # Clean and set Affiliation ID based on affil ID type.
         if affil_id_type_choice == "new":
             existing_affil_ids = (
-                Affiliation.objects.values_list("affiliation_id", flat=True)
+                Affiliation.objects.select_for_update()
+                .values_list("affiliation_id", flat=True)
                 .order_by("affiliation_id")
-                .distinct()
             )
             last_ind = existing_affil_ids.count()
             affil_id = existing_affil_ids[last_ind - 1] + 1
-            cleaned_data["affiliation_id"] = affil_id
+            if affil_id < 10000 or affil_id >= 20000:
+                self.add_error(
+                    None,
+                    ValidationError(
+                        "Affiliation ID out of range. Contact administrator."
+                    ),
+                )
+            else:
+                cleaned_data["affiliation_id"] = affil_id
         # If sibling, also check that the CDWG matches existing CDWG.
-        elif affil_id_type_choice == "sibling":
+        else:
             affil_id = sib_affil_id
             cleaned_data["affiliation_id"] = sib_affil_id
             existing_sibling_affil_cdwg = (
@@ -160,21 +162,51 @@ class AffiliationForm(forms.ModelForm):
                         "The CDWG does not match the existing sibling CDWG."
                     ),
                 )
-        # Clean and set EP ID based on Type and Affiliation ID.
-        if _type in (
-            "VCEP",
-            "GCEP",
-        ):
-            if _type == "VCEP":
-                ep_id = (affil_id - 10000) + 50000
+
+    def _handle_clean_type(self, cleaned_data):
+        """Clean and set EP ID based on Type and Affiliation ID."""
+        affil_id = cleaned_data.get("affiliation_id")
+        ep_id = cleaned_data.get("expert_panel_id")
+        _type = cleaned_data.get("type")
+
+        if _type == "VCEP":
+            ep_id = (affil_id - 10000) + 50000
+            if ep_id < 50000 or ep_id >= 60000:
+                self.add_error(
+                    None,
+                    ValidationError("VCEP ID out of range. Contact administrator."),
+                )
+            else:
                 cleaned_data["expert_panel_id"] = ep_id
-            elif _type == "GCEP":
-                ep_id = (affil_id - 10000) + 40000
+        elif _type == "GCEP":
+            ep_id = (affil_id - 10000) + 40000
+            if ep_id < 40000 or ep_id >= 50000:
+                self.add_error(
+                    None,
+                    ValidationError("GCEP ID out of range. Contact administrator."),
+                )
+            else:
                 cleaned_data["expert_panel_id"] = ep_id
+
+    @transaction.atomic
+    def clean(self):
+        cleaned_data = super().clean()
+        # If the primary key already exists, return cleaned_data.
+        if self.instance.pk is not None:
+            return cleaned_data
+
+        self._handle_clean_affiliation_id(cleaned_data)
+        self._handle_clean_type(cleaned_data)
+
         # Check to see if the Affil and EP ID already exist in DB.
-        if Affiliation.objects.filter(
-            affiliation_id=affil_id, expert_panel_id=ep_id
-        ).exists():
+        if (
+            Affiliation.objects.select_for_update()
+            .filter(
+                affiliation_id=cleaned_data.get("affiliation_id"),
+                expert_panel_id=cleaned_data.get("expert_panel_id"),
+            )
+            .exists()
+        ):
             self.add_error(
                 None,
                 ValidationError("This Affiliation ID with this Type already exist."),

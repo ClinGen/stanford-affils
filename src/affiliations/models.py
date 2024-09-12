@@ -71,8 +71,6 @@ class Affiliation(models.Model):
     expert_panel_id: models.IntegerField = models.IntegerField(
         blank=True,
         null=True,
-        help_text="GCEP or VCEP ID. If Independent Curation Group or SC-VCEP, "
-        "leave this field blank.",
         verbose_name="Expert Panel ID",
     )
     full_name: models.CharField = models.CharField(verbose_name="Full Name")
