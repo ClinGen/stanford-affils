@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from unfold.forms import (  # type: ignore
     AdminPasswordChangeForm,
@@ -123,15 +124,17 @@ class AffiliationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         affil_id = cleaned_data.get("affiliation_id")
+        ep_id = cleaned_data.get("expert_panel_id")
         affil_id_type_choice = cleaned_data.get("affil_id_type_choice")
         sib_affil_id = cleaned_data.get("sib_affil_id_choices")
         _type = cleaned_data.get("type")
+        cdwg = cleaned_data.get("clinical_domain_working_group")
 
         # If the primary key already exists, return cleaned_data.
         if self.instance.pk is not None:
             return cleaned_data
 
-        # Clean and set Affilation ID based on affil ID type.
+        # Clean and set Affiliation ID based on affil ID type.
         if affil_id_type_choice == "new":
             existing_affil_ids = (
                 Affiliation.objects.values_list("affiliation_id", flat=True)
@@ -141,19 +144,41 @@ class AffiliationForm(forms.ModelForm):
             last_ind = existing_affil_ids.count()
             affil_id = existing_affil_ids[last_ind - 1] + 1
             cleaned_data["affiliation_id"] = affil_id
+        # If sibling, also check that the CDWG matches existing CDWG.
         elif affil_id_type_choice == "sibling":
             affil_id = sib_affil_id
             cleaned_data["affiliation_id"] = sib_affil_id
-        # Clean and set EP ID based on Type and Affiliation ID
+            existing_sibling_affil_cdwg = (
+                Affiliation.objects.filter(affiliation_id=affil_id)
+                .values_list("clinical_domain_working_group", flat=True)
+                .distinct()
+            )
+            if existing_sibling_affil_cdwg[0] != cdwg:
+                self.add_error(
+                    "clinical_domain_working_group",
+                    ValidationError(
+                        "The CDWG does not match the existing sibling CDWG."
+                    ),
+                )
+        # Clean and set EP ID based on Type and Affiliation ID.
         if _type in (
             "VCEP",
             "GCEP",
         ):
             if _type == "VCEP":
-                vcep_ep_id = (affil_id - 10000) + 50000
-                cleaned_data["expert_panel_id"] = vcep_ep_id
+                ep_id = (affil_id - 10000) + 50000
+                cleaned_data["expert_panel_id"] = ep_id
             elif _type == "GCEP":
-                cleaned_data["expert_panel_id"] = (affil_id - 10000) + 40000
+                ep_id = (affil_id - 10000) + 40000
+                cleaned_data["expert_panel_id"] = ep_id
+        # Check to see if the Affil and EP ID already exist in DB.
+        if Affiliation.objects.filter(
+            affiliation_id=affil_id, expert_panel_id=ep_id
+        ).exists():
+            self.add_error(
+                None,
+                ValidationError("This Affiliation ID with this Type already exist."),
+            )
 
         return cleaned_data
 
