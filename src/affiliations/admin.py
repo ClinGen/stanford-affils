@@ -124,19 +124,23 @@ class AffiliationForm(forms.ModelForm):
 
     def _handle_clean_affiliation_id(self, cleaned_data):
         """Clean and set Affiliation ID based on affil ID type."""
-
+        affil_id = cleaned_data.get("affiliation_id")
         affil_id_type_choice = cleaned_data.get("affil_id_type_choice")
         sib_affil_id = cleaned_data.get("sib_affil_id_choices")
         cdwg = cleaned_data.get("clinical_domain_working_group")
 
+        existing_affil_ids = (
+            Affiliation.objects.select_for_update()
+            .values_list("affiliation_id", flat=True)
+            .order_by("affiliation_id")
+        )
         if affil_id_type_choice == "new":
-            existing_affil_ids = (
-                Affiliation.objects.select_for_update()
-                .values_list("affiliation_id", flat=True)
-                .order_by("affiliation_id")
-            )
             last_ind = existing_affil_ids.count()
-            affil_id = existing_affil_ids[last_ind - 1] + 1
+            if last_ind:
+                affil_id = existing_affil_ids[last_ind - 1] + 1
+            else:
+                affil_id = 10000
+            cleaned_data["affiliation_id"] = affil_id
             if affil_id < 10000 or affil_id >= 20000:
                 self.add_error(
                     None,
@@ -144,24 +148,26 @@ class AffiliationForm(forms.ModelForm):
                         "Affiliation ID out of range. Contact administrator."
                     ),
                 )
-            else:
-                cleaned_data["affiliation_id"] = affil_id
         # If sibling, also check that the CDWG matches existing CDWG.
         else:
-            affil_id = sib_affil_id
-            cleaned_data["affiliation_id"] = sib_affil_id
-            existing_sibling_affil_cdwg = (
-                Affiliation.objects.filter(affiliation_id=affil_id)
-                .values_list("clinical_domain_working_group", flat=True)
-                .distinct()
-            )
-            if existing_sibling_affil_cdwg[0] != cdwg:
-                self.add_error(
-                    "clinical_domain_working_group",
-                    ValidationError(
-                        "The CDWG does not match the existing sibling CDWG."
-                    ),
+            if existing_affil_ids.filter(affiliation_id=sib_affil_id).exists():
+                affil_id = sib_affil_id
+                cleaned_data["affiliation_id"] = sib_affil_id
+                existing_sibling_affil_cdwg = (
+                    Affiliation.objects.filter(affiliation_id=affil_id)
+                    .values_list("clinical_domain_working_group", flat=True)
+                    .distinct()
                 )
+                if (
+                    existing_sibling_affil_cdwg
+                    and existing_sibling_affil_cdwg[0] != cdwg
+                ):
+                    self.add_error(
+                        "clinical_domain_working_group",
+                        ValidationError(
+                            "The CDWG does not match the existing sibling CDWG."
+                        ),
+                    )
 
     def _handle_clean_type(self, cleaned_data):
         """Clean and set EP ID based on Type and Affiliation ID."""
@@ -171,22 +177,23 @@ class AffiliationForm(forms.ModelForm):
 
         if _type == "VCEP":
             ep_id = (affil_id - 10000) + 50000
+            cleaned_data["expert_panel_id"] = ep_id
             if ep_id < 50000 or ep_id >= 60000:
                 self.add_error(
                     None,
                     ValidationError("VCEP ID out of range. Contact administrator."),
                 )
-            else:
-                cleaned_data["expert_panel_id"] = ep_id
+
         elif _type == "GCEP":
             ep_id = (affil_id - 10000) + 40000
+            cleaned_data["expert_panel_id"] = ep_id
             if ep_id < 40000 or ep_id >= 50000:
                 self.add_error(
                     None,
                     ValidationError("GCEP ID out of range. Contact administrator."),
                 )
-            else:
-                cleaned_data["expert_panel_id"] = ep_id
+        else:
+            cleaned_data["expert_panel_id"] = None
 
     @transaction.atomic
     def clean(self):
