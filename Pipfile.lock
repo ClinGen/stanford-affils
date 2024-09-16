@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "eac2c166fe51325fa34fe26d8852e7cef177468e335a80e175666a89ff34b34c"
+            "sha256": "6f1e7383db8adb2ee5a5fa3a193b71d3e4ff1d1f19e395988d063a83d7654afa"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -564,22 +564,23 @@
         },
         "django": {
             "hashes": [
-                "sha256:848a5980e8efb76eea70872fb0e4bc5e371619c70fffbe48e3e1b50b2c09455d",
-                "sha256:d3b811bf5371a26def053d7ee42a9df1267ef7622323fe70a601936725aa4557"
+                "sha256:021ffb7fdab3d2d388bc8c7c2434eb9c1f6f4d09e6119010bbb1694dda286bc2",
+                "sha256:71603f27dac22a6533fb38d83072eea9ddb4017fead6f67f2562a40402d61c3f"
             ],
             "markers": "python_version >= '3.10'",
-            "version": "==5.1"
+            "version": "==5.1.1"
         },
         "django-stubs": {
             "extras": [
                 "compatible-mypy"
             ],
             "hashes": [
-                "sha256:236bc5606e5607cb968f92b648471f9edaa461a774bc013bf9e6bff8730f6bdf",
-                "sha256:cb0c506cb5c54c64612e4a2ee8d6b913c6178560ec168009fe847c09747c304b"
+                "sha256:78e3764488fdfd2695f12502136548ec22f8d4b1780541a835042b8238d11514",
+                "sha256:c2502f5ecbae50c68f9a86d52b5b2447d8648fd205036dad0ccb41e19a445927"
             ],
+            "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==5.0.2"
+            "version": "==5.0.4"
         },
         "django-stubs-ext": {
             "hashes": [
@@ -756,6 +757,14 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==0.5.1"
+        },
+        "tomli": {
+            "hashes": [
+                "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
+                "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
+            ],
+            "markers": "python_version < '3.11'",
+            "version": "==2.0.1"
         },
         "tomlkit": {
             "hashes": [
