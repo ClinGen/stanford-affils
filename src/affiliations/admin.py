@@ -205,7 +205,7 @@ class AffiliationsAdmin(ModelAdmin):
         "affiliation_id",
         "expert_panel_id",
         "full_name",
-        "abbreviated_name",
+        "short_name",
     ]
 
     # Controls what fields are listed in overview header.
@@ -214,7 +214,7 @@ class AffiliationsAdmin(ModelAdmin):
         "affiliation_id",
         "expert_panel_id",
         "full_name",
-        "abbreviated_name",
+        "short_name",
         "status",
         "type",
         "clinical_domain_working_group",
@@ -226,7 +226,7 @@ class AffiliationsAdmin(ModelAdmin):
         "affiliation_id",
         "expert_panel_id",
         "full_name",
-        "abbreviated_name",
+        "short_name",
         "status",
         "type",
         "clinical_domain_working_group",
@@ -247,7 +247,7 @@ class AffiliationsAdmin(ModelAdmin):
         "expert_panel_id",
         "type",
         "full_name",
-        "abbreviated_name",
+        "short_name",
         "status",
         "clinical_domain_working_group",
         "members",
