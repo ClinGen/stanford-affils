@@ -284,7 +284,9 @@ class TestDuplicateAffilIdAndTypeCreateForm(TestCase):
             ),
             mock.call(
                 None,
-                ValidationError("This Affiliation ID with this Type already exist."),
+                ValidationError(
+                    "This Affiliation ID with this Expert Panel ID already exist."
+                ),
             ),
         ]
         mock_add_error.assert_has_calls(calls)
