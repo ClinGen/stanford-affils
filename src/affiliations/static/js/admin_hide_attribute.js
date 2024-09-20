@@ -14,6 +14,15 @@ function toggleAffilID(value) {
     }
 }
 
+function toggleCDWG(value) {
+    const cdwgWrapper = document.querySelector(".form-row.field-clinical_domain_working_group");
+    if (value === "SC_VCEP") {
+        cdwgWrapper.style.display = "none";
+    } else {
+        cdwgWrapper.style.display = "block";
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const affilRadioChoiceOne = document.querySelector('input[id="id_affil_id_type_choice_0"]');
     if (affilRadioChoiceOne) {
@@ -31,6 +40,12 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleAffilID(affilRadioChoiceOne.value);
     } else {
         toggleAffilID(affilRadioChoiceTwo.value);
+    }
+
+    const typeDropdown = document.querySelector('select[id="id_type"]');
+    if (typeDropdown) {
+        typeDropdown.addEventListener("change", function() {
+            toggleCDWG(this.value); })    
     }
 
     hideAffilandEpID();

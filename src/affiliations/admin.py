@@ -70,11 +70,13 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
                 "user_permissions",
             )
         else:
-            perm_fields = ("is_active", "is_staff", "groups", "user_permissions")
+            perm_fields = ("is_active", "is_staff",
+                           "groups", "user_permissions")
 
         return [
             (None, {"fields": ("username", "password")}),
-            (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+            (_("Personal info"), {
+             "fields": ("first_name", "last_name", "email")}),
             (_("Permissions"), {"fields": perm_fields}),
             (_("Important dates"), {"fields": ("last_login", "date_joined")}),
         ]
@@ -174,6 +176,7 @@ class AffiliationForm(forms.ModelForm):
         affil_id = cleaned_data.get("affiliation_id")
         ep_id = cleaned_data.get("expert_panel_id")
         _type = cleaned_data.get("type")
+        cdwg = cleaned_data.get("clinical_domain_working_group")
 
         if _type == "VCEP":
             ep_id = (affil_id - 10000) + 50000
@@ -181,16 +184,27 @@ class AffiliationForm(forms.ModelForm):
             if ep_id < 50000 or ep_id >= 60000:
                 self.add_error(
                     None,
-                    ValidationError("VCEP ID out of range. Contact administrator."),
+                    ValidationError(
+                        "VCEP ID out of range. Contact administrator."),
                 )
-
+        elif _type == "SC_VCEP":
+            ep_id = (affil_id - 10000) + 50000
+            cleaned_data["expert_panel_id"] = ep_id
+            cleaned_data["clinical_domain_working_group"] = "SOMATIC_CANCER"
+            if ep_id < 50000 or ep_id >= 60000:
+                self.add_error(
+                    None,
+                    ValidationError(
+                        "SC-VCEP ID out of range. Contact administrator."),
+                )
         elif _type == "GCEP":
             ep_id = (affil_id - 10000) + 40000
             cleaned_data["expert_panel_id"] = ep_id
             if ep_id < 40000 or ep_id >= 50000:
                 self.add_error(
                     None,
-                    ValidationError("GCEP ID out of range. Contact administrator."),
+                    ValidationError(
+                        "GCEP ID out of range. Contact administrator."),
                 )
         else:
             cleaned_data["expert_panel_id"] = None
@@ -216,7 +230,8 @@ class AffiliationForm(forms.ModelForm):
         ):
             self.add_error(
                 None,
-                ValidationError("This Affiliation ID with this Type already exist."),
+                ValidationError(
+                    "This Affiliation ID with this Expert Panel ID already exist."),
             )
 
         return cleaned_data
