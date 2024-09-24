@@ -206,6 +206,8 @@ class AffiliationsAdmin(ModelAdmin):
         "expert_panel_id",
         "full_name",
         "abbreviated_name",
+        "coordinators__coordinator_name",
+        "coordinators__coordinator_email",
     ]
 
     # Controls what fields are listed in overview header.
@@ -218,6 +220,8 @@ class AffiliationsAdmin(ModelAdmin):
         "status",
         "type",
         "clinical_domain_working_group",
+        "get_coordinator_names",
+        "get_coordinator_emails",
     ]
 
     # Controls what columns are "clickable" to enter detailed view.
@@ -230,7 +234,35 @@ class AffiliationsAdmin(ModelAdmin):
         "status",
         "type",
         "clinical_domain_working_group",
+        "get_coordinator_names",
+        "get_coordinator_emails",
     ]
+
+    @admin.display(
+        description="Coordinator Name", ordering="coordinators__coordinator_name"
+    )
+    def get_coordinator_names(self, obj):
+        """Query coordinator names and return list of names"""
+        coordinators = Coordinator.objects.filter(affiliation_id=obj.pk).values_list(
+            "coordinator_name", flat=True
+        )
+        coordinator_names = []
+        for name in coordinators:
+            coordinator_names.append(name)
+        return coordinator_names
+
+    @admin.display(
+        description="Coordinator Email",
+    )
+    def get_coordinator_emails(self, obj):
+        """Query coordinator emails and return list of emails"""
+        coordinators = Coordinator.objects.filter(affiliation_id=obj.pk).values_list(
+            "coordinator_email", flat=True
+        )
+        coordinator_emails = []
+        for email in coordinators:
+            coordinator_emails.append(email)
+        return coordinator_emails
 
     # Controls what fields can be filtered on.
     list_filter = [
