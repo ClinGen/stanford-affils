@@ -217,10 +217,10 @@ class AffiliationsAdmin(ModelAdmin):
 
     form = AffiliationForm
 
-    class Media:
-        """Media class for modeladmin"""
+    # class Media:
+    #     """Media class for modeladmin"""
 
-        js = ["js/admin_hide_attribute.js"]
+    #     js = ["js/admin_hide_attribute_new.js"]
 
     # Controls which fields are searchable via the search bar.
     search_fields = [
@@ -327,6 +327,14 @@ class AffiliationsAdmin(ModelAdmin):
             "members",
         ]
 
+    def render_change_form(self, request, context, obj=None, *args, **kwargs):
+        if obj is None:
+            context["media"] += forms.Media(
+                js=["js/admin_hide_attribute_new.js"],
+            )
+        return super(AffiliationsAdmin, self).render_change_form(request, context, obj=None, *args, **kwargs)
+
+        
 
 # Add models we want to be able to edit in the admin interface.
 admin.site.register(Affiliation, AffiliationsAdmin)
