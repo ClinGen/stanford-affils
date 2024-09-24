@@ -18,8 +18,6 @@ from unfold.forms import (  # type: ignore
 from unfold.admin import (  # type: ignore
     ModelAdmin,
     TabularInline,
-    UnfoldAdminRadioSelectWidget,
-    UnfoldAdminSelectWidget,
 )
 
 from unfold.contrib.filters.admin import (  # type: ignore
@@ -70,13 +68,11 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
                 "user_permissions",
             )
         else:
-            perm_fields = ("is_active", "is_staff",
-                           "groups", "user_permissions")
+            perm_fields = ("is_active", "is_staff", "groups", "user_permissions")
 
         return [
             (None, {"fields": ("username", "password")}),
-            (_("Personal info"), {
-             "fields": ("first_name", "last_name", "email")}),
+            (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
             (_("Permissions"), {"fields": perm_fields}),
             (_("Important dates"), {"fields": ("last_login", "date_joined")}),
         ]
@@ -120,9 +116,7 @@ class AffiliationForm(forms.ModelForm):
         if affil_id < 10000 or affil_id >= 20000:
             self.add_error(
                 None,
-                ValidationError(
-                    "Affiliation ID out of range. Contact administrator."
-                ),
+                ValidationError("Affiliation ID out of range. Contact administrator."),
             )
 
     def _handle_clean_type(self, cleaned_data):
@@ -137,8 +131,7 @@ class AffiliationForm(forms.ModelForm):
             if ep_id < 50000 or ep_id >= 60000:
                 self.add_error(
                     None,
-                    ValidationError(
-                        "VCEP ID out of range. Contact administrator."),
+                    ValidationError("VCEP ID out of range. Contact administrator."),
                 )
         elif _type == "SC_VCEP":
             ep_id = (affil_id - 10000) + 50000
@@ -147,8 +140,7 @@ class AffiliationForm(forms.ModelForm):
             if ep_id < 50000 or ep_id >= 60000:
                 self.add_error(
                     None,
-                    ValidationError(
-                        "SC-VCEP ID out of range. Contact administrator."),
+                    ValidationError("SC-VCEP ID out of range. Contact administrator."),
                 )
         elif _type == "GCEP":
             ep_id = (affil_id - 10000) + 40000
@@ -156,8 +148,7 @@ class AffiliationForm(forms.ModelForm):
             if ep_id < 40000 or ep_id >= 50000:
                 self.add_error(
                     None,
-                    ValidationError(
-                        "GCEP ID out of range. Contact administrator."),
+                    ValidationError("GCEP ID out of range. Contact administrator."),
                 )
         else:
             cleaned_data["expert_panel_id"] = None
@@ -327,14 +318,13 @@ class AffiliationsAdmin(ModelAdmin):
             "members",
         ]
 
-    def render_change_form(self, request, context, obj=None, *args, **kwargs):
+    def render_change_form(self, request, context, *args, obj=None, **kwargs):
         if obj is None:
             context["media"] += forms.Media(
                 js=["js/admin_hide_attribute_new.js"],
             )
-        return super(AffiliationsAdmin, self).render_change_form(request, context, obj=None, *args, **kwargs)
+        return super().render_change_form(request, context, *args, obj=None, **kwargs)
 
-        
 
 # Add models we want to be able to edit in the admin interface.
 admin.site.register(Affiliation, AffiliationsAdmin)
