@@ -1,4 +1,4 @@
-function hideAffil() {
+function hideAffilID() {
   const affilID = document.querySelector(".form-row.field-affiliation_id");
   affilID.style.display = "none";
 }
@@ -26,6 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
       toggleCDWG(this.value);
     });
   }
-  hideAffil();
+  hideAffilID();
   hideExpertPanelID();
 });
