@@ -168,7 +168,6 @@ class TestUserInputsIds(TestCase):
         }
 
         cls.cleaned_user_input_ids_affiliation = {
-            "affil_id_type_choice": "new",
             "affiliation_id": 10000,
             "expert_panel_id": None,
             "full_name": "Invalid Type with ID Affiliation",
@@ -213,7 +212,6 @@ class TestAffiliationIDOutOfRange(TestCase):
         )
 
         cls.out_of_range_id_affiliation = {
-            "affil_id_type_choice": "new",
             **cls.out_of_range_id_affiliation_base,
         }
 
@@ -231,62 +229,6 @@ class TestAffiliationIDOutOfRange(TestCase):
             mock.call(
                 None,
                 ValidationError("VCEP ID out of range. Contact administrator."),
-            ),
-        ]
-        mock_add_error.assert_has_calls(calls)
-
-
-class TestDuplicateAffilIdAndTypeCreateForm(TestCase):
-    """A test class for testing validation error if user attempts to add a sibling
-    affiliation with the wrong CDWG that already exists"""
-
-    @classmethod
-    def setUpTestData(cls):
-        """Attempting to seed the test database with some test data, then make
-        sure we are triggering the ValidationError"""
-
-        cls.duplicate_affiliation_base = {
-            "full_name": "Affil and Type Already Exist",
-            "short_name": "Duplicate",
-            "status": "Active",
-            "type": "VCEP",
-            "members": "Piplup, Toxicroak, Weavile",
-        }
-
-        cls.duplicate_affiliation = {
-            "affiliation_id": 14285,
-            "expert_panel_id": 54285,
-            "clinical_domain_working_group": ["Somatic Cancer"],
-            **cls.duplicate_affiliation_base,
-        }
-
-        cls.duplicate_affil_one = Affiliation.objects.create(
-            **cls.duplicate_affiliation
-        )
-
-        cls.duplicate_affil_two = {
-            "affil_id_type_choice": "sibling",
-            "sib_affil_id_choices": 14285,
-            "clinical_domain_working_group": ["Other"],
-            **cls.duplicate_affiliation_base,
-        }
-
-    @mock.patch("affiliations.admin.AffiliationForm.add_error")
-    def test_response(self, mock_add_error):
-        """Make sure we are triggering the add_error function in clean method"""
-        duplicate_affiliation_test = AffiliationForm(self.duplicate_affiliation)
-        duplicate_affiliation_test.cleaned_data = self.duplicate_affil_two
-        duplicate_affiliation_test.clean()
-        calls = [
-            mock.call(
-                "clinical_domain_working_group",
-                ValidationError("The CDWG does not match the existing sibling CDWG."),
-            ),
-            mock.call(
-                None,
-                ValidationError(
-                    "This Affiliation ID with this Expert Panel ID already exist."
-                ),
             ),
         ]
         mock_add_error.assert_has_calls(calls)

@@ -70,11 +70,13 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
                 "user_permissions",
             )
         else:
-            perm_fields = ("is_active", "is_staff", "groups", "user_permissions")
+            perm_fields = ("is_active", "is_staff",
+                           "groups", "user_permissions")
 
         return [
             (None, {"fields": ("username", "password")}),
-            (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+            (_("Personal info"), {
+             "fields": ("first_name", "last_name", "email")}),
             (_("Permissions"), {"fields": perm_fields}),
             (_("Important dates"), {"fields": ("last_login", "date_joined")}),
         ]
@@ -99,75 +101,29 @@ class AffiliationForm(forms.ModelForm):
         fields = "__all__"
         model = Affiliation
 
-    # User will select if affiliation input is new or a "sibling" affiliation.
-    affil_id_type_choice = forms.ChoiceField(
-        label="Affiliation Type",
-        widget=UnfoldAdminRadioSelectWidget,
-        initial="new",
-        choices=(
-            ("new", "New Affiliation"),
-            ("sibling", "Sibling Affiliation"),
-        ),
-    )
-
-    # Sibling affiliation queries DB for all existing affiliation IDs to select
-    # as Affil ID.
-    sib_affil_id_choices = forms.ModelChoiceField(
-        label="Existing Affiliation IDs",
-        required=False,
-        widget=UnfoldAdminSelectWidget,
-        queryset=Affiliation.objects.values_list("affiliation_id", flat=True)
-        .order_by("affiliation_id")
-        .distinct(),
-        to_field_name="affiliation_id",
-    )
-
     def _handle_clean_affiliation_id(self, cleaned_data):
         """Clean and set Affiliation ID based on affil ID type."""
         affil_id = cleaned_data.get("affiliation_id")
-        affil_id_type_choice = cleaned_data.get("affil_id_type_choice")
-        sib_affil_id = cleaned_data.get("sib_affil_id_choices")
-        cdwg = cleaned_data.get("clinical_domain_working_group")
 
         existing_affil_ids = (
             Affiliation.objects.select_for_update()
             .values_list("affiliation_id", flat=True)
             .order_by("affiliation_id")
         )
-        if affil_id_type_choice == "new":
-            last_ind = existing_affil_ids.count()
-            if last_ind:
-                affil_id = existing_affil_ids[last_ind - 1] + 1
-            else:
-                affil_id = 10000
-            cleaned_data["affiliation_id"] = affil_id
-            if affil_id < 10000 or affil_id >= 20000:
-                self.add_error(
-                    None,
-                    ValidationError(
-                        "Affiliation ID out of range. Contact administrator."
-                    ),
-                )
-        # If sibling, also check that the CDWG matches existing CDWG.
+
+        last_ind = existing_affil_ids.count()
+        if last_ind:
+            affil_id = existing_affil_ids[last_ind - 1] + 1
         else:
-            if existing_affil_ids.filter(affiliation_id=sib_affil_id).exists():
-                affil_id = sib_affil_id
-                cleaned_data["affiliation_id"] = sib_affil_id
-                existing_sibling_affil_cdwg = (
-                    Affiliation.objects.filter(affiliation_id=affil_id)
-                    .values_list("clinical_domain_working_group", flat=True)
-                    .distinct()
-                )
-                if (
-                    existing_sibling_affil_cdwg
-                    and existing_sibling_affil_cdwg[0] != cdwg
-                ):
-                    self.add_error(
-                        "clinical_domain_working_group",
-                        ValidationError(
-                            "The CDWG does not match the existing sibling CDWG."
-                        ),
-                    )
+            affil_id = 10000
+        cleaned_data["affiliation_id"] = affil_id
+        if affil_id < 10000 or affil_id >= 20000:
+            self.add_error(
+                None,
+                ValidationError(
+                    "Affiliation ID out of range. Contact administrator."
+                ),
+            )
 
     def _handle_clean_type(self, cleaned_data):
         """Clean and set EP ID based on Type and Affiliation ID."""
@@ -181,7 +137,8 @@ class AffiliationForm(forms.ModelForm):
             if ep_id < 50000 or ep_id >= 60000:
                 self.add_error(
                     None,
-                    ValidationError("VCEP ID out of range. Contact administrator."),
+                    ValidationError(
+                        "VCEP ID out of range. Contact administrator."),
                 )
         elif _type == "SC_VCEP":
             ep_id = (affil_id - 10000) + 50000
@@ -190,7 +147,8 @@ class AffiliationForm(forms.ModelForm):
             if ep_id < 50000 or ep_id >= 60000:
                 self.add_error(
                     None,
-                    ValidationError("SC-VCEP ID out of range. Contact administrator."),
+                    ValidationError(
+                        "SC-VCEP ID out of range. Contact administrator."),
                 )
         elif _type == "GCEP":
             ep_id = (affil_id - 10000) + 40000
@@ -198,7 +156,8 @@ class AffiliationForm(forms.ModelForm):
             if ep_id < 40000 or ep_id >= 50000:
                 self.add_error(
                     None,
-                    ValidationError("GCEP ID out of range. Contact administrator."),
+                    ValidationError(
+                        "GCEP ID out of range. Contact administrator."),
                 )
         else:
             cleaned_data["expert_panel_id"] = None
