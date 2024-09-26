@@ -38,8 +38,6 @@ ALLOWED_HOSTS = ["affils.clinicalgenome.org"]
 
 CSRF_TRUSTED_ORIGINS = ["https://affils.clinicalgenome.org"]
 
-ATOMIC_REQUESTS = True
-
 INSTALLED_APPS = [
     "unfold",
     "unfold.contrib.filters",
@@ -99,6 +97,7 @@ DATABASES = {
         "PASSWORD": os.environ.get("AFFILS_DB_PASSWORD"),
         "HOST": os.environ.get("AFFILS_DB_HOST"),
         "PORT": os.environ.get("AFFILS_DB_PORT"),
+        "ATOMIC_REQUESTS": True,
     }
 }
 
