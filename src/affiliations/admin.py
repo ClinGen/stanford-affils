@@ -208,11 +208,6 @@ class AffiliationsAdmin(ModelAdmin):
 
     form = AffiliationForm
 
-    # class Media:
-    #     """Media class for modeladmin"""
-
-    #     js = ["js/admin_hide_attribute_new.js"]
-
     # Controls which fields are searchable via the search bar.
     search_fields = [
         "affiliation_id",
