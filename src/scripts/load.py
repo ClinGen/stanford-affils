@@ -29,7 +29,7 @@ def run():  # pylint: disable-msg=too-many-locals
             gcep_ep_id = row["GCEP Affiliation ID"].strip()
             gcep_full_name = row["GCEP Affiliation Name"].strip()
             status = row["Status"].strip()
-            # cdwg = row["CDWG"].strip()
+            cdwg = row["CDWG"].strip()
 
             coordinator_names = coordinator_name.split(",")
             coordinator_emails = coordinator_email.split(",")
@@ -52,7 +52,7 @@ def run():  # pylint: disable-msg=too-many-locals
                     type=type_name,
                     full_name=name,
                     status=status,
-                    # clinical_domain_working_group=cdwg,
+                    clinical_domain_working_group=cdwg,
                 )
                 if clinvar_submitter_id != "":
                     Submitter.objects.create(
