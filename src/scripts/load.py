@@ -1,5 +1,13 @@
 """
-Script to be run to insert existing data from a spreadsheet to the database.
+Script to be run to insert existing data from 
+the affiliations spreadsheet to the database.
+
+CSV needs to be saved in the `scripts` folder in directory before running.
+
+You can then run this script by running: 
+`python manage.py runscript load` in the command line from the directory.
+
+Follow steps outlined in [tutorial.md](doc/tutorial.md/#running-the-loadpy-script-to-import-csv-data-into-the-database).
 """
 
 import csv
@@ -15,8 +23,6 @@ def run():  # pylint: disable-msg=too-many-locals
         encoding="utf-8",
     ) as file:
         csv_reader = csv.DictReader(file)
-
-        Affiliation.objects.all().delete()
 
         for row in csv_reader:
             external_full_name = row["Affiliation Full Name"].strip()
