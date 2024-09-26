@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "affiliations",
     "django_admin_logs",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [

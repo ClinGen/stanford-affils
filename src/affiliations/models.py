@@ -76,8 +76,8 @@ class Affiliation(models.Model):
         verbose_name="Expert Panel ID",
     )
     full_name: models.CharField = models.CharField(verbose_name="Full Name")
-    abbreviated_name: models.CharField = models.CharField(
-        blank=True, null=True, verbose_name="Abbreviated Name"
+    short_name: models.CharField = models.CharField(
+        blank=True, null=True, verbose_name="Short Name"
     )
     status: models.CharField = models.CharField(
         verbose_name="Status",

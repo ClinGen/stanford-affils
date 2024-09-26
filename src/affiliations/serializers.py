@@ -59,7 +59,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
             "affiliation_id",
             "expert_panel_id",
             "full_name",
-            "abbreviated_name",
+            "short_name",
             "status",
             "type",
             "clinical_domain_working_group",
@@ -100,7 +100,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
         instance.affiliation_id = validated_data.IntegerField()
         instance.expert_panel_id = validated_data.IntegerField()
         instance.full_name = validated_data.CharField()
-        instance.abbreviated_name = validated_data.CharField()
+        instance.short_name = validated_data.CharField()
         instance.status = validated_data.CharField()
         instance.type = validated_data.CharField()
         instance.clinical_domain_working_group = validated_data.CharField()

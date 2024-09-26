@@ -13,6 +13,7 @@ whitenoise = "6.*"
 python-dotenv = "1.*"
 tomli = "2.*"
 dill = "0.*"
+django-extensions = "3.*"
 
 [dev-packages]
 black = "==24.*"
