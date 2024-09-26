@@ -7,7 +7,8 @@ CSV needs to be saved in the `scripts` folder in directory before running.
 You can then run this script by running: 
 `python manage.py runscript load` in the command line from the directory.
 
-Follow steps outlined in [tutorial.md](doc/tutorial.md/#running-the-loadpy-script-to-import-csv-data-into-the-database).
+Follow steps outlined in [tutorial.md](
+doc/tutorial.md/#running-the-loadpy-script-to-import-csv-data-into-the-database).
 """
 
 import csv
