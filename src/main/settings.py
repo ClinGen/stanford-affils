@@ -38,6 +38,7 @@ ALLOWED_HOSTS = ["affils.clinicalgenome.org"]
 
 CSRF_TRUSTED_ORIGINS = ["https://affils.clinicalgenome.org"]
 
+ATOMIC_REQUESTS = True
 
 INSTALLED_APPS = [
     "unfold",
