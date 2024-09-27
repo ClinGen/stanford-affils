@@ -20,10 +20,10 @@ function toggleCDWG(value) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const typeDropdown = document.querySelector('select[id="id_type"]');
+  const typeDropdown = document.querySelector('#id_type');
   if (typeDropdown) {
     typeDropdown.addEventListener("change", () => {
-      toggleCDWG(this.value);
+      toggleCDWG(typeDropdown.value);
     });
   }
   hideAffilID();
