@@ -20,7 +20,7 @@ function toggleCDWG(value) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const typeDropdown = document.querySelector('#id_type');
+  const typeDropdown = document.querySelector("#id_type");
   if (typeDropdown) {
     typeDropdown.addEventListener("change", () => {
       toggleCDWG(typeDropdown.value);
