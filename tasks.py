@@ -36,6 +36,12 @@ def fmt(c):
 
 
 @task
+def fmtcheck(c):
+    """Checks if the code is formatted properly."""
+    c.run("black --check .")
+
+
+@task
 def lint(c):
     """Run the linter."""
     c.run("pylint src")
