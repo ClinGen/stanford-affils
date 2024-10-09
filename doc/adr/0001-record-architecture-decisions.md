@@ -8,14 +8,16 @@ Accepted
 
 ## Context
 
-The issue motivating this decision, and any context that influences or
-constrains the decision.
+We decided to use ADRs to make it easier for future maintainers to understand
+the implementation decisions we have chosen and our reasoning behind them.
 
 ## Decision
 
-The change that we're proposing or have agreed to implement.
+We add ADRs to the /doc/adr subdirectory following the `adr-tools` and
+`adr-tools-python` documentation advice in
+[Documenting architecture decisions - Michael Nygard](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
 
 ## Consequences
 
-What becomes easier or more difficult to do and any risks introduced by the
-change that will need to be mitigated.
+Hopefully future maintainers are able to understand why the project was built in
+the way that it is.
