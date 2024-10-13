@@ -307,7 +307,6 @@ class AffiliationsAdmin(ModelAdmin):
                     "affiliation_id",
                     "expert_panel_id",
                     "type",
-                    "clinical_domain_working_group",
                     "members",
                 ]
         return [
