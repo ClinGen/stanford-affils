@@ -18,6 +18,8 @@ adr-tools-python = "1.*"
 django-dbbackup = "4.*"
 django-storages = {extras = ["boto3"]}
 django-crontab = "0.*"
+watchtower = "3.*"
+boto3 = "1.*"
 
 [dev-packages]
 black = "==24.*"

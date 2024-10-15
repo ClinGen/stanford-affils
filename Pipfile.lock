@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "147bd612fb78c2673f5e072dbc902d3a9d7a3557292c0e164795c46b67038536"
+            "sha256": "559916873b9961f490c7755efcf59a5c1cbf6347b517b12008eb33957e7f0397"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -65,18 +65,20 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:33c6a7aeab316f7e0b3ad8552afe95a4a10bfd58519d00741c4d4f3047da8382",
-                "sha256:9352f6d61f15c789231a5d608613f03425059072ed862c32e1ed102b17206abf"
+                "sha256:234a475fe56b65e99b4f5cfff50adaac6b23d39558d6b55137bbf1e50dd0ef08",
+                "sha256:90c8cddc4a08c8040057ad44c7468ff82fea9fe8b6517db5ff01a9b2900299cc"
             ],
-            "version": "==1.35.40"
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==1.35.38"
         },
         "botocore": {
             "hashes": [
-                "sha256:072cc47f29cb1de4fa77ce6632e4f0480af29b70816973ff415fbaa3f50bd1db",
-                "sha256:547e0a983856c7d7aeaa30fca2a283873c57c07366cd806d2d639856341b3c31"
+                "sha256:2eb17d32fa2d3bb5d475132a83564d28e3acc2161534f24b75a54418a1d51359",
+                "sha256:55d9305c44e5ba29476df456120fa4fb919f03f066afa82f2ae400485e7465f4"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==1.35.40"
+            "version": "==1.35.38"
         },
         "cffi": {
             "hashes": [
@@ -457,6 +459,15 @@
             ],
             "markers": "python_version >= '3.10'",
             "version": "==2.2.3"
+        },
+        "watchtower": {
+            "hashes": [
+                "sha256:5e654f52b54b39e279592d6c18a033b22cfbffda676f5b3cf6dfef712ed5738c",
+                "sha256:72d4f3f2ec906302e0478c042a2076611eb22f5a491ceda6411fec531aa2ee85"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==3.3.1"
         },
         "whitenoise": {
             "hashes": [

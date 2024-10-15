@@ -16,7 +16,7 @@ import os
 # Third-party dependencies:
 from dotenv import load_dotenv, find_dotenv
 from django.templatetags.static import static
-
+import boto3
 
 # Set environment variables.
 load_dotenv(find_dotenv())
@@ -33,6 +33,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: Don't run with debug turned on in production.
 DEBUG = False
+ENV = "Prod"
 
 ALLOWED_HOSTS = ["affils.clinicalgenome.org"]
 
@@ -203,3 +204,46 @@ CRONJOBS = [
     # Run dbbackup weekly on Sundays at midnight
     ("0 0 * * 0", "django.core.management.call_command", ["dbbackup"]),
 ]
+
+# Logging and Cloudwatch
+logger_boto3_session = boto3.client(
+    "logs",
+    # aws_access_key_id = os.environ.get("AFFILS_AWS_ACCESS_KEY"),
+    # aws_secret_access_key = os.environ.get("AFFILS_AWS_SECRET_KEY"),
+    region_name=os.environ.get("AFFILS_AWS_REGION"),
+)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "root": {"level": "INFO", "handlers": ["watchtower"]},
+    "formatters": {
+        "aws": {
+            "format": "%(asctime)s [%(levelname)-8s] %(message)s [%(pathname)s:%(lineno)d]",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    "handlers": {
+        "watchtower": {
+            "level": "INFO",
+            "class": "watchtower.CloudWatchLogHandler",
+            "boto3_client": logger_boto3_session,
+            "log_group_name": "Affiliation_Logs",
+            # Different stream for each environment
+            "stream_name": f"affiliation-{ENV}-logs",
+            "formatter": "aws",
+        },
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "aws",
+        },
+    },
+    "loggers": {
+        # Use this logger to send data just to Cloudwatch
+        "watchtower": {
+            "level": "INFO",
+            "handlers": ["watchtower"],
+            "propagate": False,
+        }
+    },
+}
