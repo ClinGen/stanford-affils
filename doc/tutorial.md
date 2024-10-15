@@ -40,3 +40,11 @@ oriented towards learning how rather than learning what.
 - To see previous backups you can display the backup list with
   `python manage.py listbackups` and restore a specific backup with
   `python manage.py dbrestore -i {file-name}`
+  
+## Adding logs
+
+- First add `import logging` to the top of the file.
+- Then add the below two lines of code (changing log level, string, and
+  variables as needed): `logger = logging.getLogger("watchtower")`
+  `logger.info(f"Affiliation Created:\\n\\n {Affiliation.full_name} (PK: {Affiliation.pk})")`
+- The desired log line will appear in the selected logging handler.
