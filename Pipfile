@@ -15,7 +15,7 @@ tomli = "2.*"
 dill = "0.*"
 django-extensions = "3.*"
 django-dbbackup = "4.*"
-django-storages = {extras = ["boto3"], version = "1.*"}
+django-storages = {extras = ["boto3"]}
 django-crontab = "0.*"
 
 [dev-packages]
