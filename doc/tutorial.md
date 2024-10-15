@@ -40,7 +40,7 @@ oriented towards learning how rather than learning what.
 - To see previous backups you can display the backup list with
   `python manage.py listbackups` and restore a specific backup with
   `python manage.py dbrestore -i {file-name}`
-  
+
 ## Adding logs
 
 - First add `import logging` to the top of the file.
