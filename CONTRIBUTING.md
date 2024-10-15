@@ -104,7 +104,7 @@ al-123-fix-foobar
 - Install Postgres version 16: `brew install postgresql@16`
 - Start the database server: `brew services start postgresql@16`
 - Enter the Postgres shell: `psql postgres`
-- Create an HCI user:
+- Create an Affiliations user:
   `CREATE ROLE affils_admin WITH LOGIN PASSWORD 'whateverYouWantForLocalDevelopment';`
 - Add the user's name to the `.env` file
 - Add the user's password to the `.env` file
@@ -114,6 +114,6 @@ al-123-fix-foobar
 - Re-enter the shell as the `affils_admin` user: `psql postgres -U affils_admin`
 - Check the list of roles to make sure the `affils_admin` user was given the
   correct permissions: `\du`
-- Create the HCI database: `CREATE DATABASE affils;`
+- Create the Affiliations database: `CREATE DATABASE affils;`
 - Add the name of the database to the `.env` file
 - Add the database engine (`postgresql`) to your `.env` file.

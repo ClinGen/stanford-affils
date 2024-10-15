@@ -16,6 +16,21 @@
         ]
     },
     "default": {
+        "adr-tools-python": {
+            "hashes": [
+                "sha256:0bbd23ea47ec72559f16bd9e4237c1ff3ee848fd2b8a03f31e2b976ba185ecfd"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3'",
+            "version": "==1.0.3"
+        },
+        "argparse": {
+            "hashes": [
+                "sha256:62b089a55be1d8949cd2bc7e0df0bddb9e028faefc8c32038cc84862aefdd6e4",
+                "sha256:c31647edb69fd3d465a847ea3157d37bed1f95f19760b11a47aa91c04b666314"
+            ],
+            "version": "==1.4.0"
+        },
         "asgiref": {
             "hashes": [
                 "sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47",

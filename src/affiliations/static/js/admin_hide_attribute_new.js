@@ -12,7 +12,7 @@ function toggleCDWG(value) {
   const cdwgWrapper = document.querySelector(
     ".form-row.field-clinical_domain_working_group",
   );
-  if (value === "SC_VCEP") {
+  if (value === "SC_VCEP" || value === "INDEPENDENT_CURATION") {
     cdwgWrapper.style.display = "none";
   } else {
     cdwgWrapper.style.display = "block";
