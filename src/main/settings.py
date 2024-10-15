@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "django_admin_logs",
     "django_extensions",
     "dbbackup",  # django-dbbackup
+    "django_crontab",
 ]
 
 MIDDLEWARE = [
@@ -197,3 +198,8 @@ UNFOLD = {
 # such log entries from being created.
 
 DJANGO_ADMIN_LOGS_IGNORE_UNCHANGED = True
+
+CRONJOBS = [
+    # Run dbbackup weekly on Sundays at midnight
+    ("0 0 * * 0", "django.core.management.call_command", ["dbbackup"]),
+]
