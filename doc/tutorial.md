@@ -25,3 +25,19 @@ oriented towards learning how rather than learning what.
 - Make sure all dependencies are synced: `pipenv sync --dev`.
 - Save CSV into `scripts` folder in directory.
 - Run `python manage.py runscript load`.
+
+## Running database backup
+
+- Make sure all dependencies are synced: `pipenv sync --dev`.
+- Make sure AWS S3 bucket is configured and env variables are in .env file.
+- Run `python manage.py dbbackup`.
+
+## Restoring database from backup
+
+- Make sure all dependencies are synced: `pipenv sync --dev`.
+- Make sure AWS S3 bucket is configured and env variables are in .env file.
+- Run `python manage.py dbrestore`.
+
+- To see previous backups you can display the backup list with
+  `python manage.py listbackups` and restore a specific backup with
+  `python manage.py dbrestore -i {file-name}`

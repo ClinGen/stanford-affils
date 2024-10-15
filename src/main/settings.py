@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "affiliations",
     "django_admin_logs",
     "django_extensions",
+    "dbbackup",  # django-dbbackup
 ]
 
 MIDDLEWARE = [
@@ -102,6 +103,16 @@ DATABASES = {
 }
 
 STORAGES = {
+    "dbbackup": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "bucket_name": os.environ.get("AFFILS_AWS_S3_BUCKET_NAME"),
+            "access_key": os.environ.get("AFFILS_AWS_ACCESS_KEY"),
+            "secret_key": os.environ.get("AFFILS_AWS_SECRET_KEY"),
+            "region_name": os.environ.get("AFFILS_AWS_REGION"),
+            "default_acl": os.environ.get("AFFILS_AWS_S3_ACL"),
+        },
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
