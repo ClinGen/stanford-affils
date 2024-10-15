@@ -9,6 +9,9 @@ env:
   AFFILS_DB_HOST: "127.0.0.1"
   AFFILS_DB_PORT: "5432"
   AFFILS_WORKING_DIR: ${{ github.workspace }}
+  AFFILS_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+  AFFILS_AWS_REGION: ${{ secrets.AWS_REGION }}
+  AFFILS_AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
 permissions:
   contents: read
 jobs:
