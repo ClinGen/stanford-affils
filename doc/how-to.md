@@ -82,3 +82,22 @@ How to contribute to the affiliations service.
 
 Please see our [Contributing guidelines](./CONTRIBUTING.md) for more information
 about contributing!
+
+## Set up Postgres for local development
+
+- Install Postgres version 16: `brew install postgresql@16`
+- Start the database server: `brew services start postgresql@16`
+- Enter the Postgres shell: `psql postgres`
+- Create an Affiliations user:
+  `CREATE ROLE affils_admin WITH LOGIN PASSWORD 'whateverYouWantForLocalDevelopment';`
+- Add the user's name to the `.env` file
+- Add the user's password to the `.env` file
+- Give the new user permission to create databases:
+  `ALTER ROLE affils_admin CREATEDB;`
+- Quit out of the shell: `\q`
+- Re-enter the shell as the `affils_admin` user: `psql postgres -U affils_admin`
+- Check the list of roles to make sure the `affils_admin` user was given the
+  correct permissions: `\du`
+- Create the Affiliations database: `CREATE DATABASE affils;`
+- Add the name of the database to the `.env` file
+- Add the database engine (`postgresql`) to your `.env` file.
