@@ -34,9 +34,12 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: Don't run with debug turned on in production.
 DEBUG = False
 
-ALLOWED_HOSTS = ["affils.clinicalgenome.org"]
+ALLOWED_HOSTS = ["affils.clinicalgenome.org", "affils-test.clinicalgenome.org"]
 
-CSRF_TRUSTED_ORIGINS = ["https://affils.clinicalgenome.org"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://affils.clinicalgenome.org",
+    "https://affils-test.clinicalgenome.org",
+]
 
 INSTALLED_APPS = [
     "unfold",
