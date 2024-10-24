@@ -33,11 +33,13 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: Don't run with debug turned on in production.
 DEBUG = False
-ENV = "Prod"
 
-ALLOWED_HOSTS = ["affils.clinicalgenome.org"]
+ALLOWED_HOSTS = ["affils.clinicalgenome.org", "affils-test.clinicalgenome.org"]
 
-CSRF_TRUSTED_ORIGINS = ["https://affils.clinicalgenome.org"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://affils.clinicalgenome.org",
+    "https://affils-test.clinicalgenome.org",
+]
 
 INSTALLED_APPS = [
     "unfold",
@@ -230,7 +232,7 @@ LOGGING = {
             "boto3_client": logger_boto3_session,
             "log_group_name": "Affiliation_Logs",
             # Different stream for each environment
-            "stream_name": f"affiliation-{ENV}-logs",
+            "stream_name": f"affiliation-{os.environ.get('AFFILS_ENV')}-logs",
             "formatter": "aws",
         },
         "console": {
