@@ -37,6 +37,8 @@ def run():  # pylint: disable-msg=too-many-locals
             gcep_full_name = row["GCEP Affiliation Name"].strip()
             status = row["Status"].strip()
             cdwg = row["CDWG"].strip()
+            is_deleted = row["is_deleted"].strip().lower()
+            # special_group_type = row["Group Type"].strip()
 
             coordinator_names = coordinator_name.split(",")
             coordinator_emails = coordinator_email.split(",")
@@ -60,6 +62,7 @@ def run():  # pylint: disable-msg=too-many-locals
                     full_name=name,
                     status=status,
                     clinical_domain_working_group=cdwg,
+                    is_deleted=is_deleted,
                 )
                 if clinvar_submitter_id != "":
                     Submitter.objects.create(
