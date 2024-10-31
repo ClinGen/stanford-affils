@@ -86,10 +86,16 @@ class Affiliation(models.Model):
         choices=AffiliationCDWG.choices,
     )
     members: models.CharField = models.CharField()
+    is_deleted: models.BooleanField = models.BooleanField(default=False)
 
     def __str__(self):
         """Provide a string representation of an affiliation."""
         return f"Affiliation {self.affiliation_id} {self.full_name}"
+
+    def delete(self, *args, **kwargs):
+        """Override delete method to "soft-delete" affiliations."""
+        self.is_deleted = True
+        self.save(*args, **kwargs)
 
 
 class Coordinator(models.Model):
