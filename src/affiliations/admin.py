@@ -247,6 +247,12 @@ class AffiliationsAdmin(ModelAdmin):
         "get_coordinator_emails",
     ]
 
+    @transaction.atomic
+    def get_queryset(self, request):
+        """Query to only display affiliations that have not been "soft-deleted"."""
+        affiliations_query = super().get_queryset(request)
+        return affiliations_query.filter(is_deleted=False)
+
     @admin.display(
         description="Coordinator Name", ordering="coordinators__coordinator_name"
     )

@@ -32,6 +32,7 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Gene Curation Expert Panel",
             "clinical_domain_working_group": "Neurodevelopmental Disorders",
             "members": "Bulbasaur, Charmander, Squirtle",
+            "is_deleted": False,
         }
         cls.expected_success_affiliation = {
             **cls.success_affiliation,
@@ -68,6 +69,7 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "type": "Cool",
             "clinical_domain_working_group": "Hoenn League",
             "members": "Treecko, Torchic, Mudkip",
+            "is_deleted": False,
         }
         cls.expected_hoenn_affiliation = {
             **cls.hoenn_affiliation,
@@ -165,6 +167,7 @@ class TestUserInputsIds(TestCase):
             "type": "SC_VCEP",
             "clinical_domain_working_group": ["Kidney Disease"],
             "members": "Chikorita, Cyndaquil, Totodile",
+            "is_deleted": False,
         }
 
         cls.cleaned_user_input_ids_affiliation = {
@@ -176,6 +179,7 @@ class TestUserInputsIds(TestCase):
             "type": "SC_VCEP",
             "clinical_domain_working_group": ["Kidney Disease"],
             "members": "Chikorita, Cyndaquil, Totodile",
+            "is_deleted": False,
         }
 
     @mock.patch("affiliations.admin.AffiliationForm.add_error")
@@ -205,6 +209,7 @@ class TestAffiliationIDOutOfRange(TestCase):
             "type": "VCEP",
             "clinical_domain_working_group": ["Kidney Disease"],
             "members": "Chikorita, Cyndaquil, Totodile",
+            "is_deleted": False,
         }
 
         cls.out_of_range_affil = Affiliation.objects.create(
