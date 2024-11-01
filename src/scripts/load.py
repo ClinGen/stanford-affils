@@ -38,10 +38,7 @@ def run():  # pylint: disable-msg=too-many-locals
             status = row["Status"].strip()
             cdwg = row["CDWG"].strip()
             is_deleted = row["is_deleted"].strip()
-            if is_deleted == "FALSE":
-                is_deleted = False
-            else:
-                is_deleted = True
+            is_deleted = is_deleted_value(is_deleted)
 
             coordinator_names = coordinator_name.split(",")
             coordinator_emails = coordinator_email.split(",")
@@ -86,3 +83,10 @@ def run():  # pylint: disable-msg=too-many-locals
                             affiliation=affil,
                             coordinator_name=coordinator_names[i],
                         )
+
+
+def is_deleted_value(is_deleted):
+    """Return is_deleted boolean value."""
+    if is_deleted == "FALSE":
+        return False
+    return True
