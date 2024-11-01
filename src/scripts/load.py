@@ -11,8 +11,11 @@ Follow steps outlined in [tutorial.md](
 doc/tutorial.md/#running-the-loadpy-script-to-import-csv-data-into-the-database).
 """
 
+from pathlib import Path
 import csv
 from affiliations.models import Affiliation, Submitter, Coordinator
+
+FILEPATH = Path(__file__).parent / "Affiliations - VCI_GCI Affiliation List.csv"
 
 
 def run():  # pylint: disable-msg=too-many-locals
@@ -20,7 +23,7 @@ def run():  # pylint: disable-msg=too-many-locals
     objects in the DB."""
 
     with open(
-        "/Users/gabriellasanchez/Desktop/repos/stanford-affils/src/scripts/test_affils.csv",
+        FILEPATH,
         encoding="utf-8",
     ) as file:
         csv_reader = csv.DictReader(file)
@@ -87,6 +90,4 @@ def run():  # pylint: disable-msg=too-many-locals
 
 def is_deleted_value(is_deleted):
     """Return is_deleted boolean value."""
-    if is_deleted == "FALSE":
-        return False
-    return True
+    return is_deleted == "TRUE"
