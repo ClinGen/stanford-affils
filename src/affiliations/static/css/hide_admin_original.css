@@ -1,0 +1,10 @@
+/* This stylesheet is used to omit object names in the tabular inline 
+view on the edit/view page in Django Admin. */
+
+td.original {
+    visibility: hidden
+  }
+  
+.inline-group .tabular tr.has_original td {
+      padding-top: 0px;
+  }
