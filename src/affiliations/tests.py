@@ -150,6 +150,67 @@ class AffiliationsViewsBaseTestCase(TestCase):
             clinvar_submitter_id="99",
         )
 
+    def test_should_be_able_to_view_list_of_affiliations(self):
+        """Make sure we are able to view our list of affiliations."""
+        factory = APIRequestFactory()
+        view = AffiliationsList.as_view()
+        request = factory.get("/database_list/")
+        response = view(request)
+        self.assertDictEqual(
+            response.data[0],
+            self.expected_success_affiliation,
+        )
+        self.assertDictEqual(
+            response.data[1],
+            self.expected_hoenn_affiliation,
+        )
+
+    def test_should_be_able_to_view_single_affiliation_detail(self):
+        """Make sure we are able to view a single affiliation's details."""
+        factory = APIRequestFactory()
+        view = AffiliationsDetail.as_view()
+        primary_key = 1
+        request = factory.get(f"/database_list/{primary_key}")
+        response = view(request, pk=primary_key)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertDictEqual(response.data, self.expected_success_affiliation)
+        primary_key = 2
+        request = factory.get(f"/database_list/{primary_key}")
+        response = view(request, pk=primary_key)
+        self.assertDictEqual(response.data, self.expected_hoenn_affiliation)
+
+    def test_detail_affiliation_json_call(self):
+        """Make sure the API response of a single affiliation is returned
+        in the original JSON format ."""
+        response = self.client.get("/api/affiliation_detail/?affil_id=10000")
+        self.assertEqual(
+            response.json(),
+            [
+                {
+                    "affiliation_id": 10000,
+                    "affiliation_fullname": "Test Success Result Affil",
+                    "subgroups": {
+                        "gene curation expert panel": {
+                            "id": 40000,
+                            "fullname": "Test Success Result Affil",
+                        }
+                    },
+                    "approver": [
+                        "Mew",
+                    ],
+                }
+            ],
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_list_affiliation_json_call(self):
+        """Make sure the API response of all the affiliations in the db is
+        returned in the original JSON format ."""
+        response = self.client.get("/api/affiliations_list/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)
+
 
 class TestUserInputsIds(TestCase):
     """A test class for testing validation if a user passed in an affiliation ID
@@ -237,39 +298,3 @@ class TestAffiliationIDOutOfRange(TestCase):
             ),
         ]
         mock_add_error.assert_has_calls(calls)
-
-
-class AffiliationsListTestCase(AffiliationsViewsBaseTestCase):
-    """Test the affiliations list view."""
-
-    def test_should_be_able_to_view_list_of_affiliations(self):
-        """Make sure we are able to view our list of affiliations."""
-        factory = APIRequestFactory()
-        view = AffiliationsList.as_view()
-        request = factory.get("/")
-        response = view(request)
-        self.assertDictEqual(
-            response.data[0],
-            self.expected_success_affiliation,
-        )
-        self.assertDictEqual(
-            response.data[1],
-            self.expected_hoenn_affiliation,
-        )
-
-
-class AffiliationsDetailTestCase(AffiliationsViewsBaseTestCase):
-    """Test the affiliations details view."""
-
-    def test_should_be_able_to_view_single_affiliation_detail(self):
-        """Make sure we are able to view a single affiliation's details."""
-        factory = APIRequestFactory()
-        view = AffiliationsDetail.as_view()
-        primary_key = 1
-        request = factory.get(f"/{primary_key}")
-        response = view(request, pk=primary_key)
-        self.assertDictEqual(response.data, self.expected_success_affiliation)
-        primary_key = 2
-        request = factory.get(f"/{primary_key}")
-        response = view(request, pk=primary_key)
-        self.assertDictEqual(response.data, self.expected_hoenn_affiliation)

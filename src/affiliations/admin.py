@@ -324,6 +324,10 @@ class AffiliationsAdmin(ModelAdmin):
             context["media"] += forms.Media(
                 js=["js/admin_hide_attribute_new.js"],
             )
+        else:
+            context["media"] += forms.Media(
+                css={"all": ("css/hide_admin_original.css",)},
+            )
         return super().render_change_form(request, context, *args, obj=None, **kwargs)
 
 
