@@ -817,12 +817,12 @@
         },
         "mdformat": {
             "hashes": [
-                "sha256:0060cff2a9d53a2c29a4b2be56ff90cc210d2e8506684fa482c9846166f05e22",
-                "sha256:42cba8bc5a6bb12d50bdf7c1e470c1f837a8ab8ce81571d4e53b9e62051f6e4f"
+                "sha256:5c360992adc118cf1479cbbe92bb3bd66dcd7f1a5a3a2ad6675915622c678cf1",
+                "sha256:a7d22df9802383432367864da907d2d147485b5cb6872e2d66937c1333e4d58a"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==0.7.18"
+            "version": "==0.7.19"
         },
         "mdurl": {
             "hashes": [
@@ -931,6 +931,14 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==0.5.1"
+        },
+        "tomli": {
+            "hashes": [
+                "sha256:3f646cae2aec94e17d04973e4249548320197cfabdf130015d023de4b74d8ab8",
+                "sha256:a5c57c3d1c56f5ccdf89f6523458f60ef716e210fc47c4cfb188c5ba473e0391"
+            ],
+            "markers": "python_version < '3.11'",
+            "version": "==2.1.0"
         },
         "tomlkit": {
             "hashes": [
