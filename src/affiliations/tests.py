@@ -30,7 +30,7 @@ class AffiliationsViewsBaseTestCase(TestCase):
             "full_name": "Test Success Result Affil",
             "short_name": "Successful",
             "status": "Inactive",
-            "type": "Gene Curation Expert Panel",
+            "type": "GCEP",
             "clinical_domain_working_group": "Neurodevelopmental Disorders",
             "members": "Bulbasaur, Charmander, Squirtle",
             "is_deleted": False,
@@ -191,17 +191,15 @@ class AffiliationsViewsBaseTestCase(TestCase):
             response.json(),
             [
                 {
-                    "affiliation_id": 10000,
+                    "affiliation_id": "10000",
                     "affiliation_fullname": "Test Success Result Affil",
                     "subgroups": {
-                        "gene curation expert panel": {
-                            "id": 40000,
+                        "gcep": {
+                            "id": "40000",
                             "fullname": "Test Success Result Affil",
                         }
                     },
-                    "approver": [
-                        "Mew",
-                    ],
+                    "approver": ["Mew"],
                 }
             ],
         )
