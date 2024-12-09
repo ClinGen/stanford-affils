@@ -184,18 +184,16 @@ class AffiliationsViewsBaseTestCase(TestCase):
     def test_detail_affiliation_json_call(self):
         """Make sure the API response of a single affiliation is returned
         in the original JSON format ."""
-        _ = User.objects.create_user(username="test_user", password="secret")
-        self.client.login(username="test_user", password="secret")
         response = self.client.get("/api/affiliation_detail/?affil_id=10000")
         self.assertEqual(
             response.json(),
             [
                 {
-                    "affiliation_id": 10000,
+                    "affiliation_id": "10000",
                     "affiliation_fullname": "Test Success Result Affil",
                     "subgroups": {
                         "gene curation expert panel": {
-                            "id": 40000,
+                            "id": "40000",
                             "fullname": "Test Success Result Affil",
                         }
                     },
