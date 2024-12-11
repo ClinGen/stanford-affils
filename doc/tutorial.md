@@ -20,11 +20,11 @@ oriented towards learning how rather than learning what.
 - Run the development server: `cd src`, then `python manage.py runserver`.
 - Install [yamlfmt](https://github.com/google/yamlfmt): `brew install yamlfmt`.
 
-## Running the load.py script to import CSV data into the database
+## Running the load.py script to import data into the database
 
 - Make sure all dependencies are synced: `pipenv sync --dev`.
-- Save CSV into `scripts` folder in directory.
-- Run `python manage.py runscript load`.
+- Save file into `scripts` folder in directory.
+- Run `python manage.py runscript {script_name}`.
 
 ## Running database backup
 

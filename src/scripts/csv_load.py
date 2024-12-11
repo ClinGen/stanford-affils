@@ -5,10 +5,10 @@ the affiliations spreadsheet to the database.
 CSV needs to be saved in the `scripts` folder in directory before running.
 
 You can then run this script by running: 
-`python manage.py runscript load` in the command line from the directory.
+`python manage.py runscript csv_load` in the command line from the directory.
 
 Follow steps outlined in [tutorial.md](
-doc/tutorial.md/#running-the-loadpy-script-to-import-csv-data-into-the-database).
+doc/tutorial.md/#running-the-loadpy-script-to-import-data-into-the-database).
 """
 
 from pathlib import Path
