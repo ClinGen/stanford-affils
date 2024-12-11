@@ -22,6 +22,7 @@ watchtower = "3.*"
 boto3 = "1.*"
 boto3-stubs = "1.*"
 django-cors-headers = "4.*"
+deepdiff = "8.*"
 
 [dev-packages]
 black = "==24.*"

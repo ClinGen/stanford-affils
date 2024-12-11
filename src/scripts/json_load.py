@@ -16,13 +16,13 @@ import json
 from affiliations.models import Affiliation, Approver
 
 FILEPATH = Path(__file__).parent / "affiliations.json"
-COUNT = 0
+
 
 def run():
     """Iterate through JSON file and update Affiliation with Approver
     objects in the DB."""
+    count = 0
     with open(FILEPATH, encoding="utf-8") as json_file:
-        
 
         data = json.load(json_file)
         for item in data:
@@ -32,31 +32,34 @@ def run():
                 if "subgroups" in item:
                     if "vcep" in item["subgroups"]:
                         vcep_id = item["subgroups"]["vcep"]["id"]
-                        affil_obj = Affiliation.objects.get(affiliation_id=affiliation_id, expert_panel_id=vcep_id)
-                        create_approver_model(approver, affil_obj)
+                        affil_obj = Affiliation.objects.get(
+                            affiliation_id=affiliation_id, expert_panel_id=vcep_id
+                        )
+                        create_approver_model(approver, affil_obj, count)
 
                     if "gcep" in item["subgroups"]:
                         gcep_id = item["subgroups"]["gcep"]["id"]
                         affil_obj = Affiliation.objects.get(
-                            affiliation_id=affiliation_id, expert_panel_id=gcep_id)
-                        create_approver_model(approver, affil_obj)
+                            affiliation_id=affiliation_id, expert_panel_id=gcep_id
+                        )
+                        create_approver_model(approver, affil_obj, count)
                 else:
-                    affil_obj = Affiliation.objects.get(
-                        affiliation_id=affiliation_id)
-                    create_approver_model(approver, affil_obj)
-        print(COUNT, "changed")
+                    affil_obj = Affiliation.objects.get(affiliation_id=affiliation_id)
+                    create_approver_model(approver, affil_obj, count)
+        print(count, "changed")
 
-def create_approver_model(approver, affil_obj):
+
+def create_approver_model(approver, affil_obj, count):
     """Check if approver exists, if not create approver foreign key model."""
     for approver_name in approver:
-        if not (Approver.objects.filter(
-            affiliation=affil_obj,
-            approver_name=approver_name,
+        if not (
+            Approver.objects.filter(
+                affiliation=affil_obj,
+                approver_name=approver_name,
             ).exists()
         ):
-            COUNT += 1
+            count += 1
             Approver.objects.create(
                 affiliation=affil_obj,
                 approver_name=approver_name,
             )
-    
