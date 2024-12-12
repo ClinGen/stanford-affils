@@ -9,6 +9,8 @@ from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from rest_framework_api_key.models import APIKey
+from rest_framework_api_key.admin import APIKeyModelAdmin
 
 from unfold.forms import (  # type: ignore
     AdminPasswordChangeForm,
@@ -37,6 +39,23 @@ from affiliations.models import (
 # instead for styling purposes.
 admin.site.unregister(User)
 admin.site.unregister(Group)
+admin.site.unregister(APIKey)
+
+
+@admin.register(APIKey)
+class APIKeyFormatAdmin(APIKeyModelAdmin, ModelAdmin):
+    """Register API Key with Unfold for styling of APIKey page."""
+
+    # Controls what columns are "clickable" to enter detailed view.
+    # pylint:disable=duplicate-code
+    list_display_links = [
+        "prefix",
+        "name",
+        "created",
+        "expiry_date",
+        "_has_expired",
+        "revoked",
+    ]
 
 
 @admin.register(User)
