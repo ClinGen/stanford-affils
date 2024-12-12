@@ -48,3 +48,24 @@ oriented towards learning how rather than learning what.
   variables as needed): `logger = logging.getLogger("watchtower")`
   `logger.info(f"Affiliation Created:\\n\\n {Affiliation.full_name} (PK: {Affiliation.pk})")`
 - The desired log line will appear in the selected logging handler.
+
+## API Key Information
+
+- We are utilizing
+  [Django REST Framework API Key](https://florimondmanca.github.io/djangorestframework-api-key/)
+  package to support the use of API keys.
+
+### API KEY
+
+- If you are in need of an API Key, please reach out to one of the website
+  administrators or your admin user to obtain an API Key.
+- Upon creating an API key from the admin, the full API key is shown only once
+  in a success message banner. After creation, only the prefix of the API key is
+  shown in the admin site, mostly for identification purposes. If you lose the
+  full API key, you'll need to regenerate a new one.
+
+### Authorization header
+
+By default, clients must pass their API key via the Authorization header. It
+must be formatted as follows: `Authorization: X-Api-Key <API_KEY>` where
+\<API_KEY> refers to the full generated API key
