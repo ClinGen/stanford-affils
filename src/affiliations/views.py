@@ -1,10 +1,11 @@
 """Views for the affiliations service."""
 
 # Third-party dependencies:
-from rest_framework import generics, permissions
-from rest_framework.decorators import api_view
+from rest_framework import generics
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework_api_key.permissions import HasAPIKey
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
 
 # In-house code:
 from affiliations.models import Affiliation, Approver
@@ -14,7 +15,7 @@ from affiliations.serializers import AffiliationSerializer
 class AffiliationsList(generics.ListCreateAPIView):
     """List all affiliations, or create a new affiliation."""
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Affiliation.objects.all()
     serializer_class = AffiliationSerializer
 
@@ -22,13 +23,13 @@ class AffiliationsList(generics.ListCreateAPIView):
 class AffiliationsDetail(generics.RetrieveUpdateDestroyAPIView):
     """Retrieve, update or delete an affiliation."""
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Affiliation.objects.all()
     serializer_class = AffiliationSerializer
 
 
-@login_required
 @api_view(["GET"])
+@permission_classes([HasAPIKey | IsAuthenticated])
 def affiliations_list_json_format(request):  # pylint: disable=unused-argument
     """List all affiliations in old JSON format."""
     affils_queryset = Affiliation.objects.filter(is_deleted=False).values()
@@ -98,8 +99,8 @@ def affiliations_list_json_format(request):  # pylint: disable=unused-argument
     )
 
 
-@login_required
 @api_view(["GET"])
+@permission_classes([HasAPIKey | IsAuthenticated])
 def affiliation_detail_json_format(request):
     """List specific affiliation in old JSON format."""
     affil_id = request.GET.get("affil_id")
