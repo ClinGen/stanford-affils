@@ -3,10 +3,10 @@
 # Third-party dependencies:
 from unittest import mock
 from django.test import TestCase
-from django.contrib.auth.models import User
 
 from django.core.exceptions import ValidationError
-from rest_framework.test import APIRequestFactory
+from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework_api_key.models import APIKey
 
 # In-house code:
 from affiliations.views import AffiliationsList
@@ -16,7 +16,7 @@ from affiliations.models import Affiliation, Coordinator, Approver, Submitter
 from affiliations.admin import AffiliationForm
 
 
-class AffiliationsViewsBaseTestCase(TestCase):
+class AffiliationsViewsBaseTestCase(APITestCase):
     """A base test class with setup for testing affiliations views."""
 
     maxDiff = None
@@ -184,9 +184,11 @@ class AffiliationsViewsBaseTestCase(TestCase):
     def test_detail_affiliation_json_call(self):
         """Make sure the API response of a single affiliation is returned
         in the original JSON format ."""
-        _ = User.objects.create_user(username="test_user", password="secret")
-        self.client.login(username="test_user", password="secret")
-        response = self.client.get("/api/affiliation_detail/?affil_id=10000")
+        _, key = APIKey.objects.create_key(name="my-remote-service")
+        auth_headers = {"HTTP_X_API_KEY": key}
+        response = self.client.get(
+            "/api/affiliation_detail/?affil_id=10000", **auth_headers
+        )
         self.assertEqual(
             response.json(),
             [
@@ -208,9 +210,9 @@ class AffiliationsViewsBaseTestCase(TestCase):
     def test_list_affiliation_json_call(self):
         """Make sure the API response of all the affiliations in the db is
         returned in the original JSON format ."""
-        _ = User.objects.create_user(username="test_user", password="secret")
-        self.client.login(username="test_user", password="secret")
-        response = self.client.get("/api/affiliations_list/")
+        _, key = APIKey.objects.create_key(name="my-remote-service")
+        auth_headers = {"HTTP_X_API_KEY": key}
+        response = self.client.get("/api/affiliations_list/", **auth_headers)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
 
