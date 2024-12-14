@@ -44,6 +44,12 @@ CORS_ALLOWED_ORIGINS = [
     "https://curation-test.clinicalgenome.org",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = [
+    "x-api-key",
+]
+
 CSRF_TRUSTED_ORIGINS = [
     "https://affils.clinicalgenome.org",
     "https://affils-test.clinicalgenome.org",
