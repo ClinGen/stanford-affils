@@ -12,6 +12,7 @@ from django.db import transaction
 from rest_framework_api_key.models import APIKey
 from rest_framework_api_key.admin import APIKeyModelAdmin
 from import_export.admin import ExportMixin  # type: ignore
+from import_export import resources  # type: ignore
 
 from unfold.contrib.import_export.forms import SelectableFieldsExportForm  # type: ignore
 from unfold.forms import (  # type: ignore
@@ -225,11 +226,37 @@ class SubmitterInlineAdmin(TabularInline):
     extra = 1
 
 
+class AffiliationResource(resources.ModelResource):
+    """Configure affiliation export page."""
+
+    class Meta:
+        """Meta class for Affiliation Resource"""
+
+        model = Affiliation
+
+        # pylint:disable=duplicate-code
+        fields = [
+            "affiliation_id",
+            "expert_panel_id",
+            "full_name",
+            "short_name",
+            "status",
+            "type",
+            "clinical_domain_working_group",
+            "is_deleted",
+        ]
+
+
 class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-ancestors
     """Configure the affiliations admin panel."""
 
     form = AffiliationForm
     export_form_class = SelectableFieldsExportForm
+    resource_class = AffiliationResource
+
+    # Returns all DB values in export
+    def get_export_queryset(self, request):
+        return Affiliation.objects.all()
 
     # Controls which fields are searchable via the search bar.
     search_fields = [
