@@ -24,6 +24,7 @@ boto3-stubs = "1.*"
 django-cors-headers = "4.*"
 deepdiff = "8.*"
 djangorestframework-api-key = "==2.*"
+django-import-export = "4.*"
 
 [dev-packages]
 black = "==24.*"

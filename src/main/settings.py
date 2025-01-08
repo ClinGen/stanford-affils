@@ -58,6 +58,7 @@ CSRF_TRUSTED_ORIGINS = [
 INSTALLED_APPS = [
     "unfold",
     "unfold.contrib.filters",
+    "unfold.contrib.import_export",
     "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -74,6 +75,7 @@ INSTALLED_APPS = [
     "dbbackup",  # django-dbbackup
     "django_crontab",
     "corsheaders",
+    "import_export",
 ]
 
 MIDDLEWARE = [

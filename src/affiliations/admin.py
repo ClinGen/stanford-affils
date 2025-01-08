@@ -11,7 +11,9 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from rest_framework_api_key.models import APIKey
 from rest_framework_api_key.admin import APIKeyModelAdmin
+from import_export.admin import ExportMixin  # type: ignore
 
+from unfold.contrib.import_export.forms import SelectableFieldsExportForm  # type: ignore
 from unfold.forms import (  # type: ignore
     AdminPasswordChangeForm,
     UserChangeForm,
@@ -223,10 +225,11 @@ class SubmitterInlineAdmin(TabularInline):
     extra = 1
 
 
-class AffiliationsAdmin(ModelAdmin):
+class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-ancestors
     """Configure the affiliations admin panel."""
 
     form = AffiliationForm
+    export_form_class = SelectableFieldsExportForm
 
     # Controls which fields are searchable via the search bar.
     search_fields = [
