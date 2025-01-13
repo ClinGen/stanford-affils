@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b2b2e3756dbc9c00e6930e02dd16cc689aae390bd97b8726768dd9e78e9a9928"
+            "sha256": "0248002ba365c9d9d836f1ab259c987f54eea4166a324a7c5cea1aaf25e7f13b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -337,12 +337,12 @@
         },
         "djangorestframework-api-key": {
             "hashes": [
-                "sha256:c2fa61280069acd8dc0e9dd1840e0e1934a2a85631069326f4d1e3a91ca9aa9a",
-                "sha256:eed94f383e96ca8f9f9e4182406fe28b5585629d0039f65cbb7e6e254778f674"
+                "sha256:b9443cd864e43caebdd330224f9309957b38128267fbc9dc1ba2f3fa1c8414d0",
+                "sha256:f18cdfa45aaea10fd4daaebffa60481ce4002c9b9ef6c551ef1fc21dadf28845"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
-            "version": "==2.3.0"
+            "markers": "python_version >= '3.8'",
+            "version": "==3.0.0"
         },
         "hyperlink": {
             "hashes": [
@@ -381,6 +381,14 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==5.2.3"
+        },
+        "packaging": {
+            "hashes": [
+                "sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759",
+                "sha256:c228a6dc5e932d346bc5739379109d49e8853dd8223571c7c5b55260edc0b97f"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==24.2"
         },
         "psycopg": {
             "hashes": [
