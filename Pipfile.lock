@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "66029b850ff25f98d2725e271dec9dde7c06712b5bbf8f89ef6f94746ac0932d"
+            "sha256": "b2b2e3756dbc9c00e6930e02dd16cc689aae390bd97b8726768dd9e78e9a9928"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -65,12 +65,12 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:c81223488607457dacb7829ee0c99803c664593b34a2b0f86c71d421e7c3469a",
-                "sha256:d5671226819f6a78e31b1f37bd60f194afb8203254a543d06bdfb76de7d79236"
+                "sha256:7d398f66a11e67777c189d1f58c0a75d9d60f98d0ee51b8817e828930bf19e4e",
+                "sha256:8e49416216a6e3a62c2a0c44fba4dd2852c85472e7b702516605b1363867d220"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==1.35.95"
+            "version": "==1.35.97"
         },
         "boto3-stubs": {
             "hashes": [
@@ -83,11 +83,11 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:a672406f748ad6a5b2fb7ea0d8394539eb4fda5332fc5373467d232c4bb27b12",
-                "sha256:b03d2d7cc58a16aa96a7e8f21941b766e98abc6ea74f61a63de7dc26c03641d3"
+                "sha256:88f2fab29192ffe2f2115d5bafbbd823ff4b6eb2774296e03ec8b5b0fe074f61",
+                "sha256:fed4f156b1a9b8ece53738f702ba5851b8c6216b4952de326547f349cc494f14"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==1.35.95"
+            "version": "==1.35.97"
         },
         "botocore-stubs": {
             "hashes": [
@@ -427,7 +427,7 @@
                 "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3",
                 "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.9.0.post0"
         },
         "python-dotenv": {
@@ -474,7 +474,7 @@
                 "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
                 "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.17.0"
         },
         "sqlparse": {
