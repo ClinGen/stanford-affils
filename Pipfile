@@ -23,7 +23,7 @@ boto3 = "1.*"
 boto3-stubs = "1.*"
 django-cors-headers = "4.*"
 deepdiff = "8.*"
-djangorestframework-api-key = "==2.*"
+djangorestframework-api-key = "==3.*"
 django-import-export = "4.*"
 
 [dev-packages]
