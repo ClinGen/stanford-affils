@@ -903,12 +903,12 @@
         },
         "mdformat": {
             "hashes": [
-                "sha256:74b9e2bdb5ec1e766babece2b5148958ab268e54b6f4f360a3c4e75e68637149",
-                "sha256:ed81bfab711751d8ce4bf6a7854aeb02a3fdd165be751d4f672e0d949ae54dd9"
+                "sha256:61122637c9e1d9be1329054f3fa216559f0d1f722b7919b060a8c2a4ae1850e5",
+                "sha256:eef84fa8f233d3162734683c2a8a6222227a229b9206872e6139658d99acb1ea"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==0.7.21"
+            "version": "==0.7.22"
         },
         "mdurl": {
             "hashes": [
