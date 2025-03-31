@@ -43,6 +43,9 @@ class AffiliationCDWG(models.TextChoices):  # pylint: disable=too-many-ancestors
     OTHER = "OTHER", _("Other")
     PULMONARY = "PULMONARY", _("Pulmonary")
     RASOPATHY = "RASOPATHY", _("RASopathy")
+    REPRODUCTION_AND_PREGNANCY = "REPRODUCTION_AND_PREGNANCY", _(
+        "Reproduction and Pregnancy"
+    )
     RHEUMA_AUTO_DISEASE = "RHEUMA_AUTO_DISEASE", _("Rheumatologic Autoimmune Disease")
     SKELETAL_DISORDERS = "SKELETAL_DISORDERS", _("Skeletal Disorders")
     SOMATIC_CANCER = "SOMATIC_CANCER", _("Somatic Cancer")
