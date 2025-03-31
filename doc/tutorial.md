@@ -67,21 +67,20 @@ oriented towards learning how rather than learning what.
 ### Authorization header
 
 By default, clients must pass their API key via the Authorization header. It
-must be formatted as follows: `X-Api-Key <API_KEY>` where
-\<API_KEY> refers to the full generated API key
+must be formatted as follows: `X-Api-Key <API_KEY>` where \<API_KEY> refers to
+the full generated API key
 
 ### Endpoints
+
 `affiliations_list/`
 
 `affiliation_detail/?affil_id={affiliation_id}`
 
 ### URLS
-TEST:
-`https://affils-test.clinicalgenome.org/api/`
 
-PROD:
-`https://affils.clinicalgenome.org/api/`
+TEST: `https://affils-test.clinicalgenome.org/api/`
 
-Example:
-`https://affils-test.clinicalgenome.org/api/affiliations_list/` will give you a 
-JSON response of all affiliations
+PROD: `https://affils.clinicalgenome.org/api/`
+
+Example: `https://affils-test.clinicalgenome.org/api/affiliations_list/` will
+give you a JSON response of all affiliations
