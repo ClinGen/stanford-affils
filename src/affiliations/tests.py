@@ -6,12 +6,19 @@ from django.test import TestCase
 
 from django.core.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory, APITestCase
+
 from rest_framework_api_key.models import APIKey
 
 # In-house code:
 from affiliations.views import AffiliationsList
 from affiliations.views import AffiliationsDetail
-from affiliations.models import Affiliation, Coordinator, Approver, Submitter
+from affiliations.models import (
+    Affiliation,
+    Coordinator,
+    Approver,
+    Submitter,
+    ClinicalDomainWorkingGroup,
+)
 
 from affiliations.admin import AffiliationForm
 
@@ -24,6 +31,14 @@ class AffiliationsViewsBaseTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
         """Seed the test database with some test data."""
+
+        cdwg1, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
+            code="HEARING_LOSS", defaults={"name": "Hearing Loss"}
+        )
+        cdwg2, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
+            code="RHEUMA_AUTO_DISEASE",
+            defaults={"name": "Rheumatologic Autoimmune Disease"},
+        )
         cls.success_affiliation = {
             "affiliation_id": 10000,
             "expert_panel_id": 40000,
@@ -31,12 +46,13 @@ class AffiliationsViewsBaseTestCase(APITestCase):
             "short_name": "Successful",
             "status": "Inactive",
             "type": "GCEP",
-            "clinical_domain_working_group": "Neurodevelopmental Disorders",
             "members": "Bulbasaur, Charmander, Squirtle",
             "is_deleted": False,
+            "clinical_domain_working_group": cdwg1,
         }
         cls.expected_success_affiliation = {
             **cls.success_affiliation,
+            "clinical_domain_working_group": cdwg1.id,
             "coordinators": [
                 {
                     "coordinator_name": "Professor Oak",
@@ -68,12 +84,13 @@ class AffiliationsViewsBaseTestCase(APITestCase):
             "short_name": "Hoenn",
             "status": "Active",
             "type": "Cool",
-            "clinical_domain_working_group": "Hoenn League",
             "members": "Treecko, Torchic, Mudkip",
             "is_deleted": False,
+            "clinical_domain_working_group": cdwg2,
         }
         cls.expected_hoenn_affiliation = {
             **cls.hoenn_affiliation,
+            "clinical_domain_working_group": cdwg2.id,
             "coordinators": [
                 {
                     "coordinator_name": "Professor Birch",
@@ -231,7 +248,7 @@ class TestUserInputsIds(TestCase):
             "short_name": "Invalid Type with ID",
             "status": "Retired",
             "type": "SC_VCEP",
-            "clinical_domain_working_group": ["Kidney Disease"],
+            "clinical_domain_working_group": 8,
             "members": "Chikorita, Cyndaquil, Totodile",
             "is_deleted": False,
         }
@@ -243,7 +260,7 @@ class TestUserInputsIds(TestCase):
             "short_name": "Invalid Type with ID",
             "status": "Retired",
             "type": "SC_VCEP",
-            "clinical_domain_working_group": ["Kidney Disease"],
+            "clinical_domain_working_group": 8,
             "members": "Chikorita, Cyndaquil, Totodile",
             "is_deleted": False,
         }
@@ -265,6 +282,9 @@ class TestAffiliationIDOutOfRange(TestCase):
     def setUpTestData(cls):
         """Attempting to seed the test database with some test data, then test
         that the expected validation errors are triggered"""
+        cdwg3, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
+            code="KIDNEY_DISEASE", defaults={"name": "Kidney Disease"}
+        )
         cls.out_of_range_id_affiliation_base = {
             # Creating an affil in the DB with incorrect information. change this.
             "affiliation_id": 19999,
@@ -273,7 +293,7 @@ class TestAffiliationIDOutOfRange(TestCase):
             "short_name": "Max Affil ID",
             "status": "Retired",
             "type": "VCEP",
-            "clinical_domain_working_group": ["Kidney Disease"],
+            "clinical_domain_working_group": cdwg3,
             "members": "Chikorita, Cyndaquil, Totodile",
             "is_deleted": False,
         }
@@ -303,3 +323,31 @@ class TestAffiliationIDOutOfRange(TestCase):
             ),
         ]
         mock_add_error.assert_has_calls(calls)
+
+
+class TestCDWGModel(TestCase):
+    """A test class for testing validation errors dealing with CDWGs."""
+
+    def test_duplicate_code_fails(self):
+        """Make sure expected validation errors are triggered when duplicate
+        CDWGs are created."""
+        ClinicalDomainWorkingGroup.objects.create(code="EYE", name="Eye Disorders")
+        with self.assertRaises(Exception):
+            ClinicalDomainWorkingGroup.objects.create(
+                code="EYE", name="Duplicate Eye Disorders"
+            )
+
+    def test_affiliation_missing_cdwg_raises_error(self):
+        """Make sure expected validation errors are triggered if an affiliation
+        is created without a CDWG."""
+        with self.assertRaises(Exception):
+            Affiliation.objects.create(
+                affiliation_id=99999,
+                expert_panel_id=88888,
+                full_name="Missing CDWG Affil",
+                short_name="Missing",
+                status="Active",
+                type="GCEP",
+                members="",
+                is_deleted=False,
+            )
