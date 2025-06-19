@@ -4,7 +4,13 @@
 from rest_framework import serializers
 
 # In-house code:
-from affiliations.models import Affiliation, Coordinator, Approver, Submitter
+from affiliations.models import (
+    Affiliation,
+    Coordinator,
+    Approver,
+    Submitter,
+    ClinicalDomainWorkingGroup,
+)
 
 
 class CoordinatorSerializer(serializers.ModelSerializer):
@@ -44,12 +50,26 @@ class SubmitterSerializer(serializers.ModelSerializer):
         ]
 
 
+class ClinicalDomainWorkingGroupSerializer(serializers.ModelSerializer):
+    """Serialize Clinical Domain Working Group objects."""
+
+    class Meta:
+        """Describe the fields on a CDWG object."""
+
+        model = ClinicalDomainWorkingGroup
+        fields = ["id", "code", "name"]
+
+
 class AffiliationSerializer(serializers.ModelSerializer):
     """Serialize Affiliation objects."""
 
     coordinators = CoordinatorSerializer(many=True)
     approvers = ApproverSerializer(many=True)
     clinvar_submitter_ids = SubmitterSerializer(many=True)
+
+    clinical_domain_working_group = serializers.PrimaryKeyRelatedField(
+        queryset=ClinicalDomainWorkingGroup.objects.all(),
+    )
 
     class Meta:
         """Describe the fields on an Affiliation object."""
@@ -72,9 +92,9 @@ class AffiliationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create and return an Affiliations instance."""
-        coordinators_data = validated_data.pop("coordinators")
-        approvers_data = validated_data.pop("approvers")
-        submitter_ids_data = validated_data.pop("clinvar_submitter_ids")
+        coordinators_data = validated_data.pop("coordinators", [])
+        approvers_data = validated_data.pop("approvers", [])
+        submitter_ids_data = validated_data.pop("clinvar_submitter_ids", [])
 
         affil = Affiliation.objects.create(
             **validated_data
@@ -88,44 +108,28 @@ class AffiliationSerializer(serializers.ModelSerializer):
         return affil
 
     def update(self, instance, validated_data):
-        """Update and return an existing Affiliations instance."""
-        coordinator_data = validated_data.pop("coordinators")
-        coordinators = instance.coordinators
+        """Update and return an existing Affiliation instance."""
 
-        approver_data = validated_data.pop("approvers")
-        approvers = instance.approvers
+        coordinators_data = validated_data.pop("coordinators", [])
+        approvers_data = validated_data.pop("approvers", [])
+        submitter_ids_data = validated_data.pop("clinvar_submitter_ids", [])
 
-        submitter_id_data = validated_data.pop("clinvar_submitter_ids")
-        clinvar_submitter_ids = instance.clinvar_submitter_ids
-
-        instance.affiliation_id = validated_data.IntegerField()
-        instance.expert_panel_id = validated_data.IntegerField()
-        instance.full_name = validated_data.CharField()
-        instance.short_name = validated_data.CharField()
-        instance.status = validated_data.CharField()
-        instance.type = validated_data.CharField()
-        instance.clinical_domain_working_group = validated_data.CharField()
-        instance.members = validated_data.CharField()
-        instance.is_deleted = validated_data.BooleanField()
-
+        # Update the main fields on the instance
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
         instance.save()
 
-        coordinators.coordinator_name = coordinator_data.get(
-            "coordinator_name", coordinators.coordinator_name
-        )
-        coordinators.coordinator_email = coordinator_data.get(
-            "coordinator_email", coordinators.coordinator_email
-        )
-        coordinators.save()
+        # Update nested objects by delete all existing and re-create.
+        instance.coordinators.all().delete()
+        for data in coordinators_data:
+            Coordinator.objects.create(affilation=instance, **data)
 
-        approvers.approver_name = approver_data.get(
-            "approver_name", approvers.approver_name
-        )
-        approvers.save()
+        instance.approvers.all().delete()
+        for data in approvers_data:
+            Approver.objects.create(affilation=instance, **data)
 
-        clinvar_submitter_ids.clinvar_submitter_id = submitter_id_data.get(
-            "clinvar_submitter_id", clinvar_submitter_ids.clinvar_submitter_id
-        )
-        clinvar_submitter_ids.save()
+        instance.clinvar_submitter_ids.all().delete()
+        for data in submitter_ids_data:
+            Submitter.objects.create(affilation=instance, **data)
 
         return instance

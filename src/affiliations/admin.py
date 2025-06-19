@@ -36,6 +36,7 @@ from affiliations.models import (
     Coordinator,
     Approver,
     Submitter,
+    ClinicalDomainWorkingGroup,
 )
 
 # Unregistering base Django Admin User and Group to use Unfold User and Group
@@ -110,6 +111,14 @@ class GroupAdmin(BaseGroupAdmin, ModelAdmin):
         css = {"all": ("css/permissions.css",)}
 
 
+@admin.register(ClinicalDomainWorkingGroup)
+class ClinicalDomainWorkingGroupAdmin(ModelAdmin):
+    """Register CDWGs in Admin page"""
+
+    list_display = ("name", "code")
+    search_fields = ("name", "code")
+
+
 class AffiliationForm(forms.ModelForm):
     """Create forms to display information in Admin page."""
 
@@ -158,7 +167,9 @@ class AffiliationForm(forms.ModelForm):
         elif _type == "SC_VCEP":
             ep_id = (affil_id - 10000) + 50000
             cleaned_data["expert_panel_id"] = ep_id
-            cleaned_data["clinical_domain_working_group"] = "SOMATIC_CANCER"
+            cleaned_data["clinical_domain_working_group"] = (
+                ClinicalDomainWorkingGroup.objects.filter(name="Somatic Cancer").first()
+            )
             if ep_id < 50000 or ep_id >= 60000:
                 self.add_error(
                     None,
@@ -174,7 +185,9 @@ class AffiliationForm(forms.ModelForm):
                 )
         else:
             cleaned_data["expert_panel_id"] = None
-            cleaned_data["clinical_domain_working_group"] = "NONE"
+            cleaned_data["clinical_domain_working_group"] = (
+                ClinicalDomainWorkingGroup.objects.filter(name="None").first()
+            )
 
     @transaction.atomic
     def clean(self):
@@ -242,7 +255,7 @@ class AffiliationResource(resources.ModelResource):
             "short_name",
             "status",
             "type",
-            "clinical_domain_working_group",
+            "clinical_domain_working_group__name",
             "is_deleted",
         ]
 
