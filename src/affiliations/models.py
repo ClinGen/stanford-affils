@@ -24,31 +24,29 @@ class AffiliationType(models.TextChoices):  # pylint: disable=too-many-ancestors
     SC_VCEP = "SC_VCEP", _("Somatic Cancer Variant Curation Expert Panel")
 
 
-class AffiliationCDWG(models.TextChoices):  # pylint: disable=too-many-ancestors
-    """Creating choices for clinical_domain_working_group."""
+class ClinicalDomainWorkingGroup(models.Model):
+    """Define the shape of an clinical domain working group(CDWG)."""
 
-    NONE = "NONE", _("None")
-    CARDIOVASCULAR = "CARDIOVASCULAR", _("Cardiovascular")
-    HEARING_LOSS = "HEARING_LOSS", _("Hearing Loss")
-    HEMOSTASIS_THROMBOSIS = "HEMOSTASIS_THROMBOSIS", _("Hemostasis/Thrombosis")
-    HEREDITARY_CANCER = "HEREDITARY_CANCER", _("Hereditary Cancer")
-    IMMUNOLOGY = "IMMUNOLOGY", _("Immunology")
-    INBORN_ERR_METABOLISM = "INBORN_ERR_METABOLISM", _("Inborn Errors of Metabolism")
-    KIDNEY_DISEASE = "KIDNEY_DISEASE", _("Kidney Disease")
-    NEURODEVELOPMENTAL_DISORDER = "NEURODEVELOPMENTAL_DISORDER", _(
-        "Neurodevelopmental Disorders"
-    )
-    NEUROLOGICAL_DISORDERS = "NEUROLOGICAL_DISORDERS", _("Neurological Disorders")
-    OCULAR = "OCULAR", _("Ocular")
-    OTHER = "OTHER", _("Other")
-    PULMONARY = "PULMONARY", _("Pulmonary")
-    RASOPATHY = "RASOPATHY", _("RASopathy")
-    REPRODUCTION_AND_PREGNANCY = "REPRODUCTION_AND_PREGNANCY", _(
-        "Reproduction and Pregnancy"
-    )
-    RHEUMA_AUTO_DISEASE = "RHEUMA_AUTO_DISEASE", _("Rheumatologic Autoimmune Disease")
-    SKELETAL_DISORDERS = "SKELETAL_DISORDERS", _("Skeletal Disorders")
-    SOMATIC_CANCER = "SOMATIC_CANCER", _("Somatic Cancer")
+    code = models.CharField(
+        max_length=30,
+        unique=True,
+        help_text=""" A less than 30 character, unique identifier code
+        (e.g., 'NONE', 'RHEUMA_AUTO_DISEASE').""",
+    )  # type: object
+    name = models.CharField(
+        max_length=255,
+        help_text="""The full name of the clinical domain
+        working group.""",
+    )  # type: object
+
+    class Meta:
+        """Describe the fields on a CDWG."""
+
+        verbose_name = "Clinical Domain Working Group"
+        verbose_name_plural = "Clinical Domain Working Groups"
+
+    def __str__(self):
+        return str(self.name)
 
 
 class Affiliation(models.Model):
@@ -84,9 +82,11 @@ class Affiliation(models.Model):
         verbose_name="Status",
         choices=AffiliationStatus.choices,
     )
-    clinical_domain_working_group: models.CharField = models.CharField(
-        verbose_name="CDWG",
-        choices=AffiliationCDWG.choices,
+    clinical_domain_working_group: models.ForeignKey = models.ForeignKey(
+        ClinicalDomainWorkingGroup,
+        on_delete=models.CASCADE,
+        verbose_name="Clinical Domain Working Group",
+        related_name="affiliations",
     )
     members: models.CharField = models.CharField()
     is_deleted: models.BooleanField = models.BooleanField(default=False)
