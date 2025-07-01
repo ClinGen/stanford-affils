@@ -380,7 +380,7 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
         return [
             "members",
         ]
-    
+
     def get_fields(self, request, obj=None):
         """Customize visible fields in admin:
         - On add: hides affiliation_id and expert_panel_id
@@ -388,8 +388,11 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
         """
         fields = list(super().get_fields(request, obj))
         if obj is None:  # Add form
-            fields = [f for f in fields if f not in ("affiliation_id", "expert_panel_id")]
+            fields = [
+                f for f in fields if f not in ("affiliation_id", "expert_panel_id")
+            ]
         return fields
+
 
 # Add models we want to be able to edit in the admin interface.
 admin.site.register(Affiliation, AffiliationsAdmin)
