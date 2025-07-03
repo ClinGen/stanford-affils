@@ -23,6 +23,9 @@ urlpatterns: list[URLResolver | URLPattern] = [
         "affiliation/create/",
         views.create_affiliation,
     ),
+    path(
+        "affiliation/<int:affiliation_id>/update", views.AffiliationUpdateView.as_view()
+    ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
