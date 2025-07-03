@@ -53,6 +53,15 @@ class AffiliationsDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AffiliationSerializer
 
 
+class AffiliationUpdateView(generics.RetrieveUpdateAPIView):
+    """Update editable affiliation data, return all affiliation information."""
+
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    queryset = Affiliation.objects.all()
+    serializer_class = AffiliationSerializer
+    lookup_field = "affiliation_id"
+
+
 @api_view(["GET"])
 @permission_classes([HasAPIKey | IsAuthenticated])
 def affiliations_list_json_format(request):  # pylint: disable=unused-argument
