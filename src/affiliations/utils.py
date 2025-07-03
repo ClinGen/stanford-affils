@@ -1,7 +1,7 @@
 """Utility functions"""
 
 from django.db import transaction
-from django.core.exceptions import ValidationError
+from rest_framework import serializers
 from affiliations.models import Affiliation, ClinicalDomainWorkingGroup
 
 VCEP_BASE = 50000
@@ -25,7 +25,9 @@ def generate_next_affiliation_id(cleaned_data: dict) -> None:
             next_id = AFFIL_BASE
 
         if next_id < AFFIL_BASE or next_id >= 20000:
-            raise ValueError("Affiliation ID out of range. Contact administrator.")
+            raise serializers.ValidationError(
+                "Affiliation ID out of range. Contact administrator."
+            )
 
         cleaned_data["affiliation_id"] = next_id
 
@@ -38,23 +40,29 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
     cdwg = cleaned_data.get("clinical_domain_working_group")
 
     if affil_id is None:
-        raise ValidationError("affiliation_id is required to create expert_panel_id.")
+        raise serializers.ValidationError(
+            "affiliation_id is required to create expert_panel_id."
+        )
 
     ep_id = None
 
     if _type == "VCEP":
         ep_id = (affil_id - AFFIL_BASE) + VCEP_BASE
         if not VCEP_BASE <= ep_id < 60000:
-            raise ValidationError("VCEP ID out of range. Contact administrator.")
+            raise serializers.ValidationError(
+                "VCEP ID out of range. Contact administrator."
+            )
 
     elif _type == "SC_VCEP":
         ep_id = (affil_id - AFFIL_BASE) + VCEP_BASE
         if not VCEP_BASE <= ep_id < 60000:
-            raise ValidationError("SC-VCEP ID out of range. Contact administrator.")
+            raise serializers.ValidationError(
+                "SC-VCEP ID out of range. Contact administrator."
+            )
 
         expected_cdwg = ClinicalDomainWorkingGroup.objects.get(name="Somatic Cancer")
         if cdwg != expected_cdwg:
-            raise ValidationError(
+            raise serializers.ValidationError(
                 "If type is 'Somatic Cancer Variant Curation Expert Panel', "
                 + "then CDWG must be 'Somatic Cancer'."
             )
@@ -62,11 +70,13 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
     elif _type == "GCEP":
         ep_id = (affil_id - AFFIL_BASE) + GCEP_BASE
         if not GCEP_BASE <= ep_id < VCEP_BASE:
-            raise ValidationError("GCEP ID out of range. Contact administrator.")
+            raise serializers.ValidationError(
+                "GCEP ID out of range. Contact administrator."
+            )
     else:
         expected_cdwg = ClinicalDomainWorkingGroup.objects.get(name="None")
         if cdwg != expected_cdwg:
-            raise ValidationError(
+            raise serializers.ValidationError(
                 "If type is 'Independent Curation Group', then CDWG must be 'None'."
             )
 

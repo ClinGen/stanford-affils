@@ -2,9 +2,8 @@
 
 # Third-party dependencies:
 from django.test import TestCase
-from django.core.exceptions import ValidationError
 from rest_framework.test import APIClient, APITestCase
-from rest_framework import status
+from rest_framework import status, serializers
 
 from rest_framework_api_key.models import APIKey
 
@@ -135,7 +134,7 @@ class AffiliationsViewsBaseTestCase(APITestCase):
         _, key = APIKey.objects.create_key(name="my-remote-service")
         auth_headers = {"HTTP_X_API_KEY": key}
         response = self.client.post(
-            "/api/affiliation/create", self.create_data, format="json", **auth_headers
+            "/api/affiliation/create/", self.create_data, format="json", **auth_headers
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("affiliation_id", response.data)
@@ -146,11 +145,11 @@ class AffiliationsViewsBaseTestCase(APITestCase):
         _, key = APIKey.objects.create_key(name="my-remote-service")
         auth_headers = {"HTTP_X_API_KEY": key}
         response = self.client.post(
-            "/api/affiliation/create", {}, format="json", **auth_headers
+            "/api/affiliation/create/", {}, format="json", **auth_headers
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("full_name", response.data)
-        self.assertIn("type", response.data)
+        self.assertIn("full_name", response.data["details"])
+        self.assertIn("type", response.data["details"])
 
 
 class TestCDWGModel(TestCase):
@@ -264,7 +263,7 @@ class AffiliationUtilsTest(TestCase):
         )
 
     def test_generate_next_affiliation_id_raises_value_error(self):
-        """Should raise ValueError if next affiliation_id exceeds valid range."""
+        """Should raise serializers.ValidationError if next affiliation_id exceeds valid range."""
         Affiliation.objects.create(
             full_name="Overflow Affiliation",
             type="SC_VCEP",
@@ -274,19 +273,19 @@ class AffiliationUtilsTest(TestCase):
             expert_panel_id=49999,
         )
         cleaned_data = {}
-        with self.assertRaises(ValueError) as cm:
+        with self.assertRaises(serializers.ValidationError) as cm:
             generate_next_affiliation_id(cleaned_data)
 
         self.assertIn("Affiliation ID out of range", str(cm.exception))
 
     def test_missing_affiliation_id_raises_validation_error(self):
-        """Should raise ValidationError when affiliation_id is missing."""
+        """Should raise serializers.ValidationError when affiliation_id is missing."""
         cleaned_data = {
             "type": "SC_VCEP",
             "clinical_domain_working_group": self.cdwg,
         }
 
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(serializers.ValidationError) as cm:
             validate_and_set_expert_panel_id(cleaned_data)
 
         self.assertIn("affiliation_id is required", str(cm.exception))

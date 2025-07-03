@@ -20,7 +20,7 @@ urlpatterns: list[URLResolver | URLPattern] = [
         views.affiliation_detail_json_format,
     ),
     path(
-        "affiliation/create",
+        "affiliation/create/",
         views.create_affiliation,
     ),
 ]

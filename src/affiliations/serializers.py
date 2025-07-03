@@ -100,8 +100,12 @@ class AffiliationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Create an Affiliation instance along with
         nested Coordinators, Approvers, and Submitter IDs."""
-        generate_next_affiliation_id(validated_data)
-        validate_and_set_expert_panel_id(validated_data)
+        try:
+            generate_next_affiliation_id(validated_data)
+            validate_and_set_expert_panel_id(validated_data)
+        except serializers.ValidationError as e:
+            raise e
+
         coordinators_data = validated_data.pop("coordinators", [])
         approvers_data = validated_data.pop("approvers", [])
         submitter_ids_data = validated_data.pop("clinvar_submitter_ids", [])
