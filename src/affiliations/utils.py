@@ -55,13 +55,20 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
         expected_cdwg = ClinicalDomainWorkingGroup.objects.get(name="Somatic Cancer")
         if cdwg != expected_cdwg:
             raise ValidationError(
-                "If type is 'Somatic Cancer Variant Curation Expert Panel', ",
-                "then CDWG must be 'Somatic Cancer'.",
+                "If type is 'Somatic Cancer Variant Curation Expert Panel', "
+                "then CDWG must be 'Somatic Cancer'."
             )
 
     elif _type == "GCEP":
         ep_id = (affil_id - AFFIL_BASE) + GCEP_BASE
         if not GCEP_BASE <= ep_id < VCEP_BASE:
             raise ValidationError("GCEP ID out of range. Contact administrator.")
+    else:
+        expected_cdwg = ClinicalDomainWorkingGroup.objects.get(name="None")
+        if cdwg != expected_cdwg:
+            raise ValidationError(
+                "If type is 'Independent Curation Group', "
+                "then CDWG must be 'None'."
+            )
 
     cleaned_data["expert_panel_id"] = ep_id
