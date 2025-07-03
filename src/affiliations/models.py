@@ -70,7 +70,6 @@ class Affiliation(models.Model):
     either of these IDs.
     """
     expert_panel_id: models.IntegerField = models.IntegerField(
-        unique=True,
         blank=True,
         null=True,
         verbose_name="Expert Panel ID",
