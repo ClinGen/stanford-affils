@@ -381,16 +381,16 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
             "members",
         ]
 
-    def render_change_form(self, request, context, *args, obj=None, **kwargs):
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        """Customize visible fields in admin:
+        - On add: hides affiliation_id and expert_panel_id
+        - On change: show all fields
+        """
+        form = super().get_form(request, obj, **kwargs)
         if obj is None:
-            context["media"] += forms.Media(
-                js=["js/admin_hide_attribute_new.js"],
-            )
-        else:
-            context["media"] += forms.Media(
-                css={"all": ("css/hide_admin_original.css",)},
-            )
-        return super().render_change_form(request, context, *args, obj=None, **kwargs)
+            form.base_fields["affiliation_id"].widget = forms.HiddenInput()
+            form.base_fields["expert_panel_id"].widget = forms.HiddenInput()
+        return form
 
 
 # Add models we want to be able to edit in the admin interface.
