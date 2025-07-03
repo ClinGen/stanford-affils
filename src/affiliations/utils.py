@@ -56,7 +56,7 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
         if cdwg != expected_cdwg:
             raise ValidationError(
                 "If type is 'Somatic Cancer Variant Curation Expert Panel', "
-                "then CDWG must be 'Somatic Cancer'."
+                + "then CDWG must be 'Somatic Cancer'."
             )
 
     elif _type == "GCEP":
@@ -67,8 +67,7 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
         expected_cdwg = ClinicalDomainWorkingGroup.objects.get(name="None")
         if cdwg != expected_cdwg:
             raise ValidationError(
-                "If type is 'Independent Curation Group', "
-                "then CDWG must be 'None'."
+                "If type is 'Independent Curation Group', then CDWG must be 'None'."
             )
 
     cleaned_data["expert_panel_id"] = ep_id
