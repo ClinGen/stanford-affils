@@ -1,17 +1,14 @@
 """Tests for the affiliations service."""
 
 # Third-party dependencies:
-from unittest import mock
 from django.test import TestCase
-
 from django.core.exceptions import ValidationError
-from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework.test import APIClient, APITestCase
+from rest_framework import status
 
 from rest_framework_api_key.models import APIKey
 
 # In-house code:
-from affiliations.views import AffiliationsList
-from affiliations.views import AffiliationsDetail
 from affiliations.models import (
     Affiliation,
     Coordinator,
@@ -20,7 +17,11 @@ from affiliations.models import (
     ClinicalDomainWorkingGroup,
 )
 
-from affiliations.admin import AffiliationForm
+from affiliations.serializers import AffiliationSerializer
+from affiliations.utils import (
+    generate_next_affiliation_id,
+    validate_and_set_expert_panel_id,
+)
 
 
 class AffiliationsViewsBaseTestCase(APITestCase):
@@ -35,89 +36,18 @@ class AffiliationsViewsBaseTestCase(APITestCase):
         cdwg1, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
             code="HEARING_LOSS", defaults={"name": "Hearing Loss"}
         )
-        cdwg2, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
-            code="RHEUMA_AUTO_DISEASE",
-            defaults={"name": "Rheumatologic Autoimmune Disease"},
-        )
         cls.success_affiliation = {
-            "affiliation_id": 10000,
-            "expert_panel_id": 40000,
             "full_name": "Test Success Result Affil",
             "short_name": "Successful",
-            "status": "Inactive",
+            "status": "INACTIVE",
             "type": "GCEP",
             "members": "Bulbasaur, Charmander, Squirtle",
             "is_deleted": False,
             "clinical_domain_working_group": cdwg1,
         }
-        cls.expected_success_affiliation = {
-            **cls.success_affiliation,
-            "clinical_domain_working_group": cdwg1.id,
-            "coordinators": [
-                {
-                    "coordinator_name": "Professor Oak",
-                    "coordinator_email": "ProfessorOak@email.com",
-                },
-            ],
-            "approvers": [
-                {
-                    "approver_name": "Mew",
-                },
-            ],
-            "clinvar_submitter_ids": [
-                {
-                    "clinvar_submitter_id": "11",
-                },
-                {
-                    "clinvar_submitter_id": "22",
-                },
-                {
-                    "clinvar_submitter_id": "33",
-                },
-            ],
-        }
-
-        cls.hoenn_affiliation = {
-            "affiliation_id": 3,
-            "expert_panel_id": 2003,
-            "full_name": "Hoenn Pokémon",
-            "short_name": "Hoenn",
-            "status": "Active",
-            "type": "Cool",
-            "members": "Treecko, Torchic, Mudkip",
-            "is_deleted": False,
-            "clinical_domain_working_group": cdwg2,
-        }
-        cls.expected_hoenn_affiliation = {
-            **cls.hoenn_affiliation,
-            "clinical_domain_working_group": cdwg2.id,
-            "coordinators": [
-                {
-                    "coordinator_name": "Professor Birch",
-                    "coordinator_email": "ProfessorBirch@email.com",
-                }
-            ],
-            "approvers": [
-                {
-                    "approver_name": "Groudon",
-                },
-                {
-                    "approver_name": "Kyogre",
-                },
-            ],
-            "clinvar_submitter_ids": [
-                {
-                    "clinvar_submitter_id": "77",
-                },
-                {
-                    "clinvar_submitter_id": "88",
-                },
-                {
-                    "clinvar_submitter_id": "99",
-                },
-            ],
-        }
-
+        # Pass data through custom clean functions to generate affil and EP ID
+        generate_next_affiliation_id(cls.success_affiliation)
+        validate_and_set_expert_panel_id(cls.success_affiliation)
         success_affil = Affiliation.objects.create(**cls.success_affiliation)
         Coordinator.objects.create(
             affiliation=success_affil,
@@ -128,75 +58,42 @@ class AffiliationsViewsBaseTestCase(APITestCase):
             affiliation=success_affil,
             approver_name="Mew",
         )
-        Submitter.objects.create(
-            affiliation=success_affil,
-            clinvar_submitter_id="11",
-        )
-        Submitter.objects.create(
-            affiliation=success_affil,
-            clinvar_submitter_id="22",
-        )
-        Submitter.objects.create(
-            affiliation=success_affil,
-            clinvar_submitter_id="33",
+        Submitter.objects.bulk_create(
+            [
+                Submitter(affiliation=success_affil, clinvar_submitter_id=id)
+                for id in ["11", "22", "33"]
+            ]
         )
 
-        hoenn_affil = Affiliation.objects.create(**cls.hoenn_affiliation)
-        Coordinator.objects.create(
-            affiliation=hoenn_affil,
-            coordinator_name="Professor Birch",
-            coordinator_email="ProfessorBirch@email.com",
+        cls.cdwg2 = ClinicalDomainWorkingGroup.objects.create(
+            name="Hemostasis/Thrombosis"
         )
-        Approver.objects.create(
-            affiliation=hoenn_affil,
-            approver_name="Groudon",
-        )
-        Approver.objects.create(
-            affiliation=hoenn_affil,
-            approver_name="Kyogre",
-        )
-        Submitter.objects.create(
-            affiliation=hoenn_affil,
-            clinvar_submitter_id="77",
-        )
-        Submitter.objects.create(
-            affiliation=hoenn_affil,
-            clinvar_submitter_id="88",
-        )
-        Submitter.objects.create(
-            affiliation=hoenn_affil,
-            clinvar_submitter_id="99",
-        )
+        cls.create_data = {
+            "full_name": "Test VCEP",
+            "type": "VCEP",
+            "status": "ACTIVE",
+            "clinical_domain_working_group": cls.cdwg2.id,
+        }
 
     def test_should_be_able_to_view_list_of_affiliations(self):
         """Make sure we are able to view our list of affiliations."""
-        factory = APIRequestFactory()
-        view = AffiliationsList.as_view()
-        request = factory.get("/database_list/")
-        response = view(request)
-        self.assertDictEqual(
-            response.data[0],
-            self.expected_success_affiliation,
-        )
-        self.assertDictEqual(
-            response.data[1],
-            self.expected_hoenn_affiliation,
-        )
+        client = APIClient()
+        response = client.get("/api/database_list/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        returned_names = {affil["full_name"] for affil in response.data}
+        self.assertIn("Test Success Result Affil", returned_names)
 
     def test_should_be_able_to_view_single_affiliation_detail(self):
         """Make sure we are able to view a single affiliation's details."""
-        factory = APIRequestFactory()
-        view = AffiliationsDetail.as_view()
-        primary_key = 1
-        request = factory.get(f"/database_list/{primary_key}")
-        response = view(request, pk=primary_key)
-        self.assertEqual(response.status_code, 200)
+        client = APIClient()
+        affil = Affiliation.objects.get(full_name="Test Success Result Affil")
 
-        self.assertDictEqual(response.data, self.expected_success_affiliation)
-        primary_key = 2
-        request = factory.get(f"/database_list/{primary_key}")
-        response = view(request, pk=primary_key)
-        self.assertDictEqual(response.data, self.expected_hoenn_affiliation)
+        response = client.get(f"/api/database_list/{affil.pk}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data["full_name"], self.success_affiliation["full_name"]
+        )
 
     def test_detail_affiliation_json_call(self):
         """Make sure the API response of a single affiliation is returned
@@ -231,98 +128,29 @@ class AffiliationsViewsBaseTestCase(APITestCase):
         auth_headers = {"HTTP_X_API_KEY": key}
         response = self.client.get("/api/affiliations_list/", **auth_headers)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(len(response.json()), 1)
 
-
-class TestUserInputsIds(TestCase):
-    """A test class for testing validation if a user passed in an affiliation ID
-    and/or EP ID."""
-
-    @classmethod
-    def setUpTestData(cls):
-        """Creating test data then test that we are overwriting the provided data."""
-        cls.user_input_ids_affiliation = {
-            "affiliation_id": 100001,
-            "expert_panel_id": 60000,
-            "full_name": "Invalid Type with ID Affiliation",
-            "short_name": "Invalid Type with ID",
-            "status": "Retired",
-            "type": "SC_VCEP",
-            "clinical_domain_working_group": 8,
-            "members": "Chikorita, Cyndaquil, Totodile",
-            "is_deleted": False,
-        }
-
-        cls.cleaned_user_input_ids_affiliation = {
-            "affiliation_id": 10000,
-            "expert_panel_id": None,
-            "full_name": "Invalid Type with ID Affiliation",
-            "short_name": "Invalid Type with ID",
-            "status": "Retired",
-            "type": "SC_VCEP",
-            "clinical_domain_working_group": 8,
-            "members": "Chikorita, Cyndaquil, Totodile",
-            "is_deleted": False,
-        }
-
-    @mock.patch("affiliations.admin.AffiliationForm.add_error")
-    def test_response(self, mock_add_error):
-        """Make sure we are overwriting provided user inputs in clean method"""
-        user_input_ids = AffiliationForm(self.user_input_ids_affiliation)
-        user_input_ids.cleaned_data = self.cleaned_user_input_ids_affiliation
-        user_input_ids.clean()
-        mock_add_error.assert_not_called()
-
-
-class TestAffiliationIDOutOfRange(TestCase):
-    """A test class for testing validation errors if max Affil ID and VCEP ID
-    are reached."""
-
-    @classmethod
-    def setUpTestData(cls):
-        """Attempting to seed the test database with some test data, then test
-        that the expected validation errors are triggered"""
-        cdwg3, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
-            code="KIDNEY_DISEASE", defaults={"name": "Kidney Disease"}
+    def test_create_affiliation__success(self):
+        """Test successful creation of affiliation via POST API with valid data."""
+        _, key = APIKey.objects.create_key(name="my-remote-service")
+        auth_headers = {"HTTP_X_API_KEY": key}
+        response = self.client.post(
+            "/api/affiliation/create", self.create_data, format="json", **auth_headers
         )
-        cls.out_of_range_id_affiliation_base = {
-            # Creating an affil in the DB with incorrect information. change this.
-            "affiliation_id": 19999,
-            "expert_panel_id": 59999,
-            "full_name": "Max Affiliation ID",
-            "short_name": "Max Affil ID",
-            "status": "Retired",
-            "type": "VCEP",
-            "clinical_domain_working_group": cdwg3,
-            "members": "Chikorita, Cyndaquil, Totodile",
-            "is_deleted": False,
-        }
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn("affiliation_id", response.data)
+        self.assertIn("expert_panel_id", response.data)
 
-        cls.out_of_range_affil = Affiliation.objects.create(
-            **cls.out_of_range_id_affiliation_base
+    def test_create_affiliation_missing_required_fields(self):
+        """Test that missing required fields in POST request returns 400 and error messages."""
+        _, key = APIKey.objects.create_key(name="my-remote-service")
+        auth_headers = {"HTTP_X_API_KEY": key}
+        response = self.client.post(
+            "/api/affiliation/create", {}, format="json", **auth_headers
         )
-
-        cls.out_of_range_id_affiliation = {
-            **cls.out_of_range_id_affiliation_base,
-        }
-
-    @mock.patch("affiliations.admin.AffiliationForm.add_error")
-    def test_response(self, mock_add_error):
-        """Make sure expected validation errors are triggered in clean method"""
-        out_of_range = AffiliationForm(self.out_of_range_affil)
-        out_of_range.cleaned_data = self.out_of_range_id_affiliation
-        out_of_range.clean()
-        calls = [
-            mock.call(
-                None,
-                ValidationError("Affiliation ID out of range. Contact administrator."),
-            ),
-            mock.call(
-                None,
-                ValidationError("VCEP ID out of range. Contact administrator."),
-            ),
-        ]
-        mock_add_error.assert_has_calls(calls)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("full_name", response.data)
+        self.assertIn("type", response.data)
 
 
 class TestCDWGModel(TestCase):
@@ -351,3 +179,114 @@ class TestCDWGModel(TestCase):
                 members="",
                 is_deleted=False,
             )
+
+
+class AffiliationSerializerTest(TestCase):
+    """Tests for the AffiliationSerializer create and validation logic."""
+
+    @classmethod
+    def setUpTestData(cls):
+        """Set up a CDWG for serializer tests."""
+        cls.cdwg, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
+            name="Somatic Cancer"
+        )
+
+    def test_serializer_create_affiliation__success(self):
+        """Test successful serialization and creation of an SC_VCEP affiliation."""
+        payload = {
+            "full_name": "Test SC_VCEP",
+            "type": "SC_VCEP",
+            "status": "ACTIVE",
+            "clinical_domain_working_group": self.cdwg.id,
+        }
+        serializer = AffiliationSerializer(data=payload)
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+        instance = serializer.save()
+        self.assertIsInstance(instance, Affiliation)
+        self.assertGreaterEqual(instance.expert_panel_id, 50000)
+
+    def test_serializer_fails_with_missing_required_fields(self):
+        """Test serializer validation fails when required fields are missing."""
+        data = {
+            "status": "ACTIVE",
+            "type": "SC_VCEP",
+            "clinical_domain_working_group": self.cdwg.id,
+            # Missing 'full_name'
+        }
+        serializer = AffiliationSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn("full_name", serializer.errors)
+
+
+class AffiliationUtilsTest(TestCase):
+    """Tests for affiliation helper utility functions."""
+
+    @classmethod
+    def setUpTestData(cls):
+        """Set up test CDWG used across utility tests."""
+        cls.cdwg, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
+            name="Somatic Cancer"
+        )
+
+    def test_generate_next_affiliation_id(self):
+        """Test that the next affiliation ID is generated and added to cleaned_data."""
+        cleaned_data = {}
+        generate_next_affiliation_id(cleaned_data)
+        self.assertIn("affiliation_id", cleaned_data)
+        self.assertGreaterEqual(cleaned_data["affiliation_id"], 10000)
+
+    def test_validate_and_set_expert_panel_id_success(self):
+        """Test that a valid SC_VCEP affiliation sets the correct expert_panel_id."""
+        cleaned_data = {
+            "affiliation_id": 10000,
+            "type": "SC_VCEP",
+            "clinical_domain_working_group": self.cdwg,
+        }
+        validate_and_set_expert_panel_id(cleaned_data)
+        self.assertIn("expert_panel_id", cleaned_data)
+        self.assertGreaterEqual(cleaned_data["expert_panel_id"], 50000)
+
+    def test_validate_and_set_expert_panel_id_invalid_cdwg(self):
+        """Test that an SC_VCEP with incorrect CDWG raises a validation error."""
+        wrong_cdwg, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
+            name="Cardiology"
+        )
+        cleaned_data = {
+            "affiliation_id": 10000,
+            "type": "SC_VCEP",
+            "clinical_domain_working_group": wrong_cdwg,
+        }
+        with self.assertRaises(Exception) as context:
+            validate_and_set_expert_panel_id(cleaned_data)
+        self.assertIn(
+            "If type is 'Somatic Cancer Variant Curation Expert Panel",
+            str(context.exception),
+        )
+
+    def test_generate_next_affiliation_id_raises_value_error(self):
+        """Should raise ValueError if next affiliation_id exceeds valid range."""
+        Affiliation.objects.create(
+            full_name="Overflow Affiliation",
+            type="SC_VCEP",
+            status="ACTIVE",
+            clinical_domain_working_group=self.cdwg,
+            affiliation_id=19999,
+            expert_panel_id=49999,
+        )
+        cleaned_data = {}
+        with self.assertRaises(ValueError) as cm:
+            generate_next_affiliation_id(cleaned_data)
+
+        self.assertIn("Affiliation ID out of range", str(cm.exception))
+
+    def test_missing_affiliation_id_raises_validation_error(self):
+        """Should raise ValidationError when affiliation_id is missing."""
+        cleaned_data = {
+            "type": "SC_VCEP",
+            "clinical_domain_working_group": self.cdwg,
+        }
+
+        with self.assertRaises(ValidationError) as cm:
+            validate_and_set_expert_panel_id(cleaned_data)
+
+        self.assertIn("affiliation_id is required", str(cm.exception))

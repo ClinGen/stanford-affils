@@ -1,11 +1,14 @@
 """Views for the affiliations service."""
 
 # Third-party dependencies:
-from rest_framework import generics
+import logging
+from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 from rest_framework_api_key.permissions import HasAPIKey
 from django.http import JsonResponse
+
 
 # In-house code:
 from affiliations.models import Affiliation, Approver
@@ -172,3 +175,22 @@ def affiliation_detail_json_format(request):
         safe=False,
         json_dumps_params={"ensure_ascii": False},
     )
+
+
+@api_view(["POST"])
+@permission_classes([HasAPIKey | IsAuthenticated])
+def create_affiliation(request):
+    """Handle POST request to create a new affiliation, return affiliation_id
+    and expert_panel_id in response."""
+    serializer = AffiliationSerializer(data=request.data)
+    if serializer.is_valid():
+        instance = serializer.save()
+        return Response(
+            {
+                "affiliation_id": instance.affiliation_id,
+                "expert_panel_id": instance.expert_panel_id,
+            },
+            status=status.HTTP_201_CREATED,
+        )
+    logging.warning("Affiliation creation failed: %s", serializer.errors)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

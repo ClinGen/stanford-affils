@@ -2,6 +2,7 @@
 
 # Third-party dependencies:
 from rest_framework import serializers
+from django.db import transaction
 
 # In-house code:
 from affiliations.models import (
@@ -10,6 +11,11 @@ from affiliations.models import (
     Approver,
     Submitter,
     ClinicalDomainWorkingGroup,
+)
+
+from affiliations.utils import (
+    generate_next_affiliation_id,
+    validate_and_set_expert_panel_id,
 )
 
 
@@ -63,9 +69,9 @@ class ClinicalDomainWorkingGroupSerializer(serializers.ModelSerializer):
 class AffiliationSerializer(serializers.ModelSerializer):
     """Serialize Affiliation objects."""
 
-    coordinators = CoordinatorSerializer(many=True)
-    approvers = ApproverSerializer(many=True)
-    clinvar_submitter_ids = SubmitterSerializer(many=True)
+    coordinators = CoordinatorSerializer(many=True, required=False)
+    approvers = ApproverSerializer(many=True, required=False)
+    clinvar_submitter_ids = SubmitterSerializer(many=True, required=False)
 
     clinical_domain_working_group = serializers.PrimaryKeyRelatedField(
         queryset=ClinicalDomainWorkingGroup.objects.all(),
@@ -90,8 +96,12 @@ class AffiliationSerializer(serializers.ModelSerializer):
             "is_deleted",
         ]
 
+    @transaction.atomic
     def create(self, validated_data):
-        """Create and return an Affiliations instance."""
+        """Create an Affiliation instance along with
+        nested Coordinators, Approvers, and Submitter IDs."""
+        generate_next_affiliation_id(validated_data)
+        validate_and_set_expert_panel_id(validated_data)
         coordinators_data = validated_data.pop("coordinators", [])
         approvers_data = validated_data.pop("approvers", [])
         submitter_ids_data = validated_data.pop("clinvar_submitter_ids", [])
@@ -100,11 +110,11 @@ class AffiliationSerializer(serializers.ModelSerializer):
             **validated_data
         )  # pylint: disable=no-member
         for coordinator_data in coordinators_data:
-            Coordinator.objects.create(affilation=affil, **coordinator_data)
+            Coordinator.objects.create(affiliation=affil, **coordinator_data)
         for approver_data in approvers_data:
-            Approver.objects.create(affilation=affil, **approver_data)
+            Approver.objects.create(affiliation=affil, **approver_data)
         for submitter_id_data in submitter_ids_data:
-            Submitter.objects.create(affilation=affil, **submitter_id_data)
+            Submitter.objects.create(affiliation=affil, **submitter_id_data)
         return affil
 
     def update(self, instance, validated_data):
@@ -122,14 +132,14 @@ class AffiliationSerializer(serializers.ModelSerializer):
         # Update nested objects by delete all existing and re-create.
         instance.coordinators.all().delete()
         for data in coordinators_data:
-            Coordinator.objects.create(affilation=instance, **data)
+            Coordinator.objects.create(affiliation=instance, **data)
 
         instance.approvers.all().delete()
         for data in approvers_data:
-            Approver.objects.create(affilation=instance, **data)
+            Approver.objects.create(affiliation=instance, **data)
 
         instance.clinvar_submitter_ids.all().delete()
         for data in submitter_ids_data:
-            Submitter.objects.create(affilation=instance, **data)
+            Submitter.objects.create(affiliation=instance, **data)
 
         return instance

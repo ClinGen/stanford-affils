@@ -70,6 +70,7 @@ class Affiliation(models.Model):
     either of these IDs.
     """
     expert_panel_id: models.IntegerField = models.IntegerField(
+        unique=True,
         blank=True,
         null=True,
         verbose_name="Expert Panel ID",
@@ -88,7 +89,7 @@ class Affiliation(models.Model):
         verbose_name="Clinical Domain Working Group",
         related_name="affiliations",
     )
-    members: models.CharField = models.CharField()
+    members: models.CharField = models.CharField(blank=True, null=True)
     is_deleted: models.BooleanField = models.BooleanField(default=False)
 
     def __str__(self):
