@@ -129,7 +129,10 @@ class AffiliationsViewsBaseTestCase(APITestCase):
     def test_create_affiliation__success(self):
         """Test successful creation of affiliation via POST API with valid data."""
         response = self.client.post(
-            "/api/affiliation/create/", self.create_data, format="json", **auth_headers
+            "/api/affiliation/create/",
+            self.create_data,
+            format="json",
+            **self.auth_headers,
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("affiliation_id", response.data)
@@ -138,7 +141,7 @@ class AffiliationsViewsBaseTestCase(APITestCase):
     def test_create_affiliation_missing_required_fields(self):
         """Test that missing required fields in POST request returns 400 and error messages."""
         response = self.client.post(
-            "/api/affiliation/create/", {}, format="json", **auth_headers
+            "/api/affiliation/create/", {}, format="json", **self.auth_headers
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("full_name", response.data["details"])
@@ -356,7 +359,7 @@ class TestAffiliationUpdateView(APITestCase):
             "status": "INACTIVE",
         }
         response = self.client.patch(
-            f"/api/affiliation/{self.affiliation.affiliation_id}/update",
+            f"/api/affiliation/{self.affiliation.affiliation_id}/update/",
             data=payload,
             format="json",
             **self.auth_headers,
@@ -370,10 +373,10 @@ class TestAffiliationUpdateView(APITestCase):
         """Test to attempt to update an immutable field via API."""
         payload = {"type": "VCEP"}
         response = self.client.patch(
-            f"/api/affiliation/{self.affiliation.affiliation_id}/update",
+            f"/api/affiliation/{self.affiliation.affiliation_id}/update/",
             data=payload,
             format="json",
             **self.auth_headers,
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("type", response.data)
+        self.assertIn("type", response.data["details"])
