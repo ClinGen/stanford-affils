@@ -366,10 +366,10 @@ class TestAffiliationUpdateView(APITestCase):
         """Test to attempt to update an immutable field via API."""
         payload = {"type": "VCEP"}
         response = self.client.patch(
-            f"/api/affiliation/{self.affiliation.affiliation_id}/update",
+            f"/api/affiliation/{self.affiliation.affiliation_id}/update/",
             data=payload,
             format="json",
             **self.auth_headers,
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("type", response.data)
+        self.assertIn("type", response.data["details"])
