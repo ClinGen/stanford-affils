@@ -24,7 +24,8 @@ urlpatterns: list[URLResolver | URLPattern] = [
         views.create_affiliation,
     ),
     path(
-        "affiliation/<int:affiliation_id>/update", views.AffiliationUpdateView.as_view()
+        "affiliation/<int:affiliation_id>/update/",
+        views.AffiliationUpdateView.as_view(),
     ),
 ]
 
