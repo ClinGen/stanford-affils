@@ -84,6 +84,12 @@ class CDWGCreateView(generics.CreateAPIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+class CDWGUpdateView(generics.RetrieveUpdateAPIView):
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    queryset = ClinicalDomainWorkingGroup.objects.all()
+    serializer_class = ClinicalDomainWorkingGroupSerializer
+    lookup_field = "id"
+
 class CDWGListView(generics.ListAPIView):
     permission_classes = [HasAPIKey | IsAuthenticated]
     queryset = ClinicalDomainWorkingGroup.objects.all()
