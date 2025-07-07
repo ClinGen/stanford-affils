@@ -120,8 +120,8 @@ class GroupAdmin(BaseGroupAdmin, ModelAdmin):
 class ClinicalDomainWorkingGroupAdmin(ModelAdmin):
     """Register CDWGs in Admin page"""
 
-    list_display = ("name", "code")
-    search_fields = ("name", "code")
+    list_display = ("name", "id")
+    search_fields = ("name", "id")
 
 
 class AffiliationForm(forms.ModelForm):

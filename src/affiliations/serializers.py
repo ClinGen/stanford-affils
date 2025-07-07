@@ -64,7 +64,7 @@ class ClinicalDomainWorkingGroupSerializer(serializers.ModelSerializer):
         """Describe the fields on a CDWG object."""
 
         model = ClinicalDomainWorkingGroup
-        fields = ["id", "code", "name"]
+        fields = ["id", "name"]
 
 
 class AffiliationSerializer(serializers.ModelSerializer):
