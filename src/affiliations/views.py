@@ -61,6 +61,29 @@ class AffiliationUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = AffiliationSerializer
     lookup_field = "affiliation_id"
 
+class CDWGCreateView(generics.CreateAPIView):
+    
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    def post(self, request):
+        serializer = ClinicalDomainWorkingGroupSerializer(data=request.data)
+        if serializer.is_valid():
+            instance = serializer.save()
+            return Response(
+
+                {
+                    "name": instance.name,
+                    "id": instance.id,
+                },
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            {
+                "error": "Validation Failed",
+                "details": serializer.errors,
+            }, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
 class CDWGListView(generics.ListAPIView):
     permission_classes = [HasAPIKey | IsAuthenticated]
     queryset = ClinicalDomainWorkingGroup.objects.all()
