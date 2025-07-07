@@ -64,6 +64,11 @@ class AffiliationUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = AffiliationSerializer
     lookup_field = "affiliation_id"
 
+class CDWGListView(generics.ListAPIView):
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    queryset = ClinicalDomainWorkingGroup.objects.all()
+    serializer_class = ClinicalDomainWorkingGroupSerializer
+
 
 class CDWGCreateView(generics.CreateAPIView):
     """Create a new CDWG."""
