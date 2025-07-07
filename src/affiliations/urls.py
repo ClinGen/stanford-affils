@@ -31,6 +31,10 @@ urlpatterns: list[URLResolver | URLPattern] = [
         "cdwg_list/",
         views.CDWGListView.as_view(),
     ),
+    path(
+        "cdwg_detail/<int:id>/",
+        views.CDWGDetailView.as_view(),
+    ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

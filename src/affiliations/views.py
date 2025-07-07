@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 from rest_framework_api_key.permissions import HasAPIKey
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 
 # In-house code:
 from affiliations.models import Affiliation, Approver, ClinicalDomainWorkingGroup
@@ -66,6 +66,21 @@ class CDWGListView(generics.ListAPIView):
     queryset = ClinicalDomainWorkingGroup.objects.all()
     serializer_class = ClinicalDomainWorkingGroupSerializer
 
+
+class CDWGDetailView(generics.RetrieveAPIView):
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    queryset = ClinicalDomainWorkingGroup.objects.all()
+    serializer_class = ClinicalDomainWorkingGroupSerializer
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        pk = self.kwargs.get("id")
+
+        try:
+            if pk is not None:
+                return queryset.get(id=pk)
+        except ClinicalDomainWorkingGroup.DoesNotExist:
+            raise Http404("Clinical Domain Working Group not found.")
 
 @api_view(["GET"])
 @permission_classes([HasAPIKey | IsAuthenticated])
