@@ -27,6 +27,10 @@ urlpatterns: list[URLResolver | URLPattern] = [
         "affiliation/<int:affiliation_id>/update/",
         views.AffiliationUpdateView.as_view(),
     ),
+    path(
+        "cdwg_list/",
+        views.CDWGListView.as_view(),
+    ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

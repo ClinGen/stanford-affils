@@ -11,8 +11,8 @@ from rest_framework_api_key.permissions import HasAPIKey
 from django.http import JsonResponse
 
 # In-house code:
-from affiliations.models import Affiliation, Approver
-from affiliations.serializers import AffiliationSerializer
+from affiliations.models import Affiliation, Approver, ClinicalDomainWorkingGroup
+from affiliations.serializers import AffiliationSerializer, ClinicalDomainWorkingGroupSerializer
 
 
 def custom_exception_handler(exc, context):
@@ -60,6 +60,11 @@ class AffiliationUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Affiliation.objects.all()
     serializer_class = AffiliationSerializer
     lookup_field = "affiliation_id"
+
+class CDWGListView(generics.ListAPIView):
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    queryset = ClinicalDomainWorkingGroup.objects.all()
+    serializer_class = ClinicalDomainWorkingGroupSerializer
 
 
 @api_view(["GET"])
