@@ -2,7 +2,6 @@
 
 from django.db import transaction
 from django.core.exceptions import ValidationError
-from rest_framework import serializers
 from affiliations.models import Affiliation, ClinicalDomainWorkingGroup
 
 VCEP_BASE = 50000
