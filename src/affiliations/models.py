@@ -4,6 +4,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+
 class AffiliationStatus(models.TextChoices):  # pylint: disable=too-many-ancestors
     """Creating choices for status."""
 
@@ -25,6 +26,7 @@ class AffiliationType(models.TextChoices):  # pylint: disable=too-many-ancestors
 
 class ClinicalDomainWorkingGroup(models.Model):
     """Define the shape of an clinical domain working group(CDWG)."""
+
     name = models.CharField(
         max_length=255,
         help_text="""The full name of the clinical domain
