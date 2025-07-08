@@ -64,36 +64,40 @@ class AffiliationUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = AffiliationSerializer
     lookup_field = "affiliation_id"
 
-class CDWGCreateView(generics.CreateAPIView):
-    
-    permission_classes = [HasAPIKey | IsAuthenticated]
-    def post(self, request):
-        serializer = ClinicalDomainWorkingGroupSerializer(data=request.data)
-        if serializer.is_valid():
-            instance = serializer.save()
-            return Response(
 
-                {
-                    "name": instance.name,
-                    "id": instance.id,
-                },
-                status=status.HTTP_201_CREATED
-            )
+class CDWGCreateView(generics.CreateAPIView):
+    """Create a new CDWG."""
+
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    serializer_class = ClinicalDomainWorkingGroupSerializer
+    queryset = ClinicalDomainWorkingGroup.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+
         return Response(
             {
-                "error": "Validation Failed",
-                "details": serializer.errors,
-            }, 
-            status=status.HTTP_400_BAD_REQUEST
+                "name": instance.name,
+                "id": instance.id,
+            },
+            status=status.HTTP_201_CREATED,
         )
 
+
 class CDWGUpdateView(generics.RetrieveUpdateAPIView):
+    """Update editable CDWG data, return all CDWG information."""
+
     permission_classes = [HasAPIKey | IsAuthenticated]
     queryset = ClinicalDomainWorkingGroup.objects.all()
     serializer_class = ClinicalDomainWorkingGroupSerializer
     lookup_field = "id"
 
+
 class CDWGListView(generics.ListAPIView):
+    """List all CDWGs."""
+
     permission_classes = [HasAPIKey | IsAuthenticated]
     queryset = ClinicalDomainWorkingGroup.objects.all()
     serializer_class = ClinicalDomainWorkingGroupSerializer
