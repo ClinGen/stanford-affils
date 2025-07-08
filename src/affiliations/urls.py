@@ -32,7 +32,11 @@ urlpatterns: list[URLResolver | URLPattern] = [
         views.CDWGListView.as_view(),
     ),
     path(
-        "cdwg_detail/<int:id>/",
+        "cdwg_detail/id/<int:id>/",
+        views.CDWGDetailView.as_view(),
+    ),
+    path(
+        "cdwg_detail/name/<str:name>/",
         views.CDWGDetailView.as_view(),
     ),
     path(
@@ -40,7 +44,7 @@ urlpatterns: list[URLResolver | URLPattern] = [
         views.CDWGCreateView.as_view(),
     ),
     path(
-        "cdwg/<int:id>/update/",
+        "cdwg/id/<int:id>/update/",
         views.CDWGUpdateView.as_view(),
     ),
 ]

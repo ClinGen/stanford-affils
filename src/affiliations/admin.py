@@ -42,6 +42,7 @@ from affiliations.models import (
 from affiliations.utils import (
     generate_next_affiliation_id,
     validate_and_set_expert_panel_id,
+    validate_unique_cdwg_name,
 )
 
 # Unregistering base Django Admin User and Group to use Unfold User and Group
@@ -116,10 +117,28 @@ class GroupAdmin(BaseGroupAdmin, ModelAdmin):
         css = {"all": ("css/permissions.css",)}
 
 
+class CDWGAdminForm(forms.ModelForm):
+    """Create CDWG forms to validate information on Admin page."""
+
+    class Meta:
+        """Meta class for CDWGAdminforms"""
+
+        model = ClinicalDomainWorkingGroup
+        fields = "__all__"
+
+    def clean_name(self):
+        """Check to validate if duplicate CDWG name upon creation or update."""
+        name = self.cleaned_data["name"]
+        instance_id = self.instance.pk if self.instance else None
+        validate_unique_cdwg_name(name, instance_id)
+        return name
+
+
 @admin.register(ClinicalDomainWorkingGroup)
 class ClinicalDomainWorkingGroupAdmin(ModelAdmin):
     """Register CDWGs in Admin page"""
 
+    form = CDWGAdminForm
     list_display = ("name", "id")
     search_fields = ("name", "id")
 
