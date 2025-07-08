@@ -1,9 +1,10 @@
 """Tests for the affiliations service."""
 
 # Third-party dependencies:
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from rest_framework.test import APIClient, APITestCase
-from rest_framework import status, serializers
+from rest_framework import status
 
 from rest_framework_api_key.models import APIKey
 
@@ -263,7 +264,7 @@ class AffiliationUtilsTest(TestCase):
         )
 
     def test_generate_next_affiliation_id_raises_value_error(self):
-        """Should raise serializers.ValidationError if next affiliation_id exceeds valid range."""
+        """Should raise ValidationError if next affiliation_id exceeds valid range."""
         Affiliation.objects.create(
             full_name="Overflow Affiliation",
             type="SC_VCEP",
@@ -273,19 +274,19 @@ class AffiliationUtilsTest(TestCase):
             expert_panel_id=49999,
         )
         cleaned_data = {}
-        with self.assertRaises(serializers.ValidationError) as cm:
+        with self.assertRaises(ValidationError) as cm:
             generate_next_affiliation_id(cleaned_data)
 
         self.assertIn("Affiliation ID out of range", str(cm.exception))
 
     def test_missing_affiliation_id_raises_validation_error(self):
-        """Should raise serializers.ValidationError when affiliation_id is missing."""
+        """Should raise ValidationError when affiliation_id is missing."""
         cleaned_data = {
             "type": "SC_VCEP",
             "clinical_domain_working_group": self.cdwg,
         }
 
-        with self.assertRaises(serializers.ValidationError) as cm:
+        with self.assertRaises(ValidationError) as cm:
             validate_and_set_expert_panel_id(cleaned_data)
 
         self.assertIn("affiliation_id is required", str(cm.exception))

@@ -3,6 +3,7 @@
 # Third-party dependencies:
 from rest_framework import serializers
 from django.db import transaction
+from django.core.exceptions import ValidationError
 
 # In-house code:
 from affiliations.models import (
@@ -103,9 +104,8 @@ class AffiliationSerializer(serializers.ModelSerializer):
         try:
             generate_next_affiliation_id(validated_data)
             validate_and_set_expert_panel_id(validated_data)
-        except serializers.ValidationError as e:
-            raise e
-
+        except ValidationError as e:
+            raise serializers.ValidationError(e.messages)
         coordinators_data = validated_data.pop("coordinators", [])
         approvers_data = validated_data.pop("approvers", [])
         submitter_ids_data = validated_data.pop("clinvar_submitter_ids", [])
