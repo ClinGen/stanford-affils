@@ -37,6 +37,20 @@ POST `affiliation/create/`
 - Returns a `400 Bad Request` on failure with error message of missing or
   invalid fields.
 
+PATCH `affiliation/<int:affiliation_id>/update/`
+
+- Updates an existing Affiliation. This endpoint generates and returns a
+  `200 OK` and full changed affiliation on success.
+
+- Returns a `400 Bad Request` on failure with error message of missing or
+  invalid fields.
+
+- Creates a new Affiliation. This endpoint generates and returns a `201 Created`
+  status, unique `affiliation_id` and a corresponding `expert_panel_id` upon
+  success.
+
+- Returns a `404 Not Found` on failure with error message.
+
 ## POST api/affiliation/create Endpoint Details:
 
 #### Request Example:
@@ -128,6 +142,49 @@ Acceptable `status` values:
 - INACTIVE
 - RETIRED
 - ARCHIVED
+
+## PATCH affiliation/<int:affiliation_id>/update/ Endpoint Details:
+
+The affiliation_id in the URL is the only required field. In request, only the
+values that need to be updated should be included.
+
+#### Successful Response:
+
+Returns `200 OK` with:
+
+- `affiliation_id`: *integer* – Generated affiliation ID (example: 10000)
+- `expert_panel_id`: *integer* – Associated expert panel ID (example: 40000)
+- `full_name`: *string* - Full name of the affiliation.
+- `short_name`: *string* – Short or abbreviation of affiliation.
+- `clinical_domain_working_group`: *integer* - ID of the Clinical Domain Working
+  Group.
+- `type`: *string* - The type of affiliation. Must be one of the accepted values
+  below.
+- `status`: *string* - The current status of the affiliation. Must be one of the
+  accepted values below.
+- `members`: *string* – Comma-separated names of members.
+- `coordinators`: *list of objects* – Each object must contain
+  `coordinator_name` and `coordinator_email`.
+- `approvers`: *list of objects* – Each object must contain `approver_name`.
+- `clinvar_submitter_ids`: *list of objects* – Each object must contain
+  `clinvar_submitter_id`.
+- `is_deleted`: *boolean* – True or False if affiliation is tombstoned.
+
+#### Unsuccessful Responses:
+
+Returns `400 Bad Request` with a JSON object detailing which fields failed
+validation.
+
+Example:
+
+```
+{
+    "error": "Request Failed",
+    "details": {
+        "detail": "No Affiliation matches the given query."
+    }
+}
+```
 
 ### URLS
 
