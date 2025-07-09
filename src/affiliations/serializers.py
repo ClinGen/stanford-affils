@@ -17,6 +17,7 @@ from affiliations.models import (
 from affiliations.utils import (
     generate_next_affiliation_id,
     validate_and_set_expert_panel_id,
+    validate_unique_cdwg_name,
 )
 
 
@@ -64,7 +65,15 @@ class ClinicalDomainWorkingGroupSerializer(serializers.ModelSerializer):
         """Describe the fields on a CDWG object."""
 
         model = ClinicalDomainWorkingGroup
-        fields = ["id", "code", "name"]
+        fields = ["id", "name"]
+
+    def validate(self, attrs):
+        instance_id = self.instance.pk if self.instance else None
+        try:
+            validate_unique_cdwg_name(attrs["name"], instance_id)
+        except serializers.ValidationError as e:
+            raise e
+        return attrs
 
 
 class AffiliationSerializer(serializers.ModelSerializer):
