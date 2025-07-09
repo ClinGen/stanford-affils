@@ -34,7 +34,7 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
     """Assign expert_panel_id based on type and affiliation_id,
     then validate related CDWG requirements."""
     affil_id = cleaned_data.get("affiliation_id")
-    _type = cleaned_data.get("type")
+    type_ = cleaned_data.get("type")
     cdwg = cleaned_data.get("clinical_domain_working_group")
 
     if affil_id is None:
@@ -42,12 +42,12 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
 
     ep_id = None
 
-    if _type == "VCEP":
+    if type_ == "VCEP":
         ep_id = (affil_id - AFFIL_BASE) + VCEP_BASE
         if not VCEP_BASE <= ep_id < 60000:
             raise ValidationError("VCEP ID out of range. Contact administrator.")
 
-    elif _type == "SC_VCEP":
+    elif type_ == "SC_VCEP":
         ep_id = (affil_id - AFFIL_BASE) + VCEP_BASE
         if not VCEP_BASE <= ep_id < 60000:
             raise ValidationError("SC-VCEP ID out of range. Contact administrator.")
@@ -59,7 +59,7 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
                 + "then CDWG must be 'Somatic Cancer'."
             )
 
-    elif _type == "GCEP":
+    elif type_ == "GCEP":
         ep_id = (affil_id - AFFIL_BASE) + GCEP_BASE
         if not GCEP_BASE <= ep_id < VCEP_BASE:
             raise ValidationError("GCEP ID out of range. Contact administrator.")
