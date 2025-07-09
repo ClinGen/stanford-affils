@@ -39,6 +39,11 @@ from affiliations.models import (
     ClinicalDomainWorkingGroup,
 )
 
+from affiliations.utils import (
+    generate_next_affiliation_id,
+    validate_and_set_expert_panel_id,
+)
+
 # Unregistering base Django Admin User and Group to use Unfold User and Group
 # instead for styling purposes.
 admin.site.unregister(User)
@@ -128,67 +133,6 @@ class AffiliationForm(forms.ModelForm):
         fields = "__all__"
         model = Affiliation
 
-    def _handle_clean_affiliation_id(self, cleaned_data):
-        """Clean and set Affiliation ID based on affil ID type."""
-        affil_id = cleaned_data.get("affiliation_id")
-
-        existing_affil_ids = (
-            Affiliation.objects.select_for_update()
-            .values_list("affiliation_id", flat=True)
-            .order_by("affiliation_id")
-        )
-
-        last_ind = existing_affil_ids.count()
-        if last_ind:
-            affil_id = existing_affil_ids[last_ind - 1] + 1
-        else:
-            affil_id = 10000
-        cleaned_data["affiliation_id"] = affil_id
-        if affil_id < 10000 or affil_id >= 20000:
-            self.add_error(
-                None,
-                ValidationError("Affiliation ID out of range. Contact administrator."),
-            )
-
-    def _handle_clean_type(self, cleaned_data):
-        """Clean and set EP ID based on Type and Affiliation ID."""
-        affil_id = cleaned_data.get("affiliation_id")
-        ep_id = cleaned_data.get("expert_panel_id")
-        _type = cleaned_data.get("type")
-
-        if _type == "VCEP":
-            ep_id = (affil_id - 10000) + 50000
-            cleaned_data["expert_panel_id"] = ep_id
-            if ep_id < 50000 or ep_id >= 60000:
-                self.add_error(
-                    None,
-                    ValidationError("VCEP ID out of range. Contact administrator."),
-                )
-        elif _type == "SC_VCEP":
-            ep_id = (affil_id - 10000) + 50000
-            cleaned_data["expert_panel_id"] = ep_id
-            cleaned_data["clinical_domain_working_group"] = (
-                ClinicalDomainWorkingGroup.objects.filter(name="Somatic Cancer").first()
-            )
-            if ep_id < 50000 or ep_id >= 60000:
-                self.add_error(
-                    None,
-                    ValidationError("SC-VCEP ID out of range. Contact administrator."),
-                )
-        elif _type == "GCEP":
-            ep_id = (affil_id - 10000) + 40000
-            cleaned_data["expert_panel_id"] = ep_id
-            if ep_id < 40000 or ep_id >= 50000:
-                self.add_error(
-                    None,
-                    ValidationError("GCEP ID out of range. Contact administrator."),
-                )
-        else:
-            cleaned_data["expert_panel_id"] = None
-            cleaned_data["clinical_domain_working_group"] = (
-                ClinicalDomainWorkingGroup.objects.filter(name="None").first()
-            )
-
     @transaction.atomic
     def clean(self):
         cleaned_data = super().clean()
@@ -196,8 +140,8 @@ class AffiliationForm(forms.ModelForm):
         if self.instance.pk is not None:
             return cleaned_data
 
-        self._handle_clean_affiliation_id(cleaned_data)
-        self._handle_clean_type(cleaned_data)
+        generate_next_affiliation_id(cleaned_data)
+        validate_and_set_expert_panel_id(cleaned_data)
 
         # Check to see if the Affil and EP ID already exist in DB.
         if (
@@ -208,13 +152,9 @@ class AffiliationForm(forms.ModelForm):
             )
             .exists()
         ):
-            self.add_error(
-                None,
-                ValidationError(
-                    "This Affiliation ID with this Expert Panel ID already exist."
-                ),
+            raise ValidationError(
+                "An affiliation with this Affiliation ID with this Expert Panel ID already exist."
             )
-
         return cleaned_data
 
 
