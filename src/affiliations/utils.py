@@ -71,3 +71,17 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
             )
 
     cleaned_data["expert_panel_id"] = ep_id
+
+
+def validate_unique_cdwg_name(name: str, instance_id=None) -> None:
+    """
+    Raise ValidationError if another CDWG with the same name exists.
+    Case-insensitive check. Allows the current instance to retain its name.
+    """
+    qs = ClinicalDomainWorkingGroup.objects.all()
+    if instance_id:
+        qs = qs.exclude(id=instance_id)
+    if qs.filter(name__iexact=name).exists():
+        raise ValidationError(
+            "A Clinical Domain Working Group with this name already exists."
+        )
