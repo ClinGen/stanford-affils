@@ -186,6 +186,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "affiliations.renderers.BrowsableAPIRendererWithoutForms",
     ),
+    "EXCEPTION_HANDLER": "affiliations.views.custom_exception_handler",
 }
 
 UNFOLD = {

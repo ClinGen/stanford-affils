@@ -19,6 +19,10 @@ urlpatterns: list[URLResolver | URLPattern] = [
         "affiliation_detail/",
         views.affiliation_detail_json_format,
     ),
+    path(
+        "affiliation/create/",
+        views.create_affiliation,
+    ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
