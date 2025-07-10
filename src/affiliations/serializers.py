@@ -17,6 +17,7 @@ from affiliations.models import (
 from affiliations.utils import (
     generate_next_affiliation_id,
     validate_and_set_expert_panel_id,
+    validate_unique_cdwg_name,
 )
 
 
@@ -64,7 +65,15 @@ class ClinicalDomainWorkingGroupSerializer(serializers.ModelSerializer):
         """Describe the fields on a CDWG object."""
 
         model = ClinicalDomainWorkingGroup
-        fields = ["id", "code", "name"]
+        fields = ["id", "name"]
+
+    def validate(self, attrs):
+        instance_id = self.instance.pk if self.instance else None
+        try:
+            validate_unique_cdwg_name(attrs["name"], instance_id)
+        except serializers.ValidationError as e:
+            raise e
+        return attrs
 
 
 class AffiliationSerializer(serializers.ModelSerializer):
@@ -121,8 +130,21 @@ class AffiliationSerializer(serializers.ModelSerializer):
             Submitter.objects.create(affiliation=affil, **submitter_id_data)
         return affil
 
+    @transaction.atomic
     def update(self, instance, validated_data):
-        """Update and return an existing Affiliation instance."""
+        """Update and return an existing Affiliation instance,
+        while preventing changes to immutable fields."""
+
+        # Prevent updates to immutable fields
+        immutable_fields = ["affiliation_id", "expert_panel_id", "type"]
+        for field in immutable_fields:
+            if (
+                field in validated_data
+                and getattr(instance, field) != validated_data[field]
+            ):
+                raise serializers.ValidationError(
+                    {field: f"{field} is a read-only field and cannot be updated."}
+                )
 
         coordinators_data = validated_data.pop("coordinators", [])
         approvers_data = validated_data.pop("approvers", [])
@@ -130,7 +152,8 @@ class AffiliationSerializer(serializers.ModelSerializer):
 
         # Update the main fields on the instance
         for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+            if getattr(instance, attr) != value:
+                setattr(instance, attr, value)
         instance.save()
 
         # Update nested objects by delete all existing and re-create.

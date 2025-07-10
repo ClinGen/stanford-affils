@@ -23,6 +23,30 @@ urlpatterns: list[URLResolver | URLPattern] = [
         "affiliation/create/",
         views.create_affiliation,
     ),
+    path(
+        "affiliation/<int:affiliation_id>/update/",
+        views.AffiliationUpdateView.as_view(),
+    ),
+    path(
+        "cdwg_list/",
+        views.CDWGListView.as_view(),
+    ),
+    path(
+        "cdwg_detail/id/<int:id>/",
+        views.CDWGDetailView.as_view(),
+    ),
+    path(
+        "cdwg_detail/name/<str:name>/",
+        views.CDWGDetailView.as_view(),
+    ),
+    path(
+        "cdwg/create/",
+        views.CDWGCreateView.as_view(),
+    ),
+    path(
+        "cdwg/id/<int:id>/update/",
+        views.CDWGUpdateView.as_view(),
+    ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
