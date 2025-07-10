@@ -8,11 +8,14 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 from rest_framework_api_key.permissions import HasAPIKey
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 
 # In-house code:
-from affiliations.models import Affiliation, Approver
-from affiliations.serializers import AffiliationSerializer
+from affiliations.models import Affiliation, Approver, ClinicalDomainWorkingGroup
+from affiliations.serializers import (
+    AffiliationSerializer,
+    ClinicalDomainWorkingGroupSerializer,
+)
 
 
 def custom_exception_handler(exc, context):
@@ -60,6 +63,70 @@ class AffiliationUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Affiliation.objects.all()
     serializer_class = AffiliationSerializer
     lookup_field = "affiliation_id"
+
+
+class CDWGCreateView(generics.CreateAPIView):
+    """Create a new CDWG."""
+
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    serializer_class = ClinicalDomainWorkingGroupSerializer
+    queryset = ClinicalDomainWorkingGroup.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+
+        return Response(
+            {
+                "name": instance.name,
+                "id": instance.id,
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class CDWGUpdateView(generics.RetrieveUpdateAPIView):
+    """Update editable CDWG data, return all CDWG information."""
+
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    queryset = ClinicalDomainWorkingGroup.objects.all()
+    serializer_class = ClinicalDomainWorkingGroupSerializer
+    lookup_field = "id"
+
+
+class CDWGListView(generics.ListAPIView):
+    """List all CDWGs."""
+
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    queryset = ClinicalDomainWorkingGroup.objects.all()
+    serializer_class = ClinicalDomainWorkingGroupSerializer
+
+
+class CDWGDetailView(generics.RetrieveAPIView):
+    """List a single CDWG, lookup by either name or ID."""
+
+    permission_classes = [HasAPIKey | IsAuthenticated]
+    queryset = ClinicalDomainWorkingGroup.objects.all()
+    serializer_class = ClinicalDomainWorkingGroupSerializer
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        cdwg_id = self.kwargs.get("id")
+        name = self.kwargs.get("name")
+        if cdwg_id is not None:
+            try:
+                return queryset.get(id=cdwg_id)
+            except ClinicalDomainWorkingGroup.DoesNotExist as exc:
+                raise Http404("A CDWG with that ID does not exist.") from exc
+
+        if name is not None:
+            try:
+                return queryset.get(name=name)
+            except ClinicalDomainWorkingGroup.DoesNotExist as exc:
+                raise Http404("A CDWG with that name does not exist.") from exc
+
+        raise Http404("No CDWG ID or name provided.")
 
 
 @api_view(["GET"])

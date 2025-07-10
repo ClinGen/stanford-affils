@@ -34,9 +34,8 @@ class AffiliationsViewsBaseTestCase(APITestCase):
         """Seed the test database with some test data."""
         _, cls.api_key = APIKey.objects.create_key(name="test-service")
         cls.auth_headers = {"HTTP_X_API_KEY": cls.api_key}
-        cdwg1, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
-            code="HEARING_LOSS", defaults={"name": "Hearing Loss"}
-        )
+        cdwg1, _ = ClinicalDomainWorkingGroup.objects.get_or_create(name="Hearing Loss")
+
         cls.success_affiliation = {
             "full_name": "Test Success Result Affil",
             "short_name": "Successful",
@@ -151,15 +150,6 @@ class AffiliationsViewsBaseTestCase(APITestCase):
 
 class TestCDWGModel(TestCase):
     """A test class for testing validation errors dealing with CDWGs."""
-
-    def test_duplicate_code_fails(self):
-        """Make sure expected validation errors are triggered when duplicate
-        CDWGs are created."""
-        ClinicalDomainWorkingGroup.objects.create(code="EYE", name="Eye Disorders")
-        with self.assertRaises(Exception):
-            ClinicalDomainWorkingGroup.objects.create(
-                code="EYE", name="Duplicate Eye Disorders"
-            )
 
     def test_affiliation_missing_cdwg_raises_error(self):
         """Make sure expected validation errors are triggered if an affiliation
@@ -298,7 +288,7 @@ class AffiliationUtilsTest(TestCase):
         with self.assertRaises(Exception) as context:
             validate_and_set_expert_panel_id(cleaned_data)
         self.assertIn(
-            "If type is 'Somatic Cancer Variant Curation Expert Panel",
+            "If type is 'Somatic Cancer Variant Curation Expert Panel'",
             str(context.exception),
         )
 
@@ -339,7 +329,9 @@ class TestAffiliationUpdateView(APITestCase):
         _, cls.api_key = APIKey.objects.create_key(name="test-service")
         cls.auth_headers = {"HTTP_X_API_KEY": cls.api_key}
 
-        cls.cdwg = ClinicalDomainWorkingGroup.objects.create(name="Cardiology")
+        cls.cdwg, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
+            name="Cardiology"
+        )
         cls.affiliation = Affiliation.objects.create(
             affiliation_id=10000,
             expert_panel_id=40000,
@@ -381,3 +373,118 @@ class TestAffiliationUpdateView(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("type", response.data["details"])
+
+
+class TestCDWGApi(APITestCase):
+    """Class for CDWG API tests."""
+
+    @classmethod
+    def setUpTestData(cls):
+        """Seed the test database with some test data."""
+        _, cls.api_key = APIKey.objects.create_key(name="test-service")
+        cls.auth_headers = {"HTTP_X_API_KEY": cls.api_key}
+        cls.cdwg1, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
+            name="Cardiology"
+        )
+        cls.cdwg2, _ = ClinicalDomainWorkingGroup.objects.get_or_create(name="Oncology")
+        cls.client = APIClient()
+
+    def test_create_cdwg_success(self):
+        """Test that a new CDWG can be successfully created with valid data."""
+        data = {"name": "Neurology"}
+        response = self.client.post(
+            "/api/cdwg/create/",
+            data,
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["name"], "Neurology")
+
+    def test_update_cdwg_by_id_success(self):
+        """Test that a new CDWG can be successfully created with valid data."""
+        update_data = {"name": "Cardiology Updated"}
+        response = self.client.put(
+            f"/api/cdwg/id/{self.cdwg1.id}/update/",
+            update_data,
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["name"], "Cardiology Updated")
+
+    def test_list_cdwgs_success(self):
+        """Test that all existing CDWGs can be listed successfully."""
+        response = self.client.get(
+            "/api/cdwg_list/",
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(any(c["name"] == "Cardiology" for c in response.data))
+
+    def test_get_cdwg_by_id_success(self):
+        """Test that a single CDWG can be retrieved by its ID."""
+        response = self.client.get(
+            f"/api/cdwg_detail/id/{self.cdwg1.id}/",
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["name"], "Cardiology")
+
+    def test_get_cdwg_not_found(self):
+        """Test that a 404 is returned when retrieving a non-existent CDWG by ID."""
+        nonexistent_id = (
+            ClinicalDomainWorkingGroup.objects.order_by("-id").first().id + 100
+        )
+
+        response = self.client.get(
+            f"/api/cdwg_detail/id/{nonexistent_id}/",
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_cdwg_not_found(self):
+        """Test that a 404 is returned when updating a non-existent CDWG."""
+        response = self.client.put(
+            "/api/cdwg/999/update/",
+            {"name": "Ghost"},
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_cdwg_duplicate_name_case_insensitive(self):
+        """Test that creating a CDWG with a duplicate name (case-insensitive) fails."""
+        data = {"name": "cardiology"}  # existing is "Cardiology"
+        response = self.client.post(
+            "/api/cdwg/create/",
+            data,
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("non_field_errors", response.data["details"])
+
+    def test_create_cdwg_missing_name(self):
+        """Test that creating a CDWG without providing a name returns a 400."""
+        response = self.client.post(
+            "/api/cdwg/create/",
+            {},
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("name", response.data["details"])
+
+    def test_get_cdwg_by_name_success(self):
+        """Test that a CDWG can be retrieved successfully using its name."""
+        response = self.client.get(
+            f"/api/cdwg_detail/name/{self.cdwg2.name}/",
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["name"], self.cdwg2.name)
