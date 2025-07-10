@@ -352,7 +352,7 @@ class TestAffiliationUpdateView(APITestCase):
             "status": "INACTIVE",
         }
         response = self.client.patch(
-            f"/api/affiliation/{self.affiliation.affiliation_id}/update/",
+            f"/api/affiliation/update/affiliation_id/{self.affiliation.affiliation_id}/",
             data=payload,
             format="json",
             **self.auth_headers,
@@ -366,7 +366,7 @@ class TestAffiliationUpdateView(APITestCase):
         """Test to attempt to update an immutable field via API."""
         payload = {"type": "VCEP"}
         response = self.client.patch(
-            f"/api/affiliation/{self.affiliation.affiliation_id}/update/",
+            f"/api/affiliation/update/affiliation_id/{self.affiliation.affiliation_id}/",
             data=payload,
             format="json",
             **self.auth_headers,
@@ -488,3 +488,63 @@ class TestCDWGApi(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["name"], self.cdwg2.name)
+
+
+class AffiliationUpdateViewTest(APITestCase):
+    """Tests for updating affiliation data using either affiliation_id or expert_panel_id."""
+
+    @classmethod
+    def setUpTestData(cls):
+        _, cls.api_key = APIKey.objects.create_key(name="test-service")
+        cls.auth_headers = {"HTTP_X_API_KEY": cls.api_key}
+
+        cls.cdwg, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
+            name="Immunology"
+        )
+        cls.affiliation = Affiliation.objects.create(
+            affiliation_id=10000,
+            expert_panel_id=40000,
+            full_name="Original Name",
+            type="GCEP",
+            status="ACTIVE",
+            members="Misty, Brock",
+            clinical_domain_working_group=cls.cdwg,
+        )
+
+    def test_update_full_name_by_affiliation_id(self):
+        """Should update editable field using affiliation_id."""
+        url = (
+            f"/api/affiliation/update/affiliation_id/{self.affiliation.affiliation_id}/"
+        )
+        data = {"full_name": "Updated Name"}
+        response = self.client.patch(
+            url,
+            data,
+            format="json",
+            **self.auth_headers,
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.affiliation.refresh_from_db()
+        self.assertEqual(self.affiliation.full_name, "Updated Name")
+
+    def test_update_immutable_field_fails(self):
+        """Should raise error when trying to update an immutable field."""
+        url = (
+            f"/api/affiliation/update/affiliation_id/{self.affiliation.affiliation_id}/"
+        )
+        data = {"type": "VCEP"}  # Immutable
+        response = self.client.patch(url, data, format="json", **self.auth_headers)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("type", response.data["details"])
+
+    def test_404_if_both_ids_missing(self):
+        """Should raise 404 if neither ID is provided."""
+        url = "/api/affiliation/update/affiliation_id/"  # Invalid URL
+        response = self.client.get(url, **self.auth_headers)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_404_for_invalid_expert_panel_id(self):
+        """Should return 404 for non-existent expert_panel_id."""
+        url = "/api/affiliation/update/expert_panel_id/99999/"
+        response = self.client.get(url, **self.auth_headers)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

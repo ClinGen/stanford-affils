@@ -57,12 +57,37 @@ class AffiliationsDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class AffiliationUpdateView(generics.RetrieveUpdateAPIView):
-    """Update editable affiliation data, return all affiliation information."""
+    """Update editable affiliation data, return all affiliation information.
+    This view supports lookup by either `affiliation_id` or `expert_panel_id`
+    (only one should be provided in the URL).
+    """
 
     permission_classes = [HasAPIKey | IsAuthenticated]
     queryset = Affiliation.objects.all()
     serializer_class = AffiliationSerializer
-    lookup_field = "affiliation_id"
+
+    def get_object(self):
+        """Retrieve Affiliation by either affiliation_id or expert_panel_id."""
+        affiliation_id = self.kwargs.get("affiliation_id")
+        expert_panel_id = self.kwargs.get("expert_panel_id")
+
+        if affiliation_id is not None:
+            try:
+                return Affiliation.objects.get(affiliation_id=affiliation_id)
+            except Affiliation.DoesNotExist as exc:
+                raise Http404(
+                    "Affiliation with the provided affiliation_id was not found."
+                ) from exc
+
+        if expert_panel_id is not None:
+            try:
+                return Affiliation.objects.get(expert_panel_id=expert_panel_id)
+            except Affiliation.DoesNotExist as exc:
+                raise Http404(
+                    "Affiliation with the provided expert_panel_id was not found."
+                ) from exc
+
+        raise Http404("An affiliation_id or expert_panel_id must be provided.")
 
 
 class CDWGCreateView(generics.CreateAPIView):
