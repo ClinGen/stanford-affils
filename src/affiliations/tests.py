@@ -35,6 +35,7 @@ class AffiliationsViewsBaseTestCase(APITestCase):
         _, cls.api_key = APIKey.objects.create_key(name="test-service")
         cls.auth_headers = {"HTTP_X_API_KEY": cls.api_key}
         cdwg1, _ = ClinicalDomainWorkingGroup.objects.get_or_create(name="Hearing Loss")
+
         cls.success_affiliation = {
             "full_name": "Test Success Result Affil",
             "short_name": "Successful",
