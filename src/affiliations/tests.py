@@ -20,7 +20,8 @@ from affiliations.models import (
 from affiliations.serializers import AffiliationSerializer
 from affiliations.utils import (
     generate_next_affiliation_id,
-    validate_and_set_expert_panel_id,
+    set_expert_panel_id,
+    validate_cdwg_matches_type,
 )
 
 
@@ -47,7 +48,7 @@ class AffiliationsViewsBaseTestCase(APITestCase):
         }
         # Pass data through custom clean functions to generate affil and EP ID
         generate_next_affiliation_id(cls.success_affiliation)
-        validate_and_set_expert_panel_id(cls.success_affiliation)
+        set_expert_panel_id(cls.success_affiliation)
         success_affil = Affiliation.objects.create(**cls.success_affiliation)
         Coordinator.objects.create(
             affiliation=success_affil,
@@ -264,18 +265,18 @@ class AffiliationUtilsTest(TestCase):
         self.assertIn("affiliation_id", cleaned_data)
         self.assertGreaterEqual(cleaned_data["affiliation_id"], 10000)
 
-    def test_validate_and_set_expert_panel_id_success(self):
+    def test_set_expert_panel_id_success(self):
         """Test that a valid SC_VCEP affiliation sets the correct expert_panel_id."""
         cleaned_data = {
             "affiliation_id": 10000,
             "type": "SC_VCEP",
             "clinical_domain_working_group": self.cdwg,
         }
-        validate_and_set_expert_panel_id(cleaned_data)
+        set_expert_panel_id(cleaned_data)
         self.assertIn("expert_panel_id", cleaned_data)
         self.assertGreaterEqual(cleaned_data["expert_panel_id"], 50000)
 
-    def test_validate_and_set_expert_panel_id_invalid_cdwg(self):
+    def test_validate_cdwg_matches_type_invalid_cdwg(self):
         """Test that an SC_VCEP with incorrect CDWG raises a validation error."""
         wrong_cdwg, _ = ClinicalDomainWorkingGroup.objects.get_or_create(
             name="Cardiology"
@@ -286,13 +287,13 @@ class AffiliationUtilsTest(TestCase):
             "clinical_domain_working_group": wrong_cdwg,
         }
         with self.assertRaises(Exception) as context:
-            validate_and_set_expert_panel_id(cleaned_data)
+            validate_cdwg_matches_type(cleaned_data)
         self.assertIn(
             "If type is 'Somatic Cancer Variant Curation Expert Panel'",
             str(context.exception),
         )
 
-    def test_generate_next_affiliation_id_raises_value_error(self):
+    def test_generate_next_affiliation_id_raises_validation_error(self):
         """Should raise ValidationError if next affiliation_id exceeds valid range."""
         Affiliation.objects.create(
             full_name="Overflow Affiliation",
@@ -316,7 +317,7 @@ class AffiliationUtilsTest(TestCase):
         }
 
         with self.assertRaises(ValidationError) as cm:
-            validate_and_set_expert_panel_id(cleaned_data)
+            set_expert_panel_id(cleaned_data)
 
         self.assertIn("affiliation_id is required", str(cm.exception))
 

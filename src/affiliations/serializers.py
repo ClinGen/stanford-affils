@@ -16,8 +16,9 @@ from affiliations.models import (
 
 from affiliations.utils import (
     generate_next_affiliation_id,
-    validate_and_set_expert_panel_id,
+    set_expert_panel_id,
     validate_unique_cdwg_name,
+    validate_cdwg_matches_type,
 )
 
 
@@ -112,7 +113,8 @@ class AffiliationSerializer(serializers.ModelSerializer):
         nested Coordinators, Approvers, and Submitter IDs."""
         try:
             generate_next_affiliation_id(validated_data)
-            validate_and_set_expert_panel_id(validated_data)
+            set_expert_panel_id(validated_data)
+            validate_cdwg_matches_type(validated_data)
         except ValidationError as e:
             raise serializers.ValidationError(e.messages)
         coordinators_data = validated_data.pop("coordinators", [])
@@ -134,7 +136,10 @@ class AffiliationSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Update and return an existing Affiliation instance,
         while preventing changes to immutable fields."""
-
+        try:
+            validate_cdwg_matches_type(validated_data, instance)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.messages)
         # Prevent updates to immutable fields
         immutable_fields = ["affiliation_id", "expert_panel_id", "type"]
         for field in immutable_fields:
