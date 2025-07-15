@@ -104,6 +104,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
             "coordinators",
             "clinvar_submitter_ids",
             "is_deleted",
+            "uuid",
         ]
 
     @transaction.atomic
@@ -136,7 +137,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
         while preventing changes to immutable fields."""
 
         # Prevent updates to immutable fields
-        immutable_fields = ["affiliation_id", "expert_panel_id", "type"]
+        immutable_fields = ["affiliation_id", "expert_panel_id", "type", "uuid"]
         for field in immutable_fields:
             if (
                 field in validated_data
