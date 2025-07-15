@@ -99,6 +99,10 @@ class Affiliation(models.Model):
     )
     members: models.CharField = models.CharField(blank=True, null=True)
     is_deleted: models.BooleanField = models.BooleanField(default=False)
+    """ID used and provided by UNC for the GPM."""
+    uuid: models.CharField = models.CharField(
+        unique=True, null=True, blank=True, verbose_name="GPM UUID"
+    )
 
     def __str__(self):
         """Provide a string representation of an affiliation."""
