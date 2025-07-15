@@ -108,6 +108,11 @@ class AffiliationSerializer(serializers.ModelSerializer):
             "uuid",
         ]
 
+    def validate(self, attrs):
+        if self.instance is None and not attrs.get("uuid"):
+            raise serializers.ValidationError({"uuid": "This field is required."})
+        return attrs
+
     @transaction.atomic
     def create(self, validated_data):
         """Create an Affiliation instance along with

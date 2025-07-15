@@ -73,6 +73,7 @@ class AffiliationsViewsBaseTestCase(APITestCase):
             "full_name": "Test VCEP",
             "type": "VCEP",
             "status": "ACTIVE",
+            "uuid": "mock-uuid",
             "clinical_domain_working_group": cls.cdwg2.id,
         }
 
@@ -195,6 +196,7 @@ class AffiliationSerializerTest(TestCase):
             "full_name": "Test SC_VCEP",
             "type": "SC_VCEP",
             "status": "ACTIVE",
+            "uuid": "mock-uuid",
             "clinical_domain_working_group": self.cdwg.id,
         }
         serializer = AffiliationSerializer(data=payload)
