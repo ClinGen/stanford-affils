@@ -15,6 +15,7 @@ env:
   DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
   API_KEY: "placeholder"
   AFFILS_API_KEY: "placeholder"
+  AWS_REGION: ${{ secrets.AWS_REGION }}
 permissions:
   contents: read
 jobs:
