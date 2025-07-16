@@ -27,7 +27,7 @@ djangorestframework-api-key = "==3.*"
 django-import-export = "4.*"
 
 [dev-packages]
-black = "==24.*"
+black = "==25.*"
 django-stubs = {extras = ["compatible-mypy"], version = "5.*"}
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "3.*"}
 invoke = "==2.*"

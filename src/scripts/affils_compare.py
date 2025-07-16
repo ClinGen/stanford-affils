@@ -3,7 +3,7 @@ Script to be run to compare JSON file and a JSON file of API response.
 
 Both files need to be saved in the `scripts` folder in directory before running.
 
-You can then run this script by running: 
+You can then run this script by running:
 `python manage.py runscript affils_compare` in the command line from the directory.
 
 Follow steps outlined in [tutorial.md](
