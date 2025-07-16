@@ -13,11 +13,32 @@
   shown in the admin site, mostly for identification purposes. If you lose the
   full API key, you'll need to regenerate a new one.
 
-### Authorization header
+### Authorization
 
-By default, clients must pass their API key via the Authorization header. It
-must be formatted as follows: `X-Api-Key <API_KEY>` where \<API_KEY> refers to
-the full generated API key
+Clients must pass their API key via an HTTP header. It must be formatted as
+follows: `X-Api-Key: <API_KEY>` where \<API_KEY> refers to the full generated
+API key.
+
+### URLS
+
+TEST: `https://affils-test.clinicalgenome.org/api/`
+
+PROD: `https://affils.clinicalgenome.org/api/`
+
+Examples: `https://affils-test.clinicalgenome.org/api/affiliations_list/` will
+give you a JSON response of all affiliations.
+
+If you set the environment variable `AFFILIATIONS_API_KEY` with your API key,
+you can get data from the command-line with any of the following tools:
+
+```bash
+# HTTPie
+http https://affils-test.clinicalgenome.org/api/affiliations_list/ "X-Api-Key:$AFFILIATIONS_API_KEY"
+# curl
+curl -H "X-Api-Key:$AFFILIATIONS_API_KEY" https://affils-test.clinicalgenome.org/api/affiliations_list/
+# wget
+wget --header "X-Api-Key: $AFFILIATIONS_API_KEY" https://affils-test.clinicalgenome.org/api/affiliations_list/ -O-
+```
 
 ### Endpoints
 
@@ -352,12 +373,3 @@ Example:
     }
 }
 ```
-
-### URLS
-
-TEST: `https://affils-test.clinicalgenome.org/api/`
-
-PROD: `https://affils.clinicalgenome.org/api/`
-
-Example: `https://affils-test.clinicalgenome.org/api/affiliations_list/` will
-give you a JSON response of all affiliations
