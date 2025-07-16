@@ -339,7 +339,6 @@ Example:
 }
 ```
 
-
 ### URLS
 
 TEST: `https://affils-test.clinicalgenome.org/api/`
