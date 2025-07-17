@@ -216,6 +216,7 @@ class AffiliationResource(resources.ModelResource):
             "type",
             "clinical_domain_working_group__name",
             "is_deleted",
+            "uuid",
         ]
 
 
@@ -313,6 +314,7 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
     fields = (
         "affiliation_id",
         "expert_panel_id",
+        "uuid",
         "type",
         "full_name",
         "short_name",
@@ -335,6 +337,7 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
                     "expert_panel_id",
                     "type",
                     "members",
+                    "uuid",
                 ]
         return [
             "members",
