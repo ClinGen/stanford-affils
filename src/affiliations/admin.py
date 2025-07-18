@@ -41,8 +41,9 @@ from affiliations.models import (
 
 from affiliations.utils import (
     generate_next_affiliation_id,
-    validate_and_set_expert_panel_id,
+    set_expert_panel_id,
     validate_unique_cdwg_name,
+    validate_cdwg_matches_type,
 )
 
 # Unregistering base Django Admin User and Group to use Unfold User and Group
@@ -156,24 +157,25 @@ class AffiliationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         # If the primary key already exists, return cleaned_data.
-        if self.instance.pk is not None:
-            return cleaned_data
+        # Otherwise, run validations on new affiliations
+        if self.instance.pk is None:
+            generate_next_affiliation_id(cleaned_data)
+            set_expert_panel_id(cleaned_data)
 
-        generate_next_affiliation_id(cleaned_data)
-        validate_and_set_expert_panel_id(cleaned_data)
+            if (
+                Affiliation.objects.select_for_update()
+                .filter(
+                    affiliation_id=cleaned_data.get("affiliation_id"),
+                    expert_panel_id=cleaned_data.get("expert_panel_id"),
+                )
+                .exists()
+            ):
+                raise ValidationError(
+                    "An affiliation with this Affiliation ID and Expert Panel ID already exists."
+                )
 
-        # Check to see if the Affil and EP ID already exist in DB.
-        if (
-            Affiliation.objects.select_for_update()
-            .filter(
-                affiliation_id=cleaned_data.get("affiliation_id"),
-                expert_panel_id=cleaned_data.get("expert_panel_id"),
-            )
-            .exists()
-        ):
-            raise ValidationError(
-                "An affiliation with this Affiliation ID with this Expert Panel ID already exist."
-            )
+        # Always validate CDWG-type relationship
+        validate_cdwg_matches_type(cleaned_data, self.instance)
         return cleaned_data
 
 
