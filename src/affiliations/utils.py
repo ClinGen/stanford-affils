@@ -30,12 +30,10 @@ def generate_next_affiliation_id(cleaned_data: dict) -> None:
         cleaned_data["affiliation_id"] = next_id
 
 
-def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
-    """Assign expert_panel_id based on type and affiliation_id,
-    then validate related CDWG requirements."""
+def set_expert_panel_id(cleaned_data: dict) -> None:
+    """Assign expert_panel_id based on type and affiliation_id."""
     affil_id = cleaned_data.get("affiliation_id")
     type_ = cleaned_data.get("type")
-    cdwg = cleaned_data.get("clinical_domain_working_group")
 
     if affil_id is None:
         raise ValidationError("affiliation_id is required to create expert_panel_id.")
@@ -52,23 +50,10 @@ def validate_and_set_expert_panel_id(cleaned_data: dict) -> None:
         if not VCEP_BASE <= ep_id < 60000:
             raise ValidationError("SC-VCEP ID out of range. Contact administrator.")
 
-        expected_cdwg = ClinicalDomainWorkingGroup.objects.get(name="Somatic Cancer")
-        if cdwg != expected_cdwg:
-            raise ValidationError(
-                "If type is 'Somatic Cancer Variant Curation Expert Panel', "
-                + "then CDWG must be 'Somatic Cancer'."
-            )
-
     elif type_ == "GCEP":
         ep_id = (affil_id - AFFIL_BASE) + GCEP_BASE
         if not GCEP_BASE <= ep_id < VCEP_BASE:
             raise ValidationError("GCEP ID out of range. Contact administrator.")
-    else:
-        expected_cdwg = ClinicalDomainWorkingGroup.objects.get(name="None")
-        if cdwg != expected_cdwg:
-            raise ValidationError(
-                "If type is 'Independent Curation Group', then CDWG must be 'None'."
-            )
 
     cleaned_data["expert_panel_id"] = ep_id
 
@@ -85,3 +70,31 @@ def validate_unique_cdwg_name(name: str, instance_id=None) -> None:
         raise ValidationError(
             "A Clinical Domain Working Group with this name already exists."
         )
+
+
+def validate_cdwg_matches_type(cleaned_data: dict, instance=None) -> None:
+    """Ensure the provided CDWG is valid for the given immutable type."""
+    type_ = cleaned_data.get("type")
+    cdwg = cleaned_data.get("clinical_domain_working_group")
+
+    if not type_ and instance:
+        type_ = getattr(instance, "type", None)
+    if not cdwg:
+        return
+
+    if type_ == "SC_VCEP":
+        expected = ClinicalDomainWorkingGroup.objects.get(name="Somatic Cancer")
+        if cdwg != expected:
+            raise ValidationError(
+                "If type is 'Somatic Cancer Variant Curation Expert Panel', "
+                + "then CDWG must be 'Somatic Cancer'."
+            )
+
+    elif (
+        type_ == "INDEPENDENT_CURATION"
+    ):  # If your type for independent groups is 'ICG'
+        expected = ClinicalDomainWorkingGroup.objects.get(name="None")
+        if cdwg != expected:
+            raise ValidationError(
+                "If type is 'Independent Curation Group', then CDWG must be 'None'."
+            )

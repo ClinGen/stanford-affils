@@ -1,10 +1,10 @@
 """
-Script to be run to insert existing data from 
+Script to be run to insert existing data from
 the affiliations JSON file to the database.
 
 JSON file needs to be saved in the `scripts` folder in directory before running.
 
-You can then run this script by running: 
+You can then run this script by running:
 `python manage.py runscript json_load` in the command line from the directory.
 
 Follow steps outlined in [tutorial.md](
