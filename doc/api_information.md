@@ -39,10 +39,20 @@ POST `affiliation/create/`
 - Returns a `400 Bad Request` on failure with error message of missing or
   invalid fields.
 
-PATCH `affiliation/<int:affiliation_id>/update/`
+PATCH `affiliation/update/affiliation_id/<int:affiliation_id>/`
 
-- Updates an existing Affiliation. This endpoint generates and returns a
-  `200 OK` and full changed affiliation on success.
+- Updates an existing Affiliation by Affiliation ID. This endpoint generates and
+  returns a `200 OK` and full changed affiliation on success.
+
+- Returns a `400 Bad Request` on failure with error message of missing or
+  invalid fields.
+
+- Returns a `404 Not Found` on failure with error message.
+
+PATCH `affiliation/update/expert_panel_id/<int:expert_panel_id>/`
+
+- Updates an existing Affiliation by Expert Panel ID. This endpoint generates
+  and returns a `200 OK` and full changed affiliation on success.
 
 - Returns a `400 Bad Request` on failure with error message of missing or
   invalid fields.
@@ -141,10 +151,10 @@ Acceptable `status` values:
 - RETIRED
 - ARCHIVED
 
-## PATCH affiliation/<int:affiliation_id>/update/ Endpoint Details:
+## PATCH affiliation/update/affiliation_id/<int:affiliation_id>/ and affiliation/update/expert_panel_id/<int:expert_panel_id>/Endpoint Details:
 
-The affiliation_id in the URL is the only required field. In request, only the
-values that need to be updated should be included.
+The ID in the URL is the only required field. In request, only the values that
+need to be updated should be included.
 
 #### Successful Response:
 
@@ -179,7 +189,7 @@ Example:
 {
     "error": "Request Failed",
     "details": {
-        "detail": "No Affiliation matches the given query."
+        "detail": "Affiliation with the provided affiliation_id was not found."
     }
 }
 ```
