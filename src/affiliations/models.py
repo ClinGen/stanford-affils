@@ -3,6 +3,21 @@
 # Third-party dependencies:
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from rest_framework_api_key.models import AbstractAPIKey
+
+
+class CustomAPIKey(AbstractAPIKey):
+    """Define custom API key model."""
+
+    can_write: models.BooleanField = models.BooleanField(
+        default=False, verbose_name="Allow to Create/Update Affiliations"
+    )
+
+    class Meta(AbstractAPIKey.Meta):
+        """Meta class for custom API Key model."""
+
+        verbose_name = "API Key"
+        verbose_name_plural = "API Keys"
 
 
 class AffiliationStatus(models.TextChoices):  # pylint: disable=too-many-ancestors
