@@ -24,10 +24,10 @@ def migrate_old_api_keys(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("affiliations", "0047_customapikey"),
-        ("rest_framework_api_key", "0012_delete_customapikey"),
+        ("affiliations", "0047_customapikey")
     ]
 
     operations = [
         migrations.RunPython(migrate_old_api_keys),
     ]
+
