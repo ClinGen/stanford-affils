@@ -4,10 +4,11 @@
 import logging
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
-from rest_framework_api_key.permissions import HasAPIKey
+
+# from rest_framework_api_key.permissions import HasAPIKey
 from django.http import JsonResponse, Http404
 
 # In-house code:
@@ -16,6 +17,7 @@ from affiliations.serializers import (
     AffiliationSerializer,
     ClinicalDomainWorkingGroupSerializer,
 )
+from affiliations.permissions import HasWriteAccess, HasAffilsAPIKey
 
 
 def custom_exception_handler(exc, context):
@@ -62,7 +64,7 @@ class AffiliationUpdateView(generics.RetrieveUpdateAPIView):
     (only one should be provided in the URL).
     """
 
-    permission_classes = [HasAPIKey | IsAuthenticated]
+    permission_classes = [HasWriteAccess]
     queryset = Affiliation.objects.all()
     serializer_class = AffiliationSerializer
 
@@ -93,7 +95,7 @@ class AffiliationUpdateView(generics.RetrieveUpdateAPIView):
 class CDWGCreateView(generics.CreateAPIView):
     """Create a new CDWG."""
 
-    permission_classes = [HasAPIKey | IsAuthenticated]
+    permission_classes = [HasWriteAccess]
     serializer_class = ClinicalDomainWorkingGroupSerializer
     queryset = ClinicalDomainWorkingGroup.objects.all()
 
@@ -114,7 +116,7 @@ class CDWGCreateView(generics.CreateAPIView):
 class CDWGUpdateView(generics.RetrieveUpdateAPIView):
     """Update editable CDWG data, return all CDWG information."""
 
-    permission_classes = [HasAPIKey | IsAuthenticated]
+    permission_classes = [HasWriteAccess]
     queryset = ClinicalDomainWorkingGroup.objects.all()
     serializer_class = ClinicalDomainWorkingGroupSerializer
     lookup_field = "id"
@@ -123,7 +125,7 @@ class CDWGUpdateView(generics.RetrieveUpdateAPIView):
 class CDWGListView(generics.ListAPIView):
     """List all CDWGs."""
 
-    permission_classes = [HasAPIKey | IsAuthenticated]
+    permission_classes = [HasAffilsAPIKey]
     queryset = ClinicalDomainWorkingGroup.objects.all()
     serializer_class = ClinicalDomainWorkingGroupSerializer
 
@@ -131,7 +133,7 @@ class CDWGListView(generics.ListAPIView):
 class CDWGDetailView(generics.RetrieveAPIView):
     """List a single CDWG, lookup by either name or ID."""
 
-    permission_classes = [HasAPIKey | IsAuthenticated]
+    permission_classes = [HasAffilsAPIKey]
     queryset = ClinicalDomainWorkingGroup.objects.all()
     serializer_class = ClinicalDomainWorkingGroupSerializer
 
@@ -155,7 +157,7 @@ class CDWGDetailView(generics.RetrieveAPIView):
 
 
 @api_view(["GET"])
-@permission_classes([HasAPIKey | IsAuthenticated])
+@permission_classes([HasAffilsAPIKey])
 def affiliations_list_json_format(request):  # pylint: disable=unused-argument
     """List all affiliations in old JSON format."""
     affils_queryset = Affiliation.objects.filter(is_deleted=False).values()
@@ -227,7 +229,7 @@ def affiliations_list_json_format(request):  # pylint: disable=unused-argument
 
 
 @api_view(["GET"])
-@permission_classes([HasAPIKey | IsAuthenticated])
+@permission_classes([HasAffilsAPIKey])
 def affiliation_detail_json_format(request):
     """List specific affiliation in old JSON format."""
     affil_id = request.GET.get("affil_id")
@@ -301,7 +303,7 @@ def affiliation_detail_json_format(request):
 
 
 @api_view(["POST"])
-@permission_classes([HasAPIKey | IsAuthenticated])
+@permission_classes([HasWriteAccess])
 def create_affiliation(request):
     """Handle POST request to create a new affiliation, return affiliation_id
     and expert_panel_id in response."""

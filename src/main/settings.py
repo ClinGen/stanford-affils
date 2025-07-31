@@ -188,6 +188,9 @@ REST_FRAMEWORK = {
     ),
     "EXCEPTION_HANDLER": "affiliations.views.custom_exception_handler",
 }
+# API KEY
+API_KEY_CUSTOM_MODEL = "affiliations.CustomAPIKey"
+
 
 UNFOLD = {
     "SITE_FAVICONS": [
