@@ -13,12 +13,17 @@ doc/tutorial.md/#running-the-loadpy-script-to-import-data-into-the-database).
 
 from pathlib import Path
 import csv
-from affiliations.models import Affiliation, Submitter, Coordinator
+from affiliations.models import (
+    Affiliation,
+    Submitter,
+    Coordinator,
+    ClinicalDomainWorkingGroup,
+)
 
 FILEPATH = Path(__file__).parent / "Affiliations - VCI_GCI Affiliation List.csv"
 
 
-def run():  # pylint: disable-msg=too-many-locals
+def run():  # pylint: disable-msg=too-many-locals disable-msg=too-many-branches
     """Iterate through CSV and create Affiliation, Submitter ID, and Coordinator
     objects in the DB."""
 
@@ -30,6 +35,7 @@ def run():  # pylint: disable-msg=too-many-locals
 
         for row in csv_reader:
             external_full_name = row["Affiliation Full Name"].strip()
+            external_short_name = row["short name"].strip()
             affil_id = row["AffiliationID"].strip()
             coordinator_name = row["Coordinator(s)"].strip()
             coordinator_email = row["Email"].strip()
@@ -48,8 +54,12 @@ def run():  # pylint: disable-msg=too-many-locals
 
             type_list = []
             if gcep_ep_id:
+                if gcep_full_name == "":
+                    gcep_full_name = external_full_name
                 type_list.append(("GCEP", gcep_ep_id, gcep_full_name))
             if vcep_ep_id:
+                if vcep_full_name == "":
+                    vcep_full_name = external_full_name
                 if "SC-VCEP" in vcep_full_name:
                     type_list.append(("SC_VCEP", vcep_ep_id, vcep_full_name))
                 else:
@@ -57,14 +67,16 @@ def run():  # pylint: disable-msg=too-many-locals
             if not gcep_ep_id and not vcep_ep_id:
                 type_list.append(("INDEPENDENT_CURATION", None, external_full_name))
 
+            cdwg_obj = ClinicalDomainWorkingGroup.objects.get(name=cdwg)
             for type_name, ep_id, name in type_list:
                 affil = Affiliation.objects.create(
                     affiliation_id=affil_id,
                     expert_panel_id=ep_id,
                     type=type_name,
                     full_name=name,
+                    short_name=external_short_name,
                     status=status,
-                    clinical_domain_working_group=cdwg,
+                    clinical_domain_working_group=cdwg_obj,
                     is_deleted=is_deleted,
                 )
                 if clinvar_submitter_id != "":
