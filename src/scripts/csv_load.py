@@ -13,12 +13,17 @@ doc/tutorial.md/#running-the-loadpy-script-to-import-data-into-the-database).
 
 from pathlib import Path
 import csv
-from affiliations.models import Affiliation, Submitter, Coordinator, ClinicalDomainWorkingGroup
+from affiliations.models import (
+    Affiliation,
+    Submitter,
+    Coordinator,
+    ClinicalDomainWorkingGroup,
+)
 
 FILEPATH = Path(__file__).parent / "Affiliations - VCI_GCI Affiliation List.csv"
 
 
-def run():  # pylint: disable-msg=too-many-locals
+def run():  # pylint: disable-msg=too-many-locals disable-msg=too-many-branches
     """Iterate through CSV and create Affiliation, Submitter ID, and Coordinator
     objects in the DB."""
 
@@ -70,7 +75,6 @@ def run():  # pylint: disable-msg=too-many-locals
                     type=type_name,
                     full_name=name,
                     short_name=external_short_name,
-
                     status=status,
                     clinical_domain_working_group=cdwg_obj,
                     is_deleted=is_deleted,
