@@ -80,6 +80,7 @@ class ClinicalDomainWorkingGroupSerializer(serializers.ModelSerializer):
 class AffiliationSerializer(serializers.ModelSerializer):
     """Serialize Affiliation objects."""
 
+    uuid = serializers.UUIDField(required=False, allow_null=True)
     coordinators = CoordinatorSerializer(many=True, required=False)
     approvers = ApproverSerializer(many=True, required=False)
     clinvar_submitter_ids = SubmitterSerializer(many=True, required=False)
@@ -109,9 +110,13 @@ class AffiliationSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
-        if self.instance is None and not attrs.get("uuid"):
-            raise serializers.ValidationError({"uuid": "This field is required."})
-        return attrs
+        # If this is a CREATE (no existing instance)
+        if self.instance is None:
+            if not attrs.get("uuid"):
+                raise serializers.ValidationError(
+                    {"uuid": "This field is required on create."}
+                )
+        return super().validate(attrs)
 
     @transaction.atomic
     def create(self, validated_data):
