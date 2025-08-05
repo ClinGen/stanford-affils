@@ -100,6 +100,8 @@ def validate_cdwg_matches_type(cleaned_data: dict, instance=None) -> None:
             raise ValidationError(
                 "If type is 'Independent Curation Group', then CDWG must be 'None'."
             )
+
+
 def check_duplicate_affiliation_uuid(uuid_val: UUID, instance=None) -> bool:
     """Check if an affiliation with the given UUID already exists."""
     if uuid_val is None:
