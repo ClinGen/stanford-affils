@@ -3,6 +3,7 @@
 # Third-party dependencies:
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+
 from rest_framework.test import APIClient, APITestCase
 from rest_framework import status, serializers
 
@@ -73,6 +74,7 @@ class AffiliationsViewsBaseTestCase(APITestCase):
             "full_name": "Test VCEP",
             "type": "VCEP",
             "status": "ACTIVE",
+            "uuid": "72b0b9fc-a66e-4825-a747-429db7028ac5",
             "clinical_domain_working_group": cls.cdwg2.id,
         }
 
@@ -195,6 +197,7 @@ class AffiliationSerializerTest(TestCase):
             "full_name": "Test SC_VCEP",
             "type": "SC_VCEP",
             "status": "ACTIVE",
+            "uuid": "72b0b9fc-a66e-4825-a747-429db7028ac5",
             "clinical_domain_working_group": self.cdwg.id,
         }
         serializer = AffiliationSerializer(data=payload)

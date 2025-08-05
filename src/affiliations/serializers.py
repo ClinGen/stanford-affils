@@ -19,6 +19,8 @@ from affiliations.utils import (
     set_expert_panel_id,
     validate_unique_cdwg_name,
     validate_cdwg_matches_type,
+    check_duplicate_affiliation_uuid,
+    validate_type_and_uuid,
 )
 
 
@@ -80,6 +82,7 @@ class ClinicalDomainWorkingGroupSerializer(serializers.ModelSerializer):
 class AffiliationSerializer(serializers.ModelSerializer):
     """Serialize Affiliation objects."""
 
+    uuid = serializers.UUIDField(required=False, allow_null=True)
     coordinators = CoordinatorSerializer(many=True, required=False)
     approvers = ApproverSerializer(many=True, required=False)
     clinvar_submitter_ids = SubmitterSerializer(many=True, required=False)
@@ -105,7 +108,24 @@ class AffiliationSerializer(serializers.ModelSerializer):
             "coordinators",
             "clinvar_submitter_ids",
             "is_deleted",
+            "uuid",
         ]
+
+    def validate(self, attrs):
+        # Validate UUID is present on creation
+        if self.instance is None:
+            uuid_val = attrs.get("uuid")
+            type_ = attrs.get("type")
+            if not uuid_val and type_ != "INDEPENDENT_CURATION":
+                raise serializers.ValidationError({"uuid": "This field is required."})
+            if check_duplicate_affiliation_uuid(uuid_val):
+                raise serializers.ValidationError({"uuid": "This UUID already exists."})
+            try:
+                validate_type_and_uuid(attrs)
+            except ValidationError as e:
+                raise serializers.ValidationError(e.messages)
+
+        return super().validate(attrs)
 
     @transaction.atomic
     def create(self, validated_data):
@@ -141,7 +161,7 @@ class AffiliationSerializer(serializers.ModelSerializer):
         except ValidationError as e:
             raise serializers.ValidationError(e.messages)
         # Prevent updates to immutable fields
-        immutable_fields = ["affiliation_id", "expert_panel_id", "type"]
+        immutable_fields = ["affiliation_id", "expert_panel_id", "type", "uuid"]
         for field in immutable_fields:
             if (
                 field in validated_data
