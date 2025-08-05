@@ -1,12 +1,12 @@
 # pylint: disable=duplicate-code
 
 """
-Script to be run to insert existing UUID data from 
+Script to be run to insert existing UUID data from
 a spreadsheet to the database.
 
 CSV needs to be saved in the `scripts` folder in directory before running.
 
-You can then run this script by running: 
+You can then run this script by running:
 `python manage.py runscript add_uuid` in the command line from the directory.
 
 Follow steps outlined in [tutorial.md](
