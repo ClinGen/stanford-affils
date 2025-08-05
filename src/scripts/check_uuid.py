@@ -1,8 +1,7 @@
 # pylint: disable=duplicate-code
 
 """
-Script to be run to insert existing UUID data from 
-a spreadsheet to the database.
+Script to be run to check data in DB vs in spreadsheet.
 
 CSV needs to be saved in the `scripts` folder in directory before running.
 
@@ -14,7 +13,6 @@ doc/tutorial.md/#running-the-loadpy-script-to-import-data-into-the-database).
 """
 
 import csv
-import uuid
 from pathlib import Path
 
 from django.db import transaction
@@ -26,13 +24,10 @@ CSV_FILE = Path(__file__).parent / "gpm-expert-panel_custom.csv"
 @transaction.atomic
 def run():
     """
-    Iterate through a CSV, check if the ep_id and type match CSV,
-    then add UUID to affiliation.
+    Iterate through a CSV, check if affiliation data matches what is in CSV
     """
     with open(CSV_FILE, encoding="utf-8-sig") as file:
         reader = csv.DictReader(file)
-        updated = 0
-        missing = []
 
         for row in reader:
             uuid_value = row["UUID"].strip()
@@ -45,22 +40,12 @@ def run():
                 expert_panel_id=expert_panel_id, type=type_value
             ).first()
             if affil:
-                try:
-                    affil.uuid = uuid.UUID(uuid_value)
-                    affil.full_name = long_name
-                    affil.short_name = short_name
-                    affil.save()
-                    updated += 1
-                except ValueError:
-                    print(
-                        f"Invalid UUID format for ID {expert_panel_id}, "
-                        f"Type {type_value}: {uuid_value}"
-                    )
-            else:
-                missing.append((expert_panel_id, type_value))
-
-        print(f"{updated} affiliations updated with UUIDs.")
-        if missing:
-            print(f"{len(missing)} rows skipped (no match found):")
-            for expert_panel_id, type_value in missing:
-                print(f" - ID: {expert_panel_id}, Type: {type_value}")
+                uuid_compare = affil.uuid == uuid_value
+                full_name_compare = affil.full_name == long_name
+                short_name_compare = affil.short_name == short_name
+                if uuid_compare is False:
+                    print(f"{affil.uuid} != {uuid_value}")
+                if full_name_compare is False:
+                    print(f"{affil.full_name} != {long_name}")
+                if short_name_compare is False:
+                    print(f"{affil.short_name} != {short_name}")
