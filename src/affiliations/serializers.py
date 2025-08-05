@@ -18,7 +18,8 @@ from affiliations.utils import (
     generate_next_affiliation_id,
     set_expert_panel_id,
     validate_unique_cdwg_name,
-    validate_cdwg_matches_type,
+    check_duplicate_affiliation_uuid,
+    validate_type_and_uuid,
 )
 
 
@@ -110,12 +111,19 @@ class AffiliationSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
-        # If this is a CREATE (no existing instance)
+        # Validate UUID is present on creation
         if self.instance is None:
-            if not attrs.get("uuid"):
-                raise serializers.ValidationError(
-                    {"uuid": "This field is required on create."}
-                )
+            uuid_val = attrs.get("uuid")
+            type_ = attrs.get("type")
+            if not uuid_val and type_ != "INDEPENDENT_CURATION":
+                raise serializers.ValidationError({"uuid": "This field is required."})
+            if check_duplicate_affiliation_uuid(uuid_val):
+                raise serializers.ValidationError({"uuid": "This UUID already exists."})
+            try:
+                validate_type_and_uuid(attrs)
+            except ValidationError as e:
+                raise serializers.ValidationError(e.messages)
+
         return super().validate(attrs)
 
     @transaction.atomic

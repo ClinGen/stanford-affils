@@ -1,8 +1,10 @@
 """Utility functions"""
 
+from uuid import UUID
 from django.db import transaction
 from django.core.exceptions import ValidationError
 from affiliations.models import Affiliation, ClinicalDomainWorkingGroup
+
 
 VCEP_BASE = 50000
 GCEP_BASE = 40000
@@ -98,3 +100,21 @@ def validate_cdwg_matches_type(cleaned_data: dict, instance=None) -> None:
             raise ValidationError(
                 "If type is 'Independent Curation Group', then CDWG must be 'None'."
             )
+def check_duplicate_affiliation_uuid(uuid_val: UUID, instance=None) -> bool:
+    """Check if an affiliation with the given UUID already exists."""
+    if uuid_val is None:
+        return False
+    uuid_value = Affiliation.objects.filter(uuid=uuid_val)
+    if instance:
+        uuid_value = uuid_value.exclude(pk=instance.pk)
+    return uuid_value.exists()
+
+
+def validate_type_and_uuid(cleaned_data: dict) -> None:
+    """Validate that Independent Groups do not have UUIDs."""
+    uuid_val = cleaned_data.get("uuid")
+    type_val = cleaned_data.get("type")
+
+    if type_val == "INDEPENDENT_CURATION":
+        if uuid_val:
+            raise ValidationError("UUID must be empty for 'INDEPENDENT_CURATION' type.")
