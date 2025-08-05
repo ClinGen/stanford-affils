@@ -403,12 +403,12 @@
         },
         "psycopg": {
             "hashes": [
-                "sha256:43665368ccd48180744cab26b74332f46b63b7e06e8ce0775547a3533883d381",
-                "sha256:f26f1346d6bf1ef5f5ef1714dd405c67fb365cfd1c6cea07de1792747b167b92"
+                "sha256:01a8dadccdaac2123c916208c96e06631641c0566b22005493f09663c7a8d3b6",
+                "sha256:2fbb46fcd17bc81f993f28c47f1ebea38d66ae97cc2dbc3cad73b37cefbff700"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==3.2.4"
+            "version": "==3.2.9"
         },
         "pyasn1": {
             "hashes": [
