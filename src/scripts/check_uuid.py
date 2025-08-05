@@ -5,7 +5,7 @@ Script to be run to check data in DB vs in spreadsheet.
 
 CSV needs to be saved in the `scripts` folder in directory before running.
 
-You can then run this script by running: 
+You can then run this script by running:
 `python manage.py runscript add_uuid` in the command line from the directory.
 
 Follow steps outlined in [tutorial.md](
