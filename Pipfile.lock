@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "507521f2f7d479101570e23938b880cc074feb507879b20b33d36eb2fda95972"
+            "sha256": "a81a3d5b32b051ac93bc344abdaf8d4e703bde1133fe83efd29524679de8f07f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -291,12 +291,12 @@
         },
         "django-dbbackup": {
             "hashes": [
-                "sha256:157a2ec10d482345cd75092e510ac40d6e2ee6084604a1d17abe178c2f06bc69",
-                "sha256:b23265600ead0780ca781b1b4b594949aaa8a20d74f08701f91ee9d7eb1f08cd"
+                "sha256:3549c8ccfdb167f20ca2c26eb0dfa55c79aa3f31ea4e4dbfa0816bc18ceec6dc",
+                "sha256:b4003b353d49d914ffbc033c793198426572d0a2b137ec795ddb2fb82225b960"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.7'",
-            "version": "==4.2.1"
+            "version": "==4.3.0"
         },
         "django-extensions": {
             "hashes": [
@@ -461,10 +461,10 @@
         },
         "pytz": {
             "hashes": [
-                "sha256:2aa355083c50a0f93fa581709deac0c9ad65cca8a9e9beac660adcbd493c798a",
-                "sha256:31c7c1817eb7fae7ca4b8c7ee50c72f93aa2dd863de768e1ef4245d426aa0725"
+                "sha256:360b9e3dbb49a209c21ad61809c7fb453643e048b38924c765813546746e81c3",
+                "sha256:5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00"
             ],
-            "version": "==2024.2"
+            "version": "==2025.2"
         },
         "s3transfer": {
             "hashes": [
