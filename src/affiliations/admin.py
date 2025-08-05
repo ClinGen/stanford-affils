@@ -194,7 +194,6 @@ class AffiliationForm(forms.ModelForm):
 
         uuid_val = self.cleaned_data.get("uuid")
         generate_next_affiliation_id(cleaned_data)
-        validate_and_set_expert_panel_id(cleaned_data)
         check_duplicate_affiliation_uuid(uuid_val, instance=self.instance)
         validate_type_and_uuid(cleaned_data)
         # Check to see if the Affil and EP ID already exist in DB.

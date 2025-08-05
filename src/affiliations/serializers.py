@@ -18,6 +18,7 @@ from affiliations.utils import (
     generate_next_affiliation_id,
     set_expert_panel_id,
     validate_unique_cdwg_name,
+    validate_cdwg_matches_type,
     check_duplicate_affiliation_uuid,
     validate_type_and_uuid,
 )
