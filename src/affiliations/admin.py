@@ -14,6 +14,7 @@ from rest_framework_api_key.admin import APIKeyModelAdmin
 from import_export.admin import ExportMixin  # type: ignore
 from import_export import resources  # type: ignore
 
+
 from unfold.contrib.import_export.forms import SelectableFieldsExportForm  # type: ignore
 from unfold.forms import (  # type: ignore
     AdminPasswordChangeForm,
@@ -45,6 +46,7 @@ from affiliations.utils import (
     validate_unique_cdwg_name,
     validate_cdwg_matches_type,
 )
+from .models import CustomAPIKey
 
 # Unregistering base Django Admin User and Group to use Unfold User and Group
 # instead for styling purposes.
@@ -77,20 +79,23 @@ class SoftDeleteFilter(admin.SimpleListFilter):
         return queryset
 
 
-@admin.register(APIKey)
-class APIKeyFormatAdmin(APIKeyModelAdmin, ModelAdmin):
-    """Register API Key with Unfold for styling of APIKey page."""
+@admin.register(CustomAPIKey)
+class CustomAPIKeyAdmin(APIKeyModelAdmin, ModelAdmin):
+    """Register Custom API Key model"""
 
-    # Controls what columns are "clickable" to enter detailed view.
-    # pylint:disable=duplicate-code
-    list_display_links = [
-        "prefix",
+    # Controls what fields are listed in overview header.
+    list_display = ("name", "prefix", "created", "can_write", "expiry_date", "revoked")
+    # Which links are "clickable"
+    list_display_links = (
         "name",
+        "prefix",
         "created",
+        "can_write",
         "expiry_date",
-        "_has_expired",
         "revoked",
-    ]
+    )
+    # Display Order
+    fields = ("name", "can_write", "revoked", "expiry_date")
 
 
 @admin.register(User)
