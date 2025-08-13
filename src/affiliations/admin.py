@@ -14,6 +14,7 @@ from rest_framework_api_key.admin import APIKeyModelAdmin
 from import_export.admin import ExportMixin  # type: ignore
 from import_export import resources  # type: ignore
 
+
 from unfold.contrib.import_export.forms import SelectableFieldsExportForm  # type: ignore
 from unfold.forms import (  # type: ignore
     AdminPasswordChangeForm,
@@ -45,6 +46,7 @@ from affiliations.utils import (
     validate_unique_cdwg_name,
     validate_cdwg_matches_type,
 )
+from .models import CustomAPIKey
 
 # Unregistering base Django Admin User and Group to use Unfold User and Group
 # instead for styling purposes.
@@ -53,20 +55,47 @@ admin.site.unregister(Group)
 admin.site.unregister(APIKey)
 
 
-@admin.register(APIKey)
-class APIKeyFormatAdmin(APIKeyModelAdmin, ModelAdmin):
-    """Register API Key with Unfold for styling of APIKey page."""
+class SoftDeleteFilter(admin.SimpleListFilter):
+    """
+    Custom filter to allow users to see soft-deleted affiliations.
+    By default, only active/non-soft-deleted affiliations are shown.
+    """
 
-    # Controls what columns are "clickable" to enter detailed view.
-    # pylint:disable=duplicate-code
-    list_display_links = [
-        "prefix",
+    title = "Deleted Status"
+    parameter_name = "is_deleted"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("active", "Show Only Active Affiliations"),
+            ("only_deleted", "Show Only Deleted Affiliations"),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "only_deleted":
+            return queryset.filter(is_deleted=True)
+        if value == "active":
+            return queryset.filter(is_deleted=False)
+        return queryset
+
+
+@admin.register(CustomAPIKey)
+class CustomAPIKeyAdmin(APIKeyModelAdmin, ModelAdmin):
+    """Register Custom API Key model"""
+
+    # Controls what fields are listed in overview header.
+    list_display = ("name", "prefix", "created", "can_write", "expiry_date", "revoked")
+    # Which links are "clickable"
+    list_display_links = (
         "name",
+        "prefix",
         "created",
+        "can_write",
         "expiry_date",
-        "_has_expired",
         "revoked",
-    ]
+    )
+    # Display Order
+    fields = ("name", "can_write", "revoked", "expiry_date")
 
 
 @admin.register(User)
@@ -270,12 +299,6 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
         "get_coordinator_emails",
     ]
 
-    @transaction.atomic
-    def get_queryset(self, request):
-        """Query to only display affiliations that have not been "soft-deleted"."""
-        affiliations_query = super().get_queryset(request)
-        return affiliations_query.filter(is_deleted=False)
-
     @admin.display(
         description="Coordinator Name", ordering="coordinators__coordinator_name"
     )
@@ -307,6 +330,7 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
         ("status", MultipleChoicesDropdownFilter),
         ("type", ChoicesDropdownFilter),
         ("clinical_domain_working_group", ChoicesDropdownFilter),
+        (SoftDeleteFilter),
     ]
     list_filter_submit = True  # Submit button at the bottom of filter tab.
     list_fullwidth = True
