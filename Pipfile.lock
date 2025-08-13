@@ -329,12 +329,12 @@
         },
         "django-unfold": {
             "hashes": [
-                "sha256:58889ba0069cd272a471458a48b4c86b5e5580649fe50a8b21543bf2d82f18fd",
-                "sha256:fa931018b5c3f501b589d1785c430964a5b37ab1259ecb3ccb516efe075311bc"
+                "sha256:433aaddd071bce0e0c1886c69a41a69f7ab4d30d9dce80ab79f6f2d7ba4c380a",
+                "sha256:f90805e5ebb9af671554fd392af4b81bfdbdedc28b6cd64f1d8c2ae5e14a2d36"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==0.62.0"
+            "version": "==0.64.2"
         },
         "djangorestframework": {
             "hashes": [
