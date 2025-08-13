@@ -55,6 +55,30 @@ admin.site.unregister(Group)
 admin.site.unregister(APIKey)
 
 
+class SoftDeleteFilter(admin.SimpleListFilter):
+    """
+    Custom filter to allow users to see soft-deleted affiliations.
+    By default, only active/non-soft-deleted affiliations are shown.
+    """
+
+    title = "Deleted Status"
+    parameter_name = "is_deleted"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("active", "Show Only Active Affiliations"),
+            ("only_deleted", "Show Only Deleted Affiliations"),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "only_deleted":
+            return queryset.filter(is_deleted=True)
+        if value == "active":
+            return queryset.filter(is_deleted=False)
+        return queryset
+
+
 @admin.register(CustomAPIKey)
 class CustomAPIKeyAdmin(APIKeyModelAdmin, ModelAdmin):
     """Register Custom API Key model"""
@@ -275,12 +299,6 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
         "get_coordinator_emails",
     ]
 
-    @transaction.atomic
-    def get_queryset(self, request):
-        """Query to only display affiliations that have not been "soft-deleted"."""
-        affiliations_query = super().get_queryset(request)
-        return affiliations_query.filter(is_deleted=False)
-
     @admin.display(
         description="Coordinator Name", ordering="coordinators__coordinator_name"
     )
@@ -312,6 +330,7 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
         ("status", MultipleChoicesDropdownFilter),
         ("type", ChoicesDropdownFilter),
         ("clinical_domain_working_group", ChoicesDropdownFilter),
+        (SoftDeleteFilter),
     ]
     list_filter_submit = True  # Submit button at the bottom of filter tab.
     list_fullwidth = True
