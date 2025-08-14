@@ -44,7 +44,8 @@ from affiliations.utils import (
     generate_next_affiliation_id,
     set_expert_panel_id,
     validate_unique_cdwg_name,
-    validate_cdwg_matches_type,
+    check_duplicate_affiliation_uuid,
+    validate_type_and_uuid,
 )
 from .models import CustomAPIKey
 
@@ -191,20 +192,22 @@ class AffiliationForm(forms.ModelForm):
             generate_next_affiliation_id(cleaned_data)
             set_expert_panel_id(cleaned_data)
 
-            if (
-                Affiliation.objects.select_for_update()
-                .filter(
-                    affiliation_id=cleaned_data.get("affiliation_id"),
-                    expert_panel_id=cleaned_data.get("expert_panel_id"),
-                )
-                .exists()
-            ):
-                raise ValidationError(
-                    "An affiliation with this Affiliation ID and Expert Panel ID already exists."
-                )
-
-        # Always validate CDWG-type relationship
-        validate_cdwg_matches_type(cleaned_data, self.instance)
+        uuid_val = self.cleaned_data.get("uuid")
+        generate_next_affiliation_id(cleaned_data)
+        check_duplicate_affiliation_uuid(uuid_val, instance=self.instance)
+        validate_type_and_uuid(cleaned_data)
+        # Check to see if the Affil and EP ID already exist in DB.
+        if (
+            Affiliation.objects.select_for_update()
+            .filter(
+                affiliation_id=cleaned_data.get("affiliation_id"),
+                expert_panel_id=cleaned_data.get("expert_panel_id"),
+            )
+            .exists()
+        ):
+            raise ValidationError(
+                "An affiliation with this Affiliation ID with this Expert Panel ID already exist."
+            )
         return cleaned_data
 
 
@@ -247,6 +250,7 @@ class AffiliationResource(resources.ModelResource):
             "type",
             "clinical_domain_working_group__name",
             "is_deleted",
+            "uuid",
         ]
 
 
@@ -339,6 +343,7 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
     fields = (
         "affiliation_id",
         "expert_panel_id",
+        "uuid",
         "type",
         "full_name",
         "short_name",
@@ -361,6 +366,7 @@ class AffiliationsAdmin(ExportMixin, ModelAdmin):  # pylint: disable=too-many-an
                     "expert_panel_id",
                     "type",
                     "members",
+                    "uuid",
                 ]
         return [
             "members",
