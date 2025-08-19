@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from affiliations.models import Affiliation, ClinicalDomainWorkingGroup
 
 
-
 VCEP_BASE = 50000
 GCEP_BASE = 40000
 AFFIL_BASE = 10000
@@ -202,6 +201,4 @@ def validate_id_suffix_match(
     ep_suffix = ep_id % 1000
 
     if affil_suffix != ep_suffix:
-        raise ValidationError(
-            f"The ID suffix must match: got {affil_id} and {ep_id}."
-        )
+        raise ValidationError(f"The ID suffix must match: got {affil_id} and {ep_id}.")
