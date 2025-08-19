@@ -7,7 +7,6 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from rest_framework_api_key.models import APIKey
 from rest_framework_api_key.admin import APIKeyModelAdmin
@@ -47,7 +46,7 @@ from affiliations.utils import (
     check_duplicate_affiliation_uuid,
     validate_type_and_uuid,
     validate_id_duplicates,
-    validate_id_suffix_match
+    validate_id_suffix_match,
 )
 from .models import CustomAPIKey
 
