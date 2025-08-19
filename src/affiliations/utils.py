@@ -2,9 +2,9 @@
 
 from uuid import UUID
 from django.db import transaction
+from django.db.models import Q
 from django.core.exceptions import ValidationError
 from affiliations.models import Affiliation, ClinicalDomainWorkingGroup
-from django.db.models import Q
 
 
 
@@ -17,8 +17,10 @@ def generate_next_affiliation_id(cleaned_data: dict) -> None:
     """Generate the next sequential affiliation_id as an integer."""
     with transaction.atomic():
 
-        if ( cleaned_data.get("affiliation_id") != None or cleaned_data.get("expert_panel_id") != None
-            ):
+        if (
+            cleaned_data.get("affiliation_id") is not None
+            or cleaned_data.get("expert_panel_id") is not None
+        ):
             raise ValidationError(
                 "ID's cannot be manually assigned. Please remove from request."
             )
@@ -137,7 +139,11 @@ def validate_id_duplicates(cleaned_data: dict, instance=None) -> None:
     ep_id = cleaned_data.get("expert_panel_id")
 
     # Skip if IDs are unchanged
-    if instance and affil_id == instance.affiliation_id and ep_id == instance.expert_panel_id:
+    if (
+        instance
+        and affil_id == instance.affiliation_id
+        and ep_id == instance.expert_panel_id
+    ):
         return
 
     qs = Affiliation.objects.all()
@@ -145,8 +151,9 @@ def validate_id_duplicates(cleaned_data: dict, instance=None) -> None:
         qs = qs.exclude(pk=instance.pk)
 
     duplicates = list(
-        qs.filter(Q(affiliation_id=affil_id) | Q(expert_panel_id=ep_id))
-          .values("affiliation_id", "expert_panel_id")
+        qs.filter(Q(affiliation_id=affil_id) | Q(expert_panel_id=ep_id)).values(
+            "affiliation_id", "expert_panel_id"
+        )
     )
 
     if duplicates:
@@ -160,11 +167,12 @@ def validate_id_duplicates(cleaned_data: dict, instance=None) -> None:
         else:
             id_type = "Expert Panel"
 
-        raise ValidationError(
-            f"An affiliation with this {id_type} ID already exists."
-        )
+        raise ValidationError(f"An affiliation with this {id_type} ID already exists.")
 
-def validate_id_suffix_match(cleaned_data: dict,) -> None:
+
+def validate_id_suffix_match(
+    cleaned_data: dict,
+) -> None:
     """
     Ensure that the numeric suffix of affiliation_id and expert_panel_id match.
     Example: 10001 ↔ 40001, 10098 ↔ 50098.
@@ -176,14 +184,18 @@ def validate_id_suffix_match(cleaned_data: dict,) -> None:
     if affil_id is None or ep_id is None:
         return
 
-    if not (10000 <= affil_id <= 19999):
+    if not 10000 <= affil_id <= 19999:
         raise ValidationError("Affiliation ID must be between 10000 and 19999.")
     if ep_type == "GCEP":
-        if not (40000 <= ep_id <= 49999):
-            raise ValidationError("GCEP Expert Panel ID must be between 40000 and 49999.")
-    if ep_type == "VCEP" or ep_type == "SC_VCEP":
-        if not (50000 <= ep_id <= 59999):
-            raise ValidationError("VCEP/SC-VCEP Expert Panel ID must be between 50000 and 59999.")
+        if not 40000 <= ep_id <= 49999:
+            raise ValidationError(
+                "GCEP Expert Panel ID must be between 40000 and 49999."
+            )
+    if ep_type in ("VCEP", "SC_VCEP"):
+        if not 50000 <= ep_id <= 59999:
+            raise ValidationError(
+                "VCEP/SC-VCEP Expert Panel ID must be between 50000 and 59999."
+            )
 
     # Compare suffixes (last 3 digits)
     affil_suffix = affil_id % 1000
