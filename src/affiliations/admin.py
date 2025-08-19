@@ -7,7 +7,6 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from rest_framework_api_key.models import APIKey
 from rest_framework_api_key.admin import APIKeyModelAdmin
@@ -46,6 +45,8 @@ from affiliations.utils import (
     validate_unique_cdwg_name,
     check_duplicate_affiliation_uuid,
     validate_type_and_uuid,
+    validate_id_duplicates,
+    validate_id_suffix_match,
 )
 from .models import CustomAPIKey
 
@@ -193,21 +194,10 @@ class AffiliationForm(forms.ModelForm):
             set_expert_panel_id(cleaned_data)
 
         uuid_val = self.cleaned_data.get("uuid")
-        generate_next_affiliation_id(cleaned_data)
         check_duplicate_affiliation_uuid(uuid_val, instance=self.instance)
         validate_type_and_uuid(cleaned_data)
-        # Check to see if the Affil and EP ID already exist in DB.
-        if (
-            Affiliation.objects.select_for_update()
-            .filter(
-                affiliation_id=cleaned_data.get("affiliation_id"),
-                expert_panel_id=cleaned_data.get("expert_panel_id"),
-            )
-            .exists()
-        ):
-            raise ValidationError(
-                "An affiliation with this Affiliation ID with this Expert Panel ID already exist."
-            )
+        validate_id_duplicates(cleaned_data, instance=self.instance)
+        validate_id_suffix_match(cleaned_data)
         return cleaned_data
 
 
