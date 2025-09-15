@@ -8,6 +8,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
+from django.shortcuts import get_object_or_404
+
 # from rest_framework_api_key.permissions import HasAPIKey
 from django.http import JsonResponse, Http404
 
@@ -56,6 +58,18 @@ class AffiliationsDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Affiliation.objects.all()
     serializer_class = AffiliationSerializer
+
+
+class AffiliationDetailByUUID(generics.RetrieveAPIView):
+    """Look up an affiliation by its UUID."""
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Affiliation.objects.all()
+    serializer_class = AffiliationSerializer
+
+    def get_object(self):
+        uuid = self.kwargs.get("uuid")
+        return get_object_or_404(Affiliation, uuid=uuid)
 
 
 class AffiliationUpdateView(generics.RetrieveUpdateAPIView):

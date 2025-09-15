@@ -31,6 +31,10 @@ GET `affiliation_detail/?affil_id={affiliation_id}`
 
 - Get a specific affiliation in JSON format
 
+GET `affiliation_detail/uuid/<str:uuid>/`
+
+- Get a specific affiliation in JSON format by its GPM UUID.
+
 POST `affiliation/create/`
 
 - Creates a new Affiliation. This endpoint generates and returns a `201 Created`
