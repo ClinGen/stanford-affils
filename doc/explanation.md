@@ -1,19 +1,28 @@
 # Explanations
 
-Description from
-[Divio documentation](https://docs.divio.com/documentation-system/explanation/):
+Explanations discuss key topics and concepts at a fairly high level and
+provide useful background information. They are understanding-oriented.
 
-Explanations, or discussions, should clarify and illuminate a particular topic.
-They should broaden the documentation’s coverage of a topic. This page is
-understanding-oriented.
+## Understanding the Old and New Affiliations Workflow
 
-## Affiliations Workflow Diagrams
+When we first started working on the affiliations service, we created
+diagrams for the old (then current) affiliations workflow and the 
+new (then desired) affiliations workflow. These diagrams didn't win any
+design awards, and they are a bit outdated (and therefore inaccurate), 
+but they get the high-level point across.
 
-We have diagrams for our current and desired affiliations workflow in the
-[diagrams directory](./diagrams).
+### Old Workflow
 
-## Styling
+![old workflow](./diagrams/current-affiliations-workflow.svg)
 
-We use
-[django-unfold](https://github.com/unfoldadmin/django-unfold?tab=readme-ov-file)
-to style the Django admin panel.
+### New Workflow
+
+![new workflow](./diagrams/desired-affiliations-workflow.svg)
+
+## Using the Admin Site for the Affiliations Service
+
+The affiliations service is meant to be an internal tool for a small 
+group of ClinGen employees. When we first started developing it, we 
+didn't care much about making it a "proper" / "production grade" web 
+service. It just needed to be better than the old system of 
+sending emails and updating spreadsheets.
