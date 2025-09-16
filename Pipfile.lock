@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "929b59425d92d53c3f42279208ddc563b6a74bdf6ae2ee0fa98b4d407b6d9f71"
+            "sha256": "c23674c737e75d770072ee596fbe72e25c0bb1103ecc410e57841e1cd8a18bd0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,21 +16,6 @@
         ]
     },
     "default": {
-        "adr-tools-python": {
-            "hashes": [
-                "sha256:0bbd23ea47ec72559f16bd9e4237c1ff3ee848fd2b8a03f31e2b976ba185ecfd"
-            ],
-            "index": "pypi",
-            "markers": "python_version >= '3'",
-            "version": "==1.0.3"
-        },
-        "argparse": {
-            "hashes": [
-                "sha256:62b089a55be1d8949cd2bc7e0df0bddb9e028faefc8c32038cc84862aefdd6e4",
-                "sha256:c31647edb69fd3d465a847ea3157d37bed1f95f19760b11a47aa91c04b666314"
-            ],
-            "version": "==1.4.0"
-        },
         "asgiref": {
             "hashes": [
                 "sha256:a5ab6582236218e5ef1648f242fd9f10626cfd4de8dc377db215d5d5098e3142",
