@@ -1,50 +1,6 @@
 # Tutorials
 
-Description from
-[Divio documentation](https://docs.divio.com/documentation-system/tutorials/):
-
-Tutorials are lessons that take the reader through a series of steps to complete
-a project of some kind. This page is learning-oriented, and specifically,
-oriented towards learning how rather than learning what.
-
-## Get started
-
-- Install Python 3.10+.
-- Install [Pipenv](https://pipenv.pypa.io/en/latest/index.html):
-  `pip install --user pipenv`.
-- Activate a virtual environment: `pipenv shell`.
-- Install dependencies: `pipenv sync --dev`.
-- Create a `.env` file based on `.env.template`.
-- [Set up Postgres for local development](./howto.md#set-up-postgres-for-local-development).
-- Run the development server: `cd src`, then `python manage.py migrate`.
-- Run the development server: `cd src`, then `python manage.py runserver`.
-- Install [yamlfmt](https://github.com/google/yamlfmt): `brew install yamlfmt`.
-
-## Running the load.py script to import data into the database
-
-- Make sure all dependencies are synced: `pipenv sync --dev`.
-- Save file into `scripts` folder in directory.
-- Run `python manage.py runscript {script_name}`.
-
-## Running database backup
-
-- Make sure all dependencies are synced: `pipenv sync --dev`.
-- Make sure AWS S3 bucket is configured and env variables are in .env file.
-- Run `python manage.py dbbackup`.
-
-## Restoring database from backup
-
-- Make sure all dependencies are synced: `pipenv sync --dev`.
-- Make sure AWS S3 bucket is configured and env variables are in .env file.
-- Run `python manage.py dbrestore`.
-- To see previous backups you can display the backup list with
-  `python manage.py listbackups` and restore a specific backup with
-  `python manage.py dbrestore -i {file-name}`
-
-## Adding logs
-
-- First add `import logging` to the top of the file.
-- Then add the below two lines of code (changing log level, string, and
-  variables as needed): `logger = logging.getLogger("watchtower")`
-  `logger.info(f"Affiliation Created:\\n\\n {Affiliation.full_name} (PK: {Affiliation.pk})")`
-- The desired log line will appear in the selected logging handler.
+Tutorials are lessons that take the reader by the hand through a series
+of steps to accomplish something with the affiliations service. They 
+are wholly learning-oriented, and specifically, they are oriented
+towards learning how rather than learning what.

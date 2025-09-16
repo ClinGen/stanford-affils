@@ -68,3 +68,29 @@ Expectations on how to write new code.
 - Create the Affiliations database: `CREATE DATABASE affils;`
 - Add the name of the database to the `.env` file
 - Add the database engine (`postgresql`) to your `.env` file.
+
+## Run Scripts
+
+- Find the script you want to run in the `scripts` directory.
+- Run `python manage.py runscript [script_name]`.
+
+## Back Up the Database
+
+- Make sure the AWS S3 bucket is configured and environment variables are in the `.env`
+  file.
+- Run `python manage.py dbbackup`.
+
+## Restore the Database From a Backup
+
+- Make sure the AWS S3 bucket is configured and environment variables are in the `.env`
+  file.
+- Run `python manage.py dbrestore`.
+- To see previous backups, you can display the backup list with
+  `python manage.py listbackups` and restore a specific backup with
+  `python manage.py dbrestore -i {file-name}`.
+
+## Add CloudWatch Logs
+
+- Watchtower is a log handler for AWS's CloudWatch Logs.
+- First add `import logging` to the top of the file.
+- Set up a Watchtower logger: `logger = logging.getLogger("watchtower")`.
