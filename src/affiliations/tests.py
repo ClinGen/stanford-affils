@@ -50,6 +50,7 @@ class AffiliationsViewsBaseTestCase(APITestCase):
             "members": "Bulbasaur, Charmander, Squirtle",
             "is_deleted": False,
             "clinical_domain_working_group": cdwg1,
+            "uuid": "86af9d32-9e14-43de-b2a1-01acd33b2d02",
         }
         # Pass data through custom clean functions to generate affil and EP ID
         generate_next_affiliation_id(cls.success_affiliation)
@@ -97,6 +98,17 @@ class AffiliationsViewsBaseTestCase(APITestCase):
         affil = Affiliation.objects.get(full_name="Test Success Result Affil")
 
         response = client.get(f"/api/database_list/{affil.pk}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data["full_name"], self.success_affiliation["full_name"]
+        )
+
+    def test_should_be_able_to_look_up_affiliation_by_uuid(self):
+        """Make sure we can look up an affiliation by its GPM UUID."""
+        client = APIClient()
+        response = client.get(
+            f"/api/affiliation_detail/uuid/{self.success_affiliation['uuid']}/"
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.data["full_name"], self.success_affiliation["full_name"]

@@ -20,6 +20,9 @@ urlpatterns: list[URLResolver | URLPattern] = [
         views.affiliation_detail_json_format,
     ),
     path(
+        "affiliation_detail/uuid/<str:uuid>/", views.AffiliationDetailByUUID.as_view()
+    ),
+    path(
         "affiliation/create/",
         views.create_affiliation,
     ),
