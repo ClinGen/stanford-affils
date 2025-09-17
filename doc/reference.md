@@ -1,0 +1,53 @@
+# Reference
+
+Reference guides contain code conventions, technical reference for APIs,
+and technical reference for other aspects of the HCI’s machinery.
+Reference material is information-oriented.
+
+## Affiliations Service API
+
+### Routes
+
+- [`api/database_list/`](#apidatabase_list)
+- [`api/database_list/<int:pk>/`](#apidatabase_listintpk)
+- [`api/affiliations_list/`](#apiaffiliations_list)
+- [`api/affiliation_detail/`](#apiaffiliation_detail)
+- [`api/affiliation_detail/uuid/<str:uuid>/`](#apiaffiliation_detailuuidstruuid)
+- [`api/affiliation/create/`](#apiaffiliationcreate)
+- [`api/affiliation/update/affiliation_id/<int:affiliation_id>/`](#apiaffiliationupdateaffiliation_idintaffiliation_id)
+- [`api/affiliation/update/expert_panel_id/<int:expert_panel_id>/`](#apiaffiliationupdateexpert_panel_idintexpert_panel_id)
+- [`api/cdwg_list/`](#apicdwg_list)
+- [`api/cdwg_detail/id/<int:id>/`](#apicdwg_detailidintid)
+- [`api/cdwg_detail/name/<str:name>/`](#apicdwg_detailnamestrname)
+- [`api/cdwg/create/`](#apicdwgcreate)
+- [`api/cdwg/id/<int:id>/update/`](#apicdwgidintidupdate)
+
+#### `api/database_list/`
+
+Shows detailed information for each affiliation in the database in a list.
+
+#### `api/database_list/<int:pk>/`
+
+Shows detailed information for a specific affiliation in the database. 
+Requires the primary key for the affiliation.
+
+#### `api/affiliations_list/`
+
+Shows basic information for all affiliations in a list.
+
+#### `api/affiliation_detail/`
+
+Shows basic information for a specific affiliation. Requires query parameter `affil_id`.
+
+#### `api/affiliation_detail/uuid/<str:uuid>/`
+
+Shows detailed information for a specific affiliation given the GPM UUID.
+
+#### `api/affiliation/create/`
+#### `api/affiliation/update/affiliation_id/<int:affiliation_id>/`
+#### `api/affiliation/update/expert_panel_id/<int:expert_panel_id>/`
+#### `api/cdwg_list/`
+#### `api/cdwg_detail/id/<int:id>/`
+#### `api/cdwg_detail/name/<str:name>/`
+#### `api/cdwg/create/`
+#### `api/cdwg/id/<int:id>/update/`
