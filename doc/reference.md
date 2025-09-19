@@ -44,8 +44,19 @@ Shows basic information for a specific affiliation. Requires query parameter `af
 Shows detailed information for a specific affiliation given the GPM UUID.
 
 #### `api/affiliation/create/`
+
+Creates a new affiliation. Returns unique `affiliation_id` and corresponding
+`expert_panel_id` if successful. Returns error message with missing or invalid fields
+otherwise.
+
 #### `api/affiliation/update/affiliation_id/<int:affiliation_id>/`
+
+Updates an affiliation by affiliation ID.
+
 #### `api/affiliation/update/expert_panel_id/<int:expert_panel_id>/`
+
+Updates an affiliation by expert panel ID.
+
 #### `api/cdwg_list/`
 #### `api/cdwg_detail/id/<int:id>/`
 #### `api/cdwg_detail/name/<str:name>/`
