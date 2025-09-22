@@ -27,54 +27,68 @@ The affiliations service provides an API for integration with other tools.
 #### `api/database_list/`
 
 Shows detailed information for each affiliation in the database in a list.
+Unauthenticated users can issue `GET` requests to this route.
 
 #### `api/database_list/<int:pk>/`
 
 Shows detailed information for a specific affiliation in the database. 
-Requires the primary key for the affiliation.
+Requires the primary key for the affiliation. Unauthenticated users can issue `GET`
+requests to this route.
 
 #### `api/affiliations_list/`
 
-Shows basic information for all affiliations in a list.
+Shows basic information for all affiliations in a list. To issue `GET` requests to this
+route, you must have an API key.
 
 #### `api/affiliation_detail/`
 
 Shows basic information for a specific affiliation. Requires query parameter `affil_id`.
+To issue `GET` requests to this route, you must have an API key.
 
 #### `api/affiliation_detail/uuid/<str:uuid>/`
 
 Shows detailed information for a specific affiliation given the GPM UUID.
+Unauthenticated users can issue `GET` requests to this route.
 
 #### `api/affiliation/create/`
 
 Creates a new affiliation. Returns unique `affiliation_id` and corresponding
 `expert_panel_id` if successful. Returns error message with missing or invalid fields
-otherwise.
+otherwise. To issue a `POST` request to this route, you must have an API key with write
+access.
 
 #### `api/affiliation/update/affiliation_id/<int:affiliation_id>/`
 
-Updates an affiliation by ID.
+Updates an affiliation by affiliation ID. To issue a `PATCH` request to this route, you
+must have an API key with write access.
 
 #### `api/affiliation/update/expert_panel_id/<int:expert_panel_id>/`
 
-Updates an affiliation by ID.
+Updates an affiliation by expert panel ID. To issue a `PATCH` request to this route, you
+must have an API key with write access.
 
 #### `api/cdwg_list/`
 
-Shows all clinical domain working groups in a list.
+Shows all clinical domain working groups in a list. To issue `GET` requests to this
+route, you must have an API key.
 
 #### `api/cdwg_detail/id/<int:id>/`
 
 Shows detailed information for a specific clinical domain working group given the ID.
+To issue `GET` requests to this route, you must have an API key.
 
 #### `api/cdwg_detail/name/<str:name>/`
 
 Shows detailed information for a specific clinical domain working group given the name.
+To issue `GET` requests to this route, you must have an API key.
 
 #### `api/cdwg/create/`
 
-Creates a new clinical domain working group.
+Creates a new clinical domain working group. To issue a `POST` request to this route,
+you must have an API key with write access.
 
 #### `api/cdwg/id/<int:id>/update/`
 
-Updates a clinical domain working group by ID.
+Updates a clinical domain working group by ID. To issue a `PATCH` request to this route,
+you must have an API key with write access.
+
