@@ -34,7 +34,7 @@ The affiliations service is maintained by the Stanford contingent of
 - [Tutorials](./doc/tutorial.md)
 - [How-To Guides](./doc/how-to.md)
 - [Explanations](./doc/explanation.md)
-- [Reference Guides](./doc/api_information.md)
+- [Reference Guides](./doc/reference.md)
 
 ## Contributing
 

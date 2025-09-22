@@ -1,10 +1,12 @@
-# Reference
+# Reference Guides
 
 Reference guides contain code conventions, technical reference for APIs,
 and technical reference for other aspects of the HCI’s machinery.
 Reference material is information-oriented.
 
 ## Affiliations Service API
+
+The affiliations service provides an API for integration with other tools.
 
 ### Routes
 
