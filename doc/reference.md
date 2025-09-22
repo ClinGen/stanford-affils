@@ -51,14 +51,28 @@ otherwise.
 
 #### `api/affiliation/update/affiliation_id/<int:affiliation_id>/`
 
-Updates an affiliation by affiliation ID.
+Updates an affiliation by ID.
 
 #### `api/affiliation/update/expert_panel_id/<int:expert_panel_id>/`
 
-Updates an affiliation by expert panel ID.
+Updates an affiliation by ID.
 
 #### `api/cdwg_list/`
+
+Shows all clinical domain working groups in a list.
+
 #### `api/cdwg_detail/id/<int:id>/`
+
+Shows detailed information for a specific clinical domain working group given the ID.
+
 #### `api/cdwg_detail/name/<str:name>/`
+
+Shows detailed information for a specific clinical domain working group given the name.
+
 #### `api/cdwg/create/`
+
+Creates a new clinical domain working group.
+
 #### `api/cdwg/id/<int:id>/update/`
+
+Updates a clinical domain working group by ID.
