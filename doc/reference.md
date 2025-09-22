@@ -57,6 +57,24 @@ Creates a new affiliation. Returns unique `affiliation_id` and corresponding
 otherwise. To issue a `POST` request to this route, you must have an API key with write
 access.
 
+**Required Fields**:
+
+- `full_name` (*string*): The full name of the affiliation.
+- `clinical_domain_working_group` (*integer*): The ID of the clinical domain working
+  group.
+- `type` (*string*): The type of affiliation. Must be one of the following:
+  - `VCEP`
+  - `GCEP`
+  - `SC_VCEP`
+  - `INDEPENDENT_CURATION`
+- `status` (*string*): The current status of the affiliation. Must be one of the 
+  following:
+  - `APPLYING`
+  - `ACTIVE`
+  - `INACTIVE`
+  - `RETIRED`
+  - `ARCHIVED`
+
 #### `api/affiliation/update/affiliation_id/<int:affiliation_id>/`
 
 Updates an affiliation by affiliation ID. To issue a `PATCH` request to this route, you
