@@ -78,12 +78,14 @@ access.
 #### `api/affiliation/update/affiliation_id/<int:affiliation_id>/`
 
 Updates an affiliation by affiliation ID. To issue a `PATCH` request to this route, you
-must have an API key with write access.
+must have an API key with write access. The only required field is the `affiliation_id`.
+Fields that need to be updated should also be included.
 
 #### `api/affiliation/update/expert_panel_id/<int:expert_panel_id>/`
 
 Updates an affiliation by expert panel ID. To issue a `PATCH` request to this route, you
-must have an API key with write access.
+must have an API key with write access. The only required field is the `affiliation_id`.
+Fields that need to be updated should also be included.
 
 #### `api/cdwg_list/`
 
