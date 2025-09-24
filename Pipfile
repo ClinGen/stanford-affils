@@ -29,7 +29,6 @@ django-import-export = "4.*"
 black = "==25.*"
 django-stubs = {extras = ["compatible-mypy"], version = "5.*"}
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "3.*"}
-invoke = "==2.*"
 mypy = "==1.*"
 pylint = "==3.*"
 
