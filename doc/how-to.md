@@ -50,7 +50,7 @@ Expectations on how to write new code.
 - If doing something complex or weird, there should be an explanation
   for it.
 
-## Set up Postgres for local development
+## Set up Postgres for Local Development
 
 - Install Postgres version 16: `brew install postgresql@16`
 - Start the database server: `brew services start postgresql@16`
