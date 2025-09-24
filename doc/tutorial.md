@@ -57,3 +57,30 @@ If you prefer to use [HTTPie](https://httpie.io/), enter the following command:
 ```
 http https://affils-test.clinicalgenome.org/api/affiliations_list/ "X-Api-Key:$AFFILS_API_KEY"
 ```
+
+### Using the API in a Web Application
+
+Suppose you need to get some information from the affiliations service API in your web
+application. First, add the API key to your `.env` file or your secrets manager. Then,
+add some code that performs HTTP requests to the affiliations service using the API key:
+
+```python
+import logging
+import os
+import requests
+
+logger = logging.getLogger(__name__)
+
+headers = {
+    "X-API-KEY": os.getenv("AFFILS_API_KEY"),  # Or get the API key from your secrets manager.
+    "Content-Type": "application/json"
+}
+
+try:
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    data = response.json()
+    print(data)
+except requests.exceptions.RequestException as exc:
+    logger.exception(exc)
+```
