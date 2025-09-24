@@ -78,14 +78,14 @@ access.
 #### `api/affiliation/update/affiliation_id/<int:affiliation_id>/`
 
 Updates an affiliation by affiliation ID. To issue a `PATCH` request to this route, you
-must have an API key with write access. The only required field is the `affiliation_id`.
-Fields that need to be updated should also be included.
+must have an API key with write access. The `affiliation_id` must be part of the URL.
+Fields that need to be updated should be included in the request.
 
 #### `api/affiliation/update/expert_panel_id/<int:expert_panel_id>/`
 
 Updates an affiliation by expert panel ID. To issue a `PATCH` request to this route, you
-must have an API key with write access. The only required field is the `affiliation_id`.
-Fields that need to be updated should also be included.
+must have an API key with write access. The `expert_panel_id` must be part of the URL.
+Fields that need to be updated should be included in the request.
 
 #### `api/cdwg_list/`
 
@@ -105,10 +105,13 @@ To issue `GET` requests to this route, you must have an API key.
 #### `api/cdwg/create/`
 
 Creates a new clinical domain working group. To issue a `POST` request to this route,
-you must have an API key with write access.
+you must have an API key with write access. The only required field is the `name` of
+the clinical domain working group.
 
 #### `api/cdwg/id/<int:id>/update/`
 
 Updates a clinical domain working group by ID. To issue a `PATCH` request to this route,
-you must have an API key with write access.
+you must have an API key with write access. The ID of the clinical domain working group
+must be part of the URL. Fields that need to be updated should be included in the
+request.
 
