@@ -7,6 +7,8 @@ Reference material is information-oriented.
 ## Affiliations Service API
 
 The affiliations service provides an API for integration with other tools.
+For a lesson on how to use the affiliations service API, check out the
+[tutorial](tutorial.md#using-the-affiliations-service-api).
 
 ### Routes
 
