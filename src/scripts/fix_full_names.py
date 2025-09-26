@@ -35,8 +35,14 @@ def run() -> None:
     affiliations = Affiliation.objects.all()
     for a in affiliations:
         if a.type == GCEP:
+            print("before/after:")
+            print(f"\t{a.full_name}")
             a.full_name = add_suffix(a.full_name, GCEP)
             a.save()
+            print(f"\t{a.full_name}")
         elif a.type == VCEP:
+            print("before/after:")
+            print(f"\t{a.full_name}")
             a.full_name = add_suffix(a.full_name, VCEP)
             a.save()
+            print(f"\t{a.full_name}")
