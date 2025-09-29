@@ -59,12 +59,12 @@
         },
         "boto3-stubs": {
             "hashes": [
-                "sha256:0d178635c7abce8be3922917cfd8274e66c21697101276051bae625903533852",
-                "sha256:63fb760ac7b649836530f3ed8b39400f392832d4dcff39bbcf020650519c6e3e"
+                "sha256:68a49cb1d11280b9b0443766af32c5aa7f71d1ef4ddff8dfdbf6fd64c12283bf",
+                "sha256:b52d9491a0f701c60d6d54ba310019d4293afc5929710e4c9d69c11d02a01344"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==1.40.38"
+            "version": "==1.40.40"
         },
         "botocore": {
             "hashes": [
