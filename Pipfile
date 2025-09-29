@@ -14,7 +14,7 @@ python-dotenv = "1.*"
 tomli = "2.*"
 dill = "0.*"
 django-extensions = "4.*"
-django-dbbackup = "4.*"
+django-dbbackup = "5.*"
 django-storages = {extras = ["boto3"]}
 django-crontab = "0.*"
 watchtower = "3.*"
